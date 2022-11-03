@@ -1,0 +1,46 @@
+type: '*metricsgenerationprocessor.Config'
+doc: |
+  Config defines the configuration for the processor.
+fields:
+- name: rules
+  type: '[]metricsgenerationprocessor.Rule'
+  kind: slice
+  doc: |
+    Set of rules for generating new metrics
+  fields:
+  - name: name
+    kind: string
+    default: ""
+    doc: |
+      Name of the new metric being generated. This is a required field.
+  - name: unit
+    kind: string
+    default: ""
+    doc: |
+      Unit for the new metric being generated.
+  - name: type
+    type: metricsgenerationprocessor.GenerationType
+    kind: string
+    default: ""
+    doc: |
+      The rule type following which the new metric will be generated. This is a required field.
+  - name: metric1
+    kind: string
+    default: ""
+    doc: |
+      First operand metric to use in the calculation. This is a required field.
+  - name: metric2
+    kind: string
+    default: ""
+    doc: |
+      Second operand metric to use in the calculation. A required field if the type is calculate.
+  - name: operation
+    type: metricsgenerationprocessor.OperationType
+    kind: string
+    default: ""
+    doc: |
+      The arithmetic operation to apply for the calculation. This is a required field.
+  - name: scale_by
+    kind: float64
+    doc: |
+      A constant number by which the first operand will be scaled. A required field if the type is scale.

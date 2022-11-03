@@ -1,0 +1,818 @@
+type: '*elasticsearchreceiver.Config'
+doc: |
+  Config is the configuration for the elasticsearch receiver
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s
+- name: endpoint
+  kind: string
+  default: http://localhost:9200
+  doc: |
+    The target URL to send data to (e.g.: http://some.url:9411/v1/traces).
+- name: tls
+  type: configtls.TLSClientSetting
+  kind: struct
+  doc: |
+    TLSSetting struct exposes TLS client configuration.
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
+  - name: cert_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: key_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
+  - name: min_version
+    kind: string
+    default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
+  - name: max_version
+    kind: string
+    default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
+  - name: insecure
+    kind: bool
+    default: false
+    doc: |
+      In gRPC when set to true, this is used to disable the client transport security.
+      See https://godoc.org/google.golang.org/grpc#WithInsecure.
+      In HTTP, this disables verifying the server's certificate chain and host name
+      (InsecureSkipVerify in the tls Config). Please refer to
+      https://godoc.org/crypto/tls#Config for more information.
+      (optional, default false)
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+    doc: |
+      InsecureSkipVerify will enable TLS but not verify the certificate.
+  - name: server_name_override
+    kind: string
+    default: ""
+    doc: |
+      ServerName requested by client for virtual hosting.
+      This sets the ServerName in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
+- name: read_buffer_size
+  kind: int
+  doc: |
+    ReadBufferSize for HTTP client. See http.Transport.ReadBufferSize.
+- name: write_buffer_size
+  kind: int
+  doc: |
+    WriteBufferSize for HTTP client. See http.Transport.WriteBufferSize.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 10s
+  doc: |
+    Timeout parameter configures `http.Client.Timeout`.
+- name: headers
+  type: map[string]string
+  kind: map
+  doc: |
+    Additional headers attached to each HTTP request sent by the client.
+    Existing header values are overwritten if collision happens.
+- name: customroundtripper
+  type: func(http.RoundTripper) (http.RoundTripper, error)
+  kind: func
+  doc: |
+    Custom Round Tripper to allow for individual components to intercept HTTP requests
+- name: auth
+  type: '*configauth.Authentication'
+  kind: ptr
+  doc: |
+    Auth configuration for outgoing HTTP calls.
+  fields:
+  - name: authenticator
+    type: config.ComponentID
+    kind: struct
+    doc: |
+      AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
+- name: compression
+  type: configcompression.CompressionType
+  kind: string
+  default: ""
+  doc: |
+    The compression key for supported compression types within collector.
+- name: max_idle_conns
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxIdleConns is used to set a limit to the maximum idle HTTP connections the client can keep open.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: max_idle_conns_per_host
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxIdleConnsPerHost is used to set a limit to the maximum idle HTTP connections the host can keep open.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: max_conns_per_host
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxConnsPerHost limits the total number of connections per host, including connections in the dialing,
+    active, and idle states.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: idle_conn_timeout
+  type: '*time.Duration'
+  kind: ptr
+  doc: |
+    IdleConnTimeout is the maximum amount of time a connection will remain open before closing itself.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: metrics
+  type: metadata.MetricsSettings
+  kind: struct
+  doc: |
+    Metrics defines which metrics to enable for the scraper
+  fields:
+  - name: elasticsearch.breaker.memory.estimated
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.breaker.memory.limit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.breaker.tripped
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.data_nodes
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.health
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.in_flight_fetch
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.nodes
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.pending_tasks
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.published_states.differences
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.published_states.full
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.shards
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.state_queue
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.state_update.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.cluster.state_update.time
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.index.operations.completed
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.index.operations.time
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.indexing_pressure.memory.limit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.indexing_pressure.memory.total.primary_rejections
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.indexing_pressure.memory.total.replica_rejections
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.memory.indexing_pressure
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.cache.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.cache.evictions
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.cache.memory.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.cluster.connections
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.cluster.io
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.cluster.io.received
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.cluster.io.sent
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.disk.io.read
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.disk.io.write
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.documents
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.fs.disk.available
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.fs.disk.free
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.fs.disk.total
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.http.connections
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.ingest.documents
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.ingest.documents.current
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.ingest.operations.failed
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.open_files
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.operations.completed
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.operations.time
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.pipeline.ingest.documents.current
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.pipeline.ingest.documents.preprocessed
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.pipeline.ingest.operations.failed
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.script.cache_evictions
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.script.compilation_limit_triggered
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.script.compilations
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.shards.data_set.size
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.shards.reserved.size
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.shards.size
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.thread_pool.tasks.finished
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.thread_pool.tasks.queued
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.thread_pool.threads
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.translog.operations
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.translog.size
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.node.translog.uncommitted.size
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.os.cpu.load_avg.15m
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.os.cpu.load_avg.1m
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.os.cpu.load_avg.5m
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.os.cpu.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: elasticsearch.os.memory
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.classes.loaded
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.gc.collections.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.gc.collections.elapsed
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.memory.heap.committed
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.memory.heap.max
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.memory.heap.used
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.memory.nonheap.committed
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.memory.nonheap.used
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.memory.pool.max
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.memory.pool.used
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: jvm.threads.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+- name: nodes
+  type: '[]string'
+  kind: slice
+  doc: |
+    Nodes defines the nodes to scrape.
+    See https://www.elastic.co/guide/en/elasticsearch/reference/7.9/cluster.html#cluster-nodes for which selectors may be used here.
+    If Nodes is empty, no nodes will be scraped.
+- name: skip_cluster_metrics
+  kind: bool
+  default: false
+  doc: |
+    SkipClusterMetrics indicates whether cluster level metrics from /_cluster/health should be scraped or not.
+- name: indices
+  type: '[]string'
+  kind: slice
+  doc: |
+    Indices defines the indices to scrape.
+    See https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-stats.html#index-stats-api-path-params
+    for which names are viable.
+    If Indices is empty, no indices will be scraped.
+- name: username
+  kind: string
+  default: ""
+  doc: |
+    Username is the username used when making REST calls to elasticsearch. Must be specified if Password is. Not required.
+- name: password
+  kind: string
+  default: ""
+  doc: |
+    Password is the password used when making REST calls to elasticsearch. Must be specified if Username is. Not required.

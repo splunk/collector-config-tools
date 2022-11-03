@@ -1,0 +1,8 @@
+type: '*snmpreceiver.Config'
+doc: |
+  Config defines the configuration for the various elements of the receiver.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s

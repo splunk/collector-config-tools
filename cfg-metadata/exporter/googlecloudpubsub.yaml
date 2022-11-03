@@ -1,0 +1,107 @@
+type: '*googlecloudpubsubexporter.Config'
+doc: |
+  ExporterSettings defines common settings for a component.Exporter configuration.
+  Specific exporters can embed this struct and extend it with more fields if needed.
+
+  It is highly recommended to "override" the Validate() function.
+
+  When embedded in the exporter config, it must be with `mapstructure:",squash"` tag.
+fields:
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 12s
+  doc: |
+    Timeout is the timeout for every attempt to send data to the backend.
+- name: sending_queue
+  type: exporterhelper.QueueSettings
+  kind: struct
+  doc: |
+    QueueSettings defines configuration for queueing batches before sending to the consumerSender.
+  fields:
+  - name: enabled
+    kind: bool
+    default: false
+    doc: |
+      Enabled indicates whether to not enqueue batches before sending to the consumerSender.
+  - name: num_consumers
+    kind: int
+    doc: |
+      NumConsumers is the number of consumers from the queue.
+  - name: queue_size
+    kind: int
+    doc: |
+      QueueSize is the maximum number of batches allowed in queue at a given time.
+  - name: storage
+    type: '*config.ComponentID'
+    kind: ptr
+    doc: |
+      StorageID if not empty, enables the persistent storage and uses the component specified
+      as a storage extension for the persistent queue
+- name: retry_on_failure
+  type: exporterhelper.RetrySettings
+  kind: struct
+  doc: |
+    RetrySettings defines configuration for retrying batches in case of export failure.
+    The current supported strategy is exponential backoff.
+  fields:
+  - name: enabled
+    kind: bool
+    default: false
+    doc: |
+      Enabled indicates whether to not retry sending batches in case of export failure.
+  - name: initial_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      InitialInterval the time to wait after the first failure before retrying.
+  - name: max_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
+      consecutive retries will always be `MaxInterval`.
+  - name: max_elapsed_time
+    type: time.Duration
+    kind: int64
+    doc: |
+      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
+      Once this value is reached, the data is discarded.
+- name: project
+  kind: string
+  default: ""
+  doc: |
+    Google Cloud Project ID where the Pubsub client will connect to
+- name: user_agent
+  kind: string
+  default: opentelemetry-collector-contrib {{version}}
+  doc: |
+    User agent that will be used by the Pubsub client to connect to the service
+- name: topic
+  kind: string
+  default: ""
+  doc: |
+    The fully qualified resource name of the Pubsub topic
+- name: compression
+  kind: string
+  default: ""
+  doc: |
+    Compression of the payload (only gzip or is supported, no compression is the default)
+- name: watermark
+  type: googlecloudpubsubexporter.WatermarkConfig
+  kind: struct
+  doc: |
+    Watermark defines the watermark (the ce-time attribute on the message) behavior
+  fields:
+  - name: behavior
+    kind: string
+    default: current
+    doc: |
+      Behavior of the watermark. Currently, only  of the message (none, earliest and current, current being the default)
+      will set the timestamp on pubsub based on timestamps of the events inside the message
+  - name: allowed_drift
+    type: time.Duration
+    kind: int64
+    doc: |
+      Indication on how much the timestamp can drift from the current time, the timestamp will be capped to the allowed
+      maximum. A duration of 0 is the same as maximum duration

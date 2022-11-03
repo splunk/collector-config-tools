@@ -1,0 +1,43 @@
+type: '*dotnetdiagnosticsreceiver.Config'
+doc: |
+  ScraperControllerSettings defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of config.ReceiverSettings, and extend it with more fields if needed.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 1s
+- name: pid
+  kind: int
+  doc: |
+    The process ID of the dotnet process from which to collect diagnostics. This
+    process ID is used to generate the file glob "dotnet-diagnostic-%d-*-socket"
+    to locate a file in TMPDIR (or "/tmp" if unset). If the file is found, it is
+    used as a Unix domain socket (on Linux/Mac) to communicate with the dotnet
+    process. For ease of use, this receiver is intended to be used with an
+    observer and receiver creator for process discovery and receiver creation.
+- name: counters
+  type: '[]string'
+  kind: slice
+  doc: |
+    A list of counters for the dotnet process to send to the collector. Defaults
+    to ["System.Runtime", "Microsoft.AspNetCore.Hosting"]. Available counters can
+    be displayed by the `dotnet-counters` tool:
+    https://docs.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-counters
+- name: local_debug_dir
+  kind: string
+  default: ""
+  doc: |
+    LocalDebugDir takes an optional directory name where stream data can be written for
+    offline analysis and troubleshooting. If LocalDebugDir is empty, no stream data is
+    written. If it has a value, MaxLocalDebugFiles also needs to be set, and stream
+    data will be written to disk at the specified location using the naming
+    convention `msg.%d.bin` as each message is received, where %d is the current
+    message number.
+- name: max_local_debug_files
+  kind: int
+  doc: |
+    MaxLocalDebugFiles indicates the maximum number of files kept in LocalDebugDir. When a
+    file is written, the oldest one will be deleted if necessary to keep the
+    number of files in LocalDebugDir at the specified maximum.

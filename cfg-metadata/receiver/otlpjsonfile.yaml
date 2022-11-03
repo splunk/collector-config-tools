@@ -1,0 +1,72 @@
+type: '*otlpjsonfilereceiver.Config'
+doc: |
+  ReceiverSettings defines common settings for a component.Receiver configuration.
+  Specific receivers can embed this struct and extend it with more fields if needed.
+
+  It is highly recommended to "override" the Validate() function.
+
+  When embedded in the receiver config it must be with `mapstructure:",squash"` tag.
+fields:
+- name: include
+  type: '[]string'
+  kind: slice
+- name: exclude
+  type: '[]string'
+  kind: slice
+- name: include_file_name
+  kind: bool
+  default: true
+- name: include_file_path
+  kind: bool
+  default: false
+- name: include_file_name_resolved
+  kind: bool
+  default: false
+- name: include_file_path_resolved
+  kind: bool
+  default: false
+- name: poll_interval
+  type: time.Duration
+  kind: int64
+  default: 200ms
+- name: start_at
+  kind: string
+  default: end
+- name: fingerprint_size
+  type: helper.ByteSize
+  kind: int64
+  default: 1000
+- name: max_log_size
+  type: helper.ByteSize
+  kind: int64
+  default: 1048576
+- name: max_concurrent_files
+  kind: int
+  default: 1024
+- name: encoding
+  kind: string
+  default: utf-8
+- name: force_flush_period
+  type: time.Duration
+  kind: int64
+  default: 500ms
+- name: multiline
+  type: helper.MultilineConfig
+  kind: struct
+  doc: |
+    MultilineConfig is the configuration of a multiline helper
+  fields:
+  - name: line_start_pattern
+    kind: string
+    default: ""
+  - name: line_end_pattern
+    kind: string
+    default: ""
+- name: storage
+  type: '*config.ComponentID'
+  kind: ptr
+  doc: |
+    ComponentID represents the identity for a component. It combines two values:
+    * type - the Type of the component.
+    * name - the name of that component.
+    The component ComponentID (combination type + name) is unique for a given component.Kind.

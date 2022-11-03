@@ -1,0 +1,8 @@
+type: '*hostmetricsreceiver.Config'
+doc: |
+  Config defines configuration for HostMetrics receiver.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 1m0s

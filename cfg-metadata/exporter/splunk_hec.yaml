@@ -1,0 +1,253 @@
+type: '*splunkhecexporter.Config'
+doc: |
+  Config defines configuration for Splunk exporter.
+fields:
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 10s
+  doc: |
+    Timeout is the timeout for every attempt to send data to the backend.
+- name: sending_queue
+  type: exporterhelper.QueueSettings
+  kind: struct
+  doc: |
+    QueueSettings defines configuration for queueing batches before sending to the consumerSender.
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+    doc: |
+      Enabled indicates whether to not enqueue batches before sending to the consumerSender.
+  - name: num_consumers
+    kind: int
+    default: 10
+    doc: |
+      NumConsumers is the number of consumers from the queue.
+  - name: queue_size
+    kind: int
+    default: 5000
+    doc: |
+      QueueSize is the maximum number of batches allowed in queue at a given time.
+  - name: storage
+    type: '*config.ComponentID'
+    kind: ptr
+    doc: |
+      StorageID if not empty, enables the persistent storage and uses the component specified
+      as a storage extension for the persistent queue
+- name: retry_on_failure
+  type: exporterhelper.RetrySettings
+  kind: struct
+  doc: |
+    RetrySettings defines configuration for retrying batches in case of export failure.
+    The current supported strategy is exponential backoff.
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+    doc: |
+      Enabled indicates whether to not retry sending batches in case of export failure.
+  - name: initial_interval
+    type: time.Duration
+    kind: int64
+    default: 5s
+    doc: |
+      InitialInterval the time to wait after the first failure before retrying.
+  - name: max_interval
+    type: time.Duration
+    kind: int64
+    default: 30s
+    doc: |
+      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
+      consecutive retries will always be `MaxInterval`.
+  - name: max_elapsed_time
+    type: time.Duration
+    kind: int64
+    default: 5m0s
+    doc: |
+      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
+      Once this value is reached, the data is discarded.
+- name: log_data_enabled
+  kind: bool
+  default: true
+  doc: |
+    LogDataEnabled can be used to disable sending logs by the exporter.
+- name: profiling_data_enabled
+  kind: bool
+  default: true
+  doc: |
+    ProfilingDataEnabled can be used to disable sending profiling data by the exporter.
+- name: token
+  kind: string
+  default: ""
+  doc: |
+    HEC Token is the authentication token provided by Splunk: https://docs.splunk.com/Documentation/Splunk/latest/Data/UsetheHTTPEventCollector.
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    URL is the Splunk HEC endpoint where data is going to be sent to.
+- name: source
+  kind: string
+  default: ""
+  doc: |
+    Optional Splunk source: https://docs.splunk.com/Splexicon:Source.
+    Sources identify the incoming data.
+- name: sourcetype
+  kind: string
+  default: ""
+  doc: |
+    Optional Splunk source type: https://docs.splunk.com/Splexicon:Sourcetype.
+- name: index
+  kind: string
+  default: ""
+  doc: |
+    Splunk index, optional name of the Splunk index.
+- name: max_connections
+  kind: uint
+  default: 100
+  doc: |
+    MaxConnections is used to set a limit to the maximum idle HTTP connection the exporter can keep open. Defaults to 100.
+- name: disable_compression
+  kind: bool
+  default: false
+  doc: |
+    Disable GZip compression. Defaults to false.
+- name: max_content_length_logs
+  kind: uint
+  default: 2097152
+  doc: |
+    Maximum log payload size in bytes. Default value is 2097152 bytes (2MiB).
+    Maximum allowed value is 838860800 (~ 800 MB).
+- name: max_content_length_metrics
+  kind: uint
+  default: 2097152
+  doc: |
+    Maximum metric payload size in bytes. Default value is 2097152 bytes (2MiB).
+    Maximum allowed value is 838860800 (~ 800 MB).
+- name: max_content_length_traces
+  kind: uint
+  default: 2097152
+  doc: |
+    Maximum trace payload size in bytes. Default value is 2097152 bytes (2MiB).
+    Maximum allowed value is 838860800 (~ 800 MB).
+- name: tls
+  type: configtls.TLSClientSetting
+  kind: struct
+  doc: |
+    TLSSetting struct exposes TLS client configuration.
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
+  - name: cert_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: key_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
+  - name: min_version
+    kind: string
+    default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
+  - name: max_version
+    kind: string
+    default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
+  - name: insecure
+    kind: bool
+    default: false
+    doc: |
+      In gRPC when set to true, this is used to disable the client transport security.
+      See https://godoc.org/google.golang.org/grpc#WithInsecure.
+      In HTTP, this disables verifying the server's certificate chain and host name
+      (InsecureSkipVerify in the tls Config). Please refer to
+      https://godoc.org/crypto/tls#Config for more information.
+      (optional, default false)
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+    doc: |
+      InsecureSkipVerify will enable TLS but not verify the certificate.
+  - name: server_name_override
+    kind: string
+    default: ""
+    doc: |
+      ServerName requested by client for virtual hosting.
+      This sets the ServerName in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
+- name: splunk_app_name
+  kind: string
+  default: ""
+  doc: |
+    App name is used to track telemetry information for Splunk App's using HEC by App name. Defaults to "OpenTelemetry Collector Contrib".
+- name: splunk_app_version
+  kind: string
+  default: ""
+  doc: |
+    App version is used to track telemetry information for Splunk App's using HEC by App version. Defaults to the current OpenTelemetry Collector Contrib build version.
+- name: hec_metadata_to_otel_attrs
+  type: splunk.HecToOtelAttrs
+  kind: struct
+  doc: |
+    HecToOtelAttrs creates a mapping from attributes to HEC specific metadata: source, sourcetype, index and host.
+  fields:
+  - name: source
+    kind: string
+    default: com.splunk.source
+    doc: |
+      Source indicates the mapping of the source field to a specific unified model attribute.
+  - name: sourcetype
+    kind: string
+    default: com.splunk.sourcetype
+    doc: |
+      SourceType indicates the mapping of the sourcetype field to a specific unified model attribute.
+  - name: index
+    kind: string
+    default: com.splunk.index
+    doc: |
+      Index indicates the mapping of the index field to a specific unified model attribute.
+  - name: host
+    kind: string
+    default: host.name
+    doc: |
+      Host indicates the mapping of the host field to a specific unified model attribute.
+- name: otel_to_hec_fields
+  type: splunkhecexporter.OtelToHecFields
+  kind: struct
+  doc: |
+    HecFields creates a mapping from attributes to HEC fields.
+  fields:
+  - name: severity_text
+    kind: string
+    default: otel.log.severity.text
+    doc: |
+      SeverityText informs the exporter to map the severity text field to a specific HEC field.
+  - name: severity_number
+    kind: string
+    default: otel.log.severity.number
+    doc: |
+      SeverityNumber informs the exporter to map the severity number field to a specific HEC field.
+  - name: name
+    kind: string
+    default: otel.log.name
+    doc: |
+      Name informs the exporter to map the name field to a specific HEC field.

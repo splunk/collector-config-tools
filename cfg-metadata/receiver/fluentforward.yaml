@@ -1,0 +1,11 @@
+type: '*fluentforwardreceiver.Config'
+doc: |
+  Config defines configuration for the SignalFx receiver.
+fields:
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    The address to listen on for incoming Fluent Forward events.  Should be
+    of the form `<ip addr>:<port>` (TCP) or `unix://<socket_path>` (Unix
+    domain socket).

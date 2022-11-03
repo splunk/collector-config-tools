@@ -1,0 +1,538 @@
+type: '*vcenterreceiver.Config'
+doc: |
+  Config is the configuration of the receiver
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 2m0s
+- name: tls
+  type: configtls.TLSClientSetting
+  kind: struct
+  doc: |
+    TLSClientSetting contains TLS configurations that are specific to client
+    connections in addition to the common configurations. This should be used by
+    components configuring TLS client connections.
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
+  - name: cert_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: key_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
+  - name: min_version
+    kind: string
+    default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
+  - name: max_version
+    kind: string
+    default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
+  - name: insecure
+    kind: bool
+    default: false
+    doc: |
+      In gRPC when set to true, this is used to disable the client transport security.
+      See https://godoc.org/google.golang.org/grpc#WithInsecure.
+      In HTTP, this disables verifying the server's certificate chain and host name
+      (InsecureSkipVerify in the tls Config). Please refer to
+      https://godoc.org/crypto/tls#Config for more information.
+      (optional, default false)
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+    doc: |
+      InsecureSkipVerify will enable TLS but not verify the certificate.
+  - name: server_name_override
+    kind: string
+    default: ""
+    doc: |
+      ServerName requested by client for virtual hosting.
+      This sets the ServerName in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
+- name: metrics
+  type: metadata.MetricsSettings
+  kind: struct
+  doc: |
+    MetricsSettings provides settings for vcenterreceiver metrics.
+  fields:
+  - name: vcenter.cluster.cpu.effective
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.cluster.cpu.limit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.cluster.host.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.cluster.memory.effective
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.cluster.memory.limit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.cluster.memory.used
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.cluster.vm.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.datastore.disk.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.datastore.disk.utilization
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.cpu.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.cpu.utilization
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.disk.latency.avg
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.disk.latency.avg.read
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.disk.latency.avg.write
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.disk.latency.max
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.disk.throughput
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.disk.throughput.read
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.disk.throughput.write
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.memory.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.memory.utilization
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.packet.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.packet.count.receive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.packet.count.transmit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.packet.errors
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.packet.errors.receive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.packet.errors.transmit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.throughput
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.throughput.receive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.throughput.transmit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.host.network.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.resource_pool.cpu.shares
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.resource_pool.cpu.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.resource_pool.memory.shares
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.resource_pool.memory.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.disk.latency.avg
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.disk.latency.avg.read
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.disk.latency.avg.write
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.disk.latency.max
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.disk.throughput
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.disk.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.disk.utilization
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.memory.ballooned
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.memory.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.network.packet.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.network.packet.count.receive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.network.packet.count.transmit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.network.throughput
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.network.throughput.receive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.network.throughput.transmit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.network.usage
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+- name: endpoint
+  kind: string
+  default: ""
+- name: username
+  kind: string
+  default: ""
+- name: password
+  kind: string
+  default: ""

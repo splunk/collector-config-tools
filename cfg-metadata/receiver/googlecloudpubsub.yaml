@@ -1,0 +1,54 @@
+type: '*googlecloudpubsubreceiver.Config'
+doc: |
+  ReceiverSettings defines common settings for a component.Receiver configuration.
+  Specific receivers can embed this struct and extend it with more fields if needed.
+
+  It is highly recommended to "override" the Validate() function.
+
+  When embedded in the receiver config it must be with `mapstructure:",squash"` tag.
+fields:
+- name: project
+  kind: string
+  default: ""
+  doc: |
+    Google Cloud Project ID where the Pubsub client will connect to
+- name: user_agent
+  kind: string
+  default: ""
+  doc: |
+    User agent that will be used by the Pubsub client to connect to the service
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    Override of the Pubsub Endpoint, leave empty for the default endpoint
+- name: insecure
+  kind: bool
+  default: false
+  doc: |
+    Only has effect if Endpoint is not ""
+- name: timeout
+  type: time.Duration
+  kind: int64
+  doc: |
+    Timeout is the timeout for every attempt to send data to the backend.
+- name: subscription
+  kind: string
+  default: ""
+  doc: |
+    The fully qualified resource name of the Pubsub subscription
+- name: encoding
+  kind: string
+  default: ""
+  doc: |
+    Lock down the encoding of the payload, leave empty for attribute based detection
+- name: compression
+  kind: string
+  default: ""
+  doc: |
+    Lock down the compression of the payload, leave empty for attribute based detection
+- name: client_id
+  kind: string
+  default: ""
+  doc: |
+    The client id that will be used by Pubsub to make load balancing decisions

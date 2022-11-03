@@ -1,0 +1,25 @@
+type: '*sigv4authextension.Config'
+doc: |
+  Config stores the configuration for the Sigv4 Authenticator
+fields:
+- name: region
+  kind: string
+  default: ""
+- name: service
+  kind: string
+  default: ""
+- name: assume_role
+  type: sigv4authextension.AssumeRole
+  kind: struct
+  doc: |
+    AssumeRole holds the configuration needed to assume a role
+  fields:
+  - name: arn
+    kind: string
+    default: ""
+  - name: session_name
+    kind: string
+    default: ""
+  - name: sts_region
+    kind: string
+    default: ""

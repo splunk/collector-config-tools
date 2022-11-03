@@ -1,0 +1,104 @@
+type: '*pulsarreceiver.Config'
+doc: |
+  ReceiverSettings defines common settings for a component.Receiver configuration.
+  Specific receivers can embed this struct and extend it with more fields if needed.
+
+  It is highly recommended to "override" the Validate() function.
+
+  When embedded in the receiver config it must be with `mapstructure:",squash"` tag.
+fields:
+- name: endpoint
+  kind: string
+  default: pulsar://localhost:6650
+  doc: |
+    Configure the service URL for the Pulsar service.
+- name: topic
+  kind: string
+  default: ""
+  doc: |
+    The topic of pulsar to consume logs,metrics,traces. (default = "otlp_traces" for traces,
+    "otlp_metrics" for metrics, "otlp_logs" for logs)
+- name: subscription
+  kind: string
+  default: otlp_subscription
+  doc: |
+    The Subscription that receiver will be consuming messages from (default "otlp_subscription")
+- name: encoding
+  kind: string
+  default: otlp_proto
+  doc: |
+    Encoding of the messages (default "otlp_proto")
+- name: consumer_name
+  kind: string
+  default: ""
+  doc: |
+    Name specifies the consumer name.
+- name: tls_trust_certs_file_path
+  kind: string
+  default: ""
+  doc: |
+    Set the path to the trusted TLS certificate file
+- name: tls_allow_insecure_connection
+  kind: bool
+  default: false
+  doc: |
+    Configure whether the Pulsar client accept untrusted TLS certificate from broker (default: false)
+- name: auth
+  type: pulsarreceiver.Authentication
+  kind: struct
+  fields:
+  - name: tls
+    type: '*pulsarreceiver.TLS'
+    kind: ptr
+    fields:
+    - name: cert_file
+      kind: string
+      default: ""
+    - name: key_file
+      kind: string
+      default: ""
+  - name: Token
+    type: '*pulsarreceiver.Token'
+    kind: ptr
+    fields:
+    - name: Token
+      kind: string
+      default: ""
+  - name: athenz
+    type: '*pulsarreceiver.Athenz'
+    kind: ptr
+    fields:
+    - name: provider_domain
+      kind: string
+      default: ""
+    - name: tenant_domain
+      kind: string
+      default: ""
+    - name: tenant_service
+      kind: string
+      default: ""
+    - name: private_key
+      kind: string
+      default: ""
+    - name: key_id
+      kind: string
+      default: ""
+    - name: principal_header
+      kind: string
+      default: ""
+    - name: zts_url
+      kind: string
+      default: ""
+  - name: oauth2
+    type: '*pulsarreceiver.OAuth2'
+    kind: ptr
+    fields:
+    - name: issuer_url
+      kind: string
+      default: ""
+    - name: client_id
+      kind: string
+      default: ""
+    - name: audience
+      kind: string
+      default: ""

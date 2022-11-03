@@ -1,0 +1,40 @@
+type: '*oidcauthextension.Config'
+doc: |
+  Config has the configuration for the OIDC Authenticator extension.
+fields:
+- name: attribute
+  kind: string
+  default: authorization
+  doc: |
+    The attribute (header name) to look for auth data. Optional, default value: "authorization".
+- name: issuer_url
+  kind: string
+  default: ""
+  doc: |
+    IssuerURL is the base URL for the OIDC provider.
+    Required.
+- name: audience
+  kind: string
+  default: ""
+  doc: |
+    Audience of the token, used during the verification.
+    For example: "https://accounts.google.com" or "https://login.salesforce.com".
+    Required.
+- name: issuer_ca_path
+  kind: string
+  default: ""
+  doc: |
+    The local path for the issuer CA's TLS server cert.
+    Optional.
+- name: username_claim
+  kind: string
+  default: ""
+  doc: |
+    The claim to use as the username, in case the token's 'sub' isn't the suitable source.
+    Optional.
+- name: groups_claim
+  kind: string
+  default: ""
+  doc: |
+    The claim that holds the subject's group membership information.
+    Optional.

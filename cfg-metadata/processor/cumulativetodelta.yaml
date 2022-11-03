@@ -1,0 +1,72 @@
+type: '*cumulativetodeltaprocessor.Config'
+doc: |
+  Config defines the configuration for the processor.
+fields:
+- name: max_staleness
+  type: time.Duration
+  kind: int64
+  doc: |
+    MaxStaleness is the total time a state entry will live past the time it was last seen. Set to 0 to retain state indefinitely.
+- name: include
+  type: cumulativetodeltaprocessor.MatchMetrics
+  kind: struct
+  doc: |
+    Include specifies a filter on the metrics that should be converted.
+    Exclude specifies a filter on the metrics that should not be converted.
+    If neither `include` nor `exclude` are set, all metrics will be converted.
+    Cannot be used with deprecated Metrics config option.
+  fields:
+  - name: match_type
+    type: filterset.MatchType
+    kind: string
+    default: ""
+  - name: regexp
+    type: '*regexp.Config'
+    kind: ptr
+    doc: |
+      Config represents the options for a NewFilterSet.
+    fields:
+    - name: cacheenabled
+      kind: bool
+      default: false
+      doc: |
+        CacheEnabled determines whether match results are LRU cached to make subsequent matches faster.
+        Cache size is unlimited unless CacheMaxNumEntries is also specified.
+    - name: cachemaxnumentries
+      kind: int
+      doc: |
+        CacheMaxNumEntries is the max number of entries of the LRU cache that stores match results.
+        CacheMaxNumEntries is ignored if CacheEnabled is false.
+  - name: metrics
+    type: '[]string'
+    kind: slice
+- name: exclude
+  type: cumulativetodeltaprocessor.MatchMetrics
+  kind: struct
+  doc: |
+    Config configures the matching behavior of a FilterSet.
+  fields:
+  - name: match_type
+    type: filterset.MatchType
+    kind: string
+    default: ""
+  - name: regexp
+    type: '*regexp.Config'
+    kind: ptr
+    doc: |
+      Config represents the options for a NewFilterSet.
+    fields:
+    - name: cacheenabled
+      kind: bool
+      default: false
+      doc: |
+        CacheEnabled determines whether match results are LRU cached to make subsequent matches faster.
+        Cache size is unlimited unless CacheMaxNumEntries is also specified.
+    - name: cachemaxnumentries
+      kind: int
+      doc: |
+        CacheMaxNumEntries is the max number of entries of the LRU cache that stores match results.
+        CacheMaxNumEntries is ignored if CacheEnabled is false.
+  - name: metrics
+    type: '[]string'
+    kind: slice

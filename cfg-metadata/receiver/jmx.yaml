@@ -1,0 +1,121 @@
+type: '*jmxreceiver.Config'
+doc: |
+  ReceiverSettings defines common settings for a component.Receiver configuration.
+  Specific receivers can embed this struct and extend it with more fields if needed.
+
+  It is highly recommended to "override" the Validate() function.
+
+  When embedded in the receiver config it must be with `mapstructure:",squash"` tag.
+fields:
+- name: jar_path
+  kind: string
+  default: /opt/opentelemetry-java-contrib-jmx-metrics.jar
+  doc: |
+    The path for the JMX Metric Gatherer uber JAR (/opt/opentelemetry-java-contrib-jmx-metrics.jar by default).
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    The Service URL or host:port for the target coerced to one of form: service:jmx:rmi:///jndi/rmi://<host>:<port>/jmxrmi.
+- name: target_system
+  kind: string
+  default: ""
+  doc: |
+    The target system for the metric gatherer whose built in groovy script to run.
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s
+  doc: |
+    The duration in between groovy script invocations and metric exports (10 seconds by default).
+    Will be converted to milliseconds.
+- name: otlp
+  type: jmxreceiver.otlpExporterConfig
+  kind: struct
+  doc: |
+    The exporter settings for
+  fields:
+  - name: endpoint
+    kind: string
+    default: 0.0.0.0:0
+    doc: |
+      The OTLP Receiver endpoint to send metrics to ("0.0.0.0:<random open port>" by default).
+  - name: timeout
+    type: time.Duration
+    kind: int64
+    default: 5s
+    doc: |
+      Timeout is the timeout for every attempt to send data to the backend.
+  - name: headers
+    type: map[string]string
+    kind: map
+    doc: |
+      The headers to include in OTLP metric submission requests.
+- name: username
+  kind: string
+  default: ""
+  doc: |
+    The JMX username
+- name: password
+  kind: string
+  default: ""
+  doc: |
+    The JMX password
+- name: keystore_path
+  kind: string
+  default: ""
+  doc: |
+    The keystore path for SSL
+- name: keystore_password
+  kind: string
+  default: ""
+  doc: |
+    The keystore password for SSL
+- name: keystore_type
+  kind: string
+  default: ""
+  doc: |
+    The keystore type for SSL
+- name: truststore_path
+  kind: string
+  default: ""
+  doc: |
+    The truststore path for SSL
+- name: truststore_password
+  kind: string
+  default: ""
+  doc: |
+    The truststore password for SSL
+- name: truststore_type
+  kind: string
+  default: ""
+  doc: |
+    The truststore type for SSL
+- name: remote_profile
+  kind: string
+  default: ""
+  doc: |
+    The JMX remote profile.  Should be one of:
+    `"SASL/PLAIN"`, `"SASL/DIGEST-MD5"`, `"SASL/CRAM-MD5"`, `"TLS SASL/PLAIN"`, `"TLS SASL/DIGEST-MD5"`, or
+    `"TLS SASL/CRAM-MD5"`, though no enforcement is applied.
+- name: realm
+  kind: string
+  default: ""
+  doc: |
+    The SASL/DIGEST-MD5 realm
+- name: additional_jars
+  type: '[]string'
+  kind: slice
+  doc: |
+    Array of additional JARs to be added to the the class path when launching the JMX Metric Gatherer JAR
+- name: resource_attributes
+  type: map[string]string
+  kind: map
+  doc: |
+    Map of resource attributes used by the Java SDK Autoconfigure to set resource attributes
+- name: log_level
+  kind: string
+  default: ""
+  doc: |
+    Log level used by the JMX metric gatherer. Should be one of:
+    `"trace"`, `"debug"`, `"info"`, `"warn"`, `"error"`, `"off"`

@@ -1,0 +1,22 @@
+type: '*batchprocessor.Config'
+doc: |
+  Config defines configuration for batch processor.
+fields:
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 200ms
+  doc: |
+    Timeout sets the time after which a batch will be sent regardless of size.
+- name: send_batch_size
+  kind: uint32
+  default: 8192
+  doc: |
+    SendBatchSize is the size of a batch which after hit, will trigger it to be sent.
+- name: send_batch_max_size
+  kind: uint32
+  default: 0
+  doc: |
+    SendBatchMaxSize is the maximum size of a batch. It must be larger than SendBatchSize.
+    Larger batches are split into smaller units.
+    Default value is 0, that means no maximum size.

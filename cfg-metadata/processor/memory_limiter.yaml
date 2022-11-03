@@ -1,0 +1,35 @@
+type: '*memorylimiterprocessor.Config'
+doc: |
+  Config defines configuration for memory memoryLimiter processor.
+fields:
+- name: check_interval
+  type: time.Duration
+  kind: int64
+  doc: |
+    CheckInterval is the time between measurements of memory usage for the
+    purposes of avoiding going over the limits. Defaults to zero, so no
+    checks will be performed.
+- name: limit_mib
+  kind: uint32
+  default: 0
+  doc: |
+    MemoryLimitMiB is the maximum amount of memory, in MiB, targeted to be
+    allocated by the process.
+- name: spike_limit_mib
+  kind: uint32
+  default: 0
+  doc: |
+    MemorySpikeLimitMiB is the maximum, in MiB, spike expected between the
+    measurements of memory usage.
+- name: limit_percentage
+  kind: uint32
+  default: 0
+  doc: |
+    MemoryLimitPercentage is the maximum amount of memory, in %, targeted to be
+    allocated by the process. The fixed memory settings MemoryLimitMiB has a higher precedence.
+- name: spike_limit_percentage
+  kind: uint32
+  default: 0
+  doc: |
+    MemorySpikePercentage is the maximum, in percents against the total memory,
+    spike expected between the measurements of memory usage.

@@ -1,0 +1,103 @@
+type: '*oauth2clientauthextension.Config'
+doc: |
+  Config stores the configuration for OAuth2 Client Credentials (2-legged OAuth2 flow) setup.
+fields:
+- name: client_id
+  kind: string
+  default: ""
+  doc: |
+    ClientID is the application's ID.
+    See https://datatracker.ietf.org/doc/html/rfc6749#section-2.2
+- name: client_secret
+  kind: string
+  default: ""
+  doc: |
+    ClientSecret is the application's secret.
+    See https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1
+- name: endpoint_params
+  type: url.Values
+  kind: map
+  doc: |
+    EndpointParams specifies additional parameters for requests to the token endpoint.
+- name: token_url
+  kind: string
+  default: ""
+  doc: |
+    TokenURL is the resource server's token endpoint
+    URL. This is a constant specific to each server.
+    See https://datatracker.ietf.org/doc/html/rfc6749#section-3.2
+- name: scopes
+  type: '[]string'
+  kind: slice
+  doc: |
+    Scope specifies optional requested permissions.
+    See https://datatracker.ietf.org/doc/html/rfc6749#section-3.3
+- name: tls
+  type: configtls.TLSClientSetting
+  kind: struct
+  doc: |
+    TLSSetting struct exposes TLS client configuration for the underneath client to authorization server.
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
+  - name: cert_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: key_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
+  - name: min_version
+    kind: string
+    default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
+  - name: max_version
+    kind: string
+    default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
+  - name: insecure
+    kind: bool
+    default: false
+    doc: |
+      In gRPC when set to true, this is used to disable the client transport security.
+      See https://godoc.org/google.golang.org/grpc#WithInsecure.
+      In HTTP, this disables verifying the server's certificate chain and host name
+      (InsecureSkipVerify in the tls Config). Please refer to
+      https://godoc.org/crypto/tls#Config for more information.
+      (optional, default false)
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+    doc: |
+      InsecureSkipVerify will enable TLS but not verify the certificate.
+  - name: server_name_override
+    kind: string
+    default: ""
+    doc: |
+      ServerName requested by client for virtual hosting.
+      This sets the ServerName in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
+- name: timeout
+  type: time.Duration
+  kind: int64
+  doc: |
+    Timeout parameter configures `http.Client.Timeout` for the underneath client to authorization
+    server while fetching and refreshing tokens.

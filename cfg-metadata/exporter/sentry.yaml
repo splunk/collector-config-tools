@@ -1,0 +1,14 @@
+type: '*sentryexporter.Config'
+doc: |
+  Config defines the configuration for the Sentry Exporter.
+fields:
+- name: dsn
+  kind: string
+  default: ""
+  doc: |
+    DSN to report transaction to Sentry. If the DSN is not set, no trace will be sent to Sentry.
+- name: insecure_skip_verify
+  kind: bool
+  default: false
+  doc: |
+    InsecureSkipVerify controls whether the client verifies the Sentry server certificate chain

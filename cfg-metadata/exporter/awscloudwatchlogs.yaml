@@ -1,0 +1,118 @@
+type: '*awscloudwatchlogsexporter.Config'
+doc: |
+  Config represent a configuration for the CloudWatch logs exporter.
+fields:
+- name: retry_on_failure
+  type: exporterhelper.RetrySettings
+  kind: struct
+  doc: |
+    RetrySettings defines configuration for retrying batches in case of export failure.
+    The current supported strategy is exponential backoff.
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+    doc: |
+      Enabled indicates whether to not retry sending batches in case of export failure.
+  - name: initial_interval
+    type: time.Duration
+    kind: int64
+    default: 5s
+    doc: |
+      InitialInterval the time to wait after the first failure before retrying.
+  - name: max_interval
+    type: time.Duration
+    kind: int64
+    default: 30s
+    doc: |
+      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
+      consecutive retries will always be `MaxInterval`.
+  - name: max_elapsed_time
+    type: time.Duration
+    kind: int64
+    default: 5m0s
+    doc: |
+      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
+      Once this value is reached, the data is discarded.
+- name: log_group_name
+  kind: string
+  default: ""
+  doc: |
+    LogGroupName is the name of CloudWatch log group which defines group of log streams
+    that share the same retention, monitoring, and access control settings.
+- name: log_stream_name
+  kind: string
+  default: ""
+  doc: |
+    LogStreamName is the name of CloudWatch log stream which is a sequence of log events
+    that share the same source.
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    Endpoint is the CloudWatch Logs service endpoint which the requests
+    are forwarded to. https://docs.aws.amazon.com/general/latest/gr/cwl_region.html
+    e.g. logs.us-east-1.amazonaws.com
+    Optional.
+- name: sending_queue
+  type: awscloudwatchlogsexporter.QueueSettings
+  kind: struct
+  doc: |
+    QueueSettings is a subset of exporterhelper.QueueSettings,
+    because only QueueSize is user-settable due to how AWS CloudWatch API works
+  fields:
+  - name: queue_size
+    kind: int
+    default: 5000
+    doc: |
+      QueueSize set the length of the sending queue
+- name: num_workers
+  kind: int
+  default: 8
+  doc: |
+    Maximum number of concurrent calls to AWS X-Ray to upload documents.
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    X-Ray service endpoint to which the collector sends segment documents.
+- name: request_timeout_seconds
+  kind: int
+  default: 30
+  doc: |
+    Number of seconds before timing out a request.
+- name: max_retries
+  kind: int
+  default: 2
+  doc: |
+    Maximum number of retries before abandoning an attempt to post data.
+- name: no_verify_ssl
+  kind: bool
+  default: false
+  doc: |
+    Enable or disable TLS certificate verification.
+- name: proxy_address
+  kind: string
+  default: ""
+  doc: |
+    Upload segments to AWS X-Ray through a proxy.
+- name: region
+  kind: string
+  default: ""
+  doc: |
+    Send segments to AWS X-Ray service in a specific region.
+- name: local_mode
+  kind: bool
+  default: false
+  doc: |
+    Local mode to skip EC2 instance metadata check.
+- name: resource_arn
+  kind: string
+  default: ""
+  doc: |
+    Amazon Resource Name (ARN) of the AWS resource running the collector.
+- name: role_arn
+  kind: string
+  default: ""
+  doc: |
+    IAM role to upload segments to a different account.

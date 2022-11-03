@@ -1,0 +1,38 @@
+type: '*windowsperfcountersreceiver.Config'
+doc: |
+  Config defines configuration for WindowsPerfCounters receiver.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 1m0s
+- name: metrics
+  type: map[string]windowsperfcountersreceiver.MetricConfig
+  kind: map
+- name: perfcounters
+  type: '[]windowsperfcountersreceiver.ObjectConfig'
+  kind: slice
+  doc: |
+    ObjectConfig defines configuration for a perf counter object.
+  fields:
+  - name: object
+    kind: string
+    default: ""
+  - name: instances
+    type: '[]string'
+    kind: slice
+  - name: counters
+    type: '[]windowsperfcountersreceiver.CounterConfig'
+    kind: slice
+    doc: |
+      CounterConfig defines the individual counter in an object.
+    fields:
+    - name: name
+      kind: string
+      default: ""
+    - name: metric
+      kind: string
+      default: ""
+    - name: attributes
+      type: map[string]string
+      kind: map

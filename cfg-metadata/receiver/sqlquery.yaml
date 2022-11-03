@@ -1,0 +1,60 @@
+type: '*sqlqueryreceiver.Config'
+doc: |
+  ScraperControllerSettings defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of config.ReceiverSettings, and extend it with more fields if needed.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s
+- name: driver
+  kind: string
+  default: ""
+- name: datasource
+  kind: string
+  default: ""
+- name: queries
+  type: '[]sqlqueryreceiver.Query'
+  kind: slice
+  fields:
+  - name: sql
+    kind: string
+    default: ""
+  - name: metrics
+    type: '[]sqlqueryreceiver.MetricCfg'
+    kind: slice
+    fields:
+    - name: metric_name
+      kind: string
+      default: ""
+    - name: value_column
+      kind: string
+      default: ""
+    - name: attribute_columns
+      type: '[]string'
+      kind: slice
+    - name: monotonic
+      kind: bool
+      default: false
+    - name: value_type
+      type: sqlqueryreceiver.MetricValueType
+      kind: string
+      default: ""
+    - name: data_type
+      type: sqlqueryreceiver.MetricType
+      kind: string
+      default: ""
+    - name: aggregation
+      type: sqlqueryreceiver.MetricAggregation
+      kind: string
+      default: ""
+    - name: unit
+      kind: string
+      default: ""
+    - name: description
+      kind: string
+      default: ""
+    - name: static_attributes
+      type: map[string]string
+      kind: map

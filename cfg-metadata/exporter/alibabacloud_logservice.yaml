@@ -1,0 +1,41 @@
+type: '*alibabacloudlogserviceexporter.Config'
+doc: |
+  Config defines configuration for AlibabaCloud Log Service exporter.
+fields:
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    LogService's Endpoint, https://www.alibabacloud.com/help/doc-detail/29008.htm
+    for AlibabaCloud Kubernetes(or ECS), set {region-id}-intranet.log.aliyuncs.com, eg cn-hangzhou-intranet.log.aliyuncs.com;
+     others set {region-id}.log.aliyuncs.com, eg cn-hangzhou.log.aliyuncs.com
+- name: project
+  kind: string
+  default: ""
+  doc: |
+    LogService's Project Name
+- name: logstore
+  kind: string
+  default: ""
+  doc: |
+    LogService's Logstore Name
+- name: access_key_id
+  kind: string
+  default: ""
+  doc: |
+    AlibabaCloud access key id
+- name: access_key_secret
+  kind: string
+  default: ""
+  doc: |
+    AlibabaCloud access key secret
+- name: ecs_ram_role
+  kind: string
+  default: ""
+  doc: |
+    Set AlibabaCLoud ECS ram role if you are using ACK
+- name: token_file_path
+  kind: string
+  default: ""
+  doc: |
+    Set Token File Path if you are using ACK

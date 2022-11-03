@@ -1,0 +1,17 @@
+type: '*azuremonitorexporter.Config'
+doc: |
+  Config defines configuration for Azure Monitor
+fields:
+- name: endpoint
+  kind: string
+  default: https://dc.services.visualstudio.com/v2/track
+- name: instrumentation_key
+  kind: string
+  default: ""
+- name: maxbatchsize
+  kind: int
+  default: 1024
+- name: maxbatchinterval
+  type: time.Duration
+  kind: int64
+  default: 10s

@@ -1,0 +1,49 @@
+type: '*prometheusreceiver.Config'
+doc: |
+  Config defines configuration for Prometheus receiver.
+fields:
+- name: buffer_period
+  type: time.Duration
+  kind: int64
+- name: buffer_count
+  kind: int
+- name: use_start_time_metric
+  kind: bool
+  default: false
+  doc: |
+    UseStartTimeMetric enables retrieving the start time of all counter metrics
+    from the process_start_time_seconds metric. This is only correct if all counters on that endpoint
+    started after the process start time, and the process is the only actor exporting the metric after
+    the process started. It should not be used in "exporters" which export counters that may have
+    started before the process itself. Use only if you know what you are doing, as this may result
+    in incorrect rate calculations.
+- name: start_time_metric_regex
+  kind: string
+  default: ""
+- name: target_allocator
+  type: '*prometheusreceiver.targetAllocator'
+  kind: ptr
+  fields:
+  - name: endpoint
+    kind: string
+    default: ""
+  - name: interval
+    type: time.Duration
+    kind: int64
+  - name: collector_id
+    kind: string
+    default: ""
+  - name: http_sd_config
+    type: interface {}
+    kind: interface
+    doc: |
+      ConfigPlaceholder is just an entry to make the configuration pass a check
+      that requires that all keys present in the config actually exist on the
+      structure, ie.: it will error if an unknown key is present.
+- name: config
+  type: interface {}
+  kind: interface
+  doc: |
+    ConfigPlaceholder is just an entry to make the configuration pass a check
+    that requires that all keys present in the config actually exist on the
+    structure, ie.: it will error if an unknown key is present.

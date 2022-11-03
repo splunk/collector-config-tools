@@ -1,0 +1,23 @@
+type: '*collectdreceiver.Config'
+doc: |
+  Config defines configuration for Collectd receiver.
+fields:
+- name: endpoint
+  kind: string
+  default: localhost:8081
+  doc: |
+    Endpoint configures the address for this network connection.
+    The address has the form "host:port". The host must be a literal IP address, or a host name that can be
+    resolved to IP addresses. The port must be a literal port number or a service name.
+    If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
+    "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 30s
+- name: attributes_prefix
+  kind: string
+  default: ""
+- name: encoding
+  kind: string
+  default: json

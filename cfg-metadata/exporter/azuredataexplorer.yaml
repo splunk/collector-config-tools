@@ -1,0 +1,40 @@
+type: '*azuredataexplorerexporter.Config'
+doc: |
+  Config defines configuration for Azure Data Explorer Exporter
+fields:
+- name: cluster_uri
+  kind: string
+  default: ""
+- name: application_id
+  kind: string
+  default: ""
+- name: application_key
+  kind: string
+  default: ""
+- name: tenant_id
+  kind: string
+  default: ""
+- name: db_name
+  kind: string
+  default: oteldb
+- name: metrics_table_name
+  kind: string
+  default: OTELMetrics
+- name: logs_table_name
+  kind: string
+  default: OTELLogs
+- name: traces_table_name
+  kind: string
+  default: OTELTraces
+- name: metrics_table_json_mapping
+  kind: string
+  default: ""
+- name: logs_table_json_mapping
+  kind: string
+  default: ""
+- name: traces_table_json_mapping
+  kind: string
+  default: ""
+- name: ingestion_type
+  kind: string
+  default: queued

@@ -1,0 +1,10 @@
+type: '*dbstorage.Config'
+doc: |
+  Config defines configuration for dbstorage extension.
+fields:
+- name: driver
+  kind: string
+  default: ""
+- name: datasource
+  kind: string
+  default: ""

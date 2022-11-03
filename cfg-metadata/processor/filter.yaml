@@ -1,0 +1,625 @@
+type: '*filterprocessor.Config'
+doc: |
+  Config defines configuration for Resource processor.
+fields:
+- name: metrics
+  type: filterprocessor.MetricFilters
+  kind: struct
+  doc: |
+    MetricFilters filters by Metric properties.
+  fields:
+  - name: include
+    type: '*filtermetric.MatchProperties'
+    kind: ptr
+    doc: |
+      Include match properties describe metrics that should be included in the Collector Service pipeline,
+      all other metrics should be dropped from further processing.
+      If both Include and Exclude are specified, Include filtering occurs first.
+    fields:
+    - name: match_type
+      type: filtermetric.MatchType
+      kind: string
+      default: ""
+      doc: |
+        MatchType specifies the type of matching desired
+    - name: regexp
+      type: '*regexp.Config'
+      kind: ptr
+      doc: |
+        RegexpConfig specifies options for the Regexp match type
+      fields:
+      - name: cacheenabled
+        kind: bool
+        default: false
+        doc: |
+          CacheEnabled determines whether match results are LRU cached to make subsequent matches faster.
+          Cache size is unlimited unless CacheMaxNumEntries is also specified.
+      - name: cachemaxnumentries
+        kind: int
+        doc: |
+          CacheMaxNumEntries is the max number of entries of the LRU cache that stores match results.
+          CacheMaxNumEntries is ignored if CacheEnabled is false.
+    - name: metric_names
+      type: '[]string'
+      kind: slice
+      doc: |
+        MetricNames specifies the list of string patterns to match metric names against.
+        A match occurs if the metric name matches at least one string pattern in this list.
+    - name: expressions
+      type: '[]string'
+      kind: slice
+      doc: |
+        Expressions specifies the list of expr expressions to match metrics against.
+        A match occurs if any datapoint in a metric matches at least one expression in this list.
+    - name: resource_attributes
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        ResourceAttributes defines a list of possible resource attributes to match metrics against.
+        A match occurs if any resource attribute matches all expressions in this given list.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+  - name: exclude
+    type: '*filtermetric.MatchProperties'
+    kind: ptr
+    doc: |
+      Exclude match properties describe metrics that should be excluded from the Collector Service pipeline,
+      all other metrics should be included.
+      If both Include and Exclude are specified, Include filtering occurs first.
+    fields:
+    - name: match_type
+      type: filtermetric.MatchType
+      kind: string
+      default: ""
+      doc: |
+        MatchType specifies the type of matching desired
+    - name: regexp
+      type: '*regexp.Config'
+      kind: ptr
+      doc: |
+        RegexpConfig specifies options for the Regexp match type
+      fields:
+      - name: cacheenabled
+        kind: bool
+        default: false
+        doc: |
+          CacheEnabled determines whether match results are LRU cached to make subsequent matches faster.
+          Cache size is unlimited unless CacheMaxNumEntries is also specified.
+      - name: cachemaxnumentries
+        kind: int
+        doc: |
+          CacheMaxNumEntries is the max number of entries of the LRU cache that stores match results.
+          CacheMaxNumEntries is ignored if CacheEnabled is false.
+    - name: metric_names
+      type: '[]string'
+      kind: slice
+      doc: |
+        MetricNames specifies the list of string patterns to match metric names against.
+        A match occurs if the metric name matches at least one string pattern in this list.
+    - name: expressions
+      type: '[]string'
+      kind: slice
+      doc: |
+        Expressions specifies the list of expr expressions to match metrics against.
+        A match occurs if any datapoint in a metric matches at least one expression in this list.
+    - name: resource_attributes
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        ResourceAttributes defines a list of possible resource attributes to match metrics against.
+        A match occurs if any resource attribute matches all expressions in this given list.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+  - name: regexp
+    type: '*regexp.Config'
+    kind: ptr
+    doc: |
+      RegexpConfig specifies options for the Regexp match type
+    fields:
+    - name: cacheenabled
+      kind: bool
+      default: false
+      doc: |
+        CacheEnabled determines whether match results are LRU cached to make subsequent matches faster.
+        Cache size is unlimited unless CacheMaxNumEntries is also specified.
+    - name: cachemaxnumentries
+      kind: int
+      doc: |
+        CacheMaxNumEntries is the max number of entries of the LRU cache that stores match results.
+        CacheMaxNumEntries is ignored if CacheEnabled is false.
+- name: logs
+  type: filterprocessor.LogFilters
+  kind: struct
+  doc: |
+    LogFilters filters by Log properties.
+  fields:
+  - name: include
+    type: '*filterprocessor.LogMatchProperties'
+    kind: ptr
+    doc: |
+      Include match properties describe logs that should be included in the Collector Service pipeline,
+      all other logs should be dropped from further processing.
+      If both Include and Exclude are specified, Include filtering occurs first.
+    fields:
+    - name: match_type
+      type: filterprocessor.LogMatchType
+      kind: string
+      default: ""
+      doc: |
+        LogMatchType specifies the type of matching desired
+    - name: resource_attributes
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        ResourceAttributes defines a list of possible resource attributes to match logs against.
+        A match occurs if any resource attribute matches all expressions in this given list.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+    - name: record_attributes
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        RecordAttributes defines a list of possible record attributes to match logs against.
+        A match occurs if any record attribute matches at least one expression in this given list.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+    - name: severity_texts
+      type: '[]string'
+      kind: slice
+      doc: |
+        SeverityTexts is a list of strings that the LogRecord's severity text field must match
+        against.
+    - name: severity_number
+      type: '*filterprocessor.LogSeverityNumberMatchProperties'
+      kind: ptr
+      doc: |
+        SeverityNumberProperties defines how to match against a log record's SeverityNumber, if defined.
+      fields:
+      - name: min
+        type: filterprocessor.logSeverity
+        kind: string
+        default: ""
+        doc: |
+          Min is the minimum severity needed for the log record to match.
+          This corresponds to the short names specified here:
+          https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#displaying-severity
+          this field is case-insensitive ("INFO" == "info")
+      - name: match_undefined
+        kind: bool
+        default: false
+        doc: |
+          MatchUndefined lets logs records with "unknown" severity match.
+          If MinSeverity is not set, this field is ignored, as fields are not matched based on severity.
+    - name: bodies
+      type: '[]string'
+      kind: slice
+      doc: |
+        LogBodies is a list of strings that the LogRecord's body field must match
+        against.
+  - name: exclude
+    type: '*filterprocessor.LogMatchProperties'
+    kind: ptr
+    doc: |
+      Exclude match properties describe logs that should be excluded from the Collector Service pipeline,
+      all other logs should be included.
+      If both Include and Exclude are specified, Include filtering occurs first.
+    fields:
+    - name: match_type
+      type: filterprocessor.LogMatchType
+      kind: string
+      default: ""
+      doc: |
+        LogMatchType specifies the type of matching desired
+    - name: resource_attributes
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        ResourceAttributes defines a list of possible resource attributes to match logs against.
+        A match occurs if any resource attribute matches all expressions in this given list.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+    - name: record_attributes
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        RecordAttributes defines a list of possible record attributes to match logs against.
+        A match occurs if any record attribute matches at least one expression in this given list.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+    - name: severity_texts
+      type: '[]string'
+      kind: slice
+      doc: |
+        SeverityTexts is a list of strings that the LogRecord's severity text field must match
+        against.
+    - name: severity_number
+      type: '*filterprocessor.LogSeverityNumberMatchProperties'
+      kind: ptr
+      doc: |
+        SeverityNumberProperties defines how to match against a log record's SeverityNumber, if defined.
+      fields:
+      - name: min
+        type: filterprocessor.logSeverity
+        kind: string
+        default: ""
+        doc: |
+          Min is the minimum severity needed for the log record to match.
+          This corresponds to the short names specified here:
+          https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#displaying-severity
+          this field is case-insensitive ("INFO" == "info")
+      - name: match_undefined
+        kind: bool
+        default: false
+        doc: |
+          MatchUndefined lets logs records with "unknown" severity match.
+          If MinSeverity is not set, this field is ignored, as fields are not matched based on severity.
+    - name: bodies
+      type: '[]string'
+      kind: slice
+      doc: |
+        LogBodies is a list of strings that the LogRecord's body field must match
+        against.
+- name: spans
+  type: filterprocessor.SpanFilters
+  kind: struct
+  doc: |
+    SpanFilters filters by Span attributes and various other fields, Regexp config is per matcher
+  fields:
+  - name: include
+    type: '*filterconfig.MatchProperties'
+    kind: ptr
+    doc: |
+      Include match properties describe spans that should be included in the Collector Service pipeline,
+      all other spans should be dropped from further processing.
+      If both Include and Exclude are specified, Include filtering occurs first.
+    fields:
+    - name: match_type
+      type: filterset.MatchType
+      kind: string
+      default: ""
+    - name: regexp
+      type: '*regexp.Config'
+      kind: ptr
+      doc: |
+        Config represents the options for a NewFilterSet.
+      fields:
+      - name: cacheenabled
+        kind: bool
+        default: false
+        doc: |
+          CacheEnabled determines whether match results are LRU cached to make subsequent matches faster.
+          Cache size is unlimited unless CacheMaxNumEntries is also specified.
+      - name: cachemaxnumentries
+        kind: int
+        doc: |
+          CacheMaxNumEntries is the max number of entries of the LRU cache that stores match results.
+          CacheMaxNumEntries is ignored if CacheEnabled is false.
+    - name: services
+      type: '[]string'
+      kind: slice
+      doc: |
+        Services specify the list of items to match service name against.
+        A match occurs if the span's service name matches at least one item in this list.
+        This is an optional field.
+    - name: span_names
+      type: '[]string'
+      kind: slice
+      doc: |
+        SpanNames specify the list of items to match span name against.
+        A match occurs if the span name matches at least one item in this list.
+        This is an optional field.
+    - name: log_bodies
+      type: '[]string'
+      kind: slice
+      doc: |
+        LogBodies is a list of strings that the LogRecord's body field must match
+        against.
+    - name: log_severity_texts
+      type: '[]string'
+      kind: slice
+      doc: |
+        LogSeverityTexts is a list of strings that the LogRecord's severity text field must match
+        against.
+    - name: log_severity_number
+      type: '*filterconfig.LogSeverityNumberMatchProperties'
+      kind: ptr
+      doc: |
+        LogSeverityNumber defines how to match against a log record's SeverityNumber, if defined.
+      fields:
+      - name: min
+        type: plog.SeverityNumber
+        kind: int32
+        doc: |
+          Min is the lowest severity that may be matched.
+          e.g. if this is plog.SeverityNumberInfo, INFO, WARN, ERROR, and FATAL logs will match.
+      - name: match_undefined
+        kind: bool
+        default: false
+        doc: |
+          MatchUndefined controls whether logs with "undefined" severity matches.
+          If this is true, entries with undefined severity will match.
+    - name: metric_names
+      type: '[]string'
+      kind: slice
+      doc: |
+        MetricNames is a list of strings to match metric name against.
+        A match occurs if metric name matches at least one item in the list.
+        This field is optional.
+    - name: attributes
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        Attributes specifies the list of attributes to match against.
+        All of these attributes must match exactly for a match to occur.
+        Only match_type=strict is allowed if "attributes" are specified.
+        This is an optional field.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+    - name: resources
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        Resources specify the list of items to match the resources against.
+        A match occurs if the data's resources match at least one item in this list.
+        This is an optional field.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+    - name: libraries
+      type: '[]filterconfig.InstrumentationLibrary'
+      kind: slice
+      doc: |
+        Libraries specify the list of items to match the implementation library against.
+        A match occurs if the span's implementation library matches at least one item in this list.
+        This is an optional field.
+      fields:
+      - name: name
+        kind: string
+        default: ""
+      - name: version
+        type: '*string'
+        kind: ptr
+        doc: |
+          version match
+           expected actual  match
+           nil      <blank> yes
+           nil      1       yes
+           <blank>  <blank> yes
+           <blank>  1       no
+           1        <blank> no
+           1        1       yes
+    - name: span_kinds
+      type: '[]string'
+      kind: slice
+      doc: |
+        SpanKinds specify the list of items to match the span kind against.
+        A match occurs if the span's span kind matches at least one item in this list.
+        This is an optional field
+  - name: exclude
+    type: '*filterconfig.MatchProperties'
+    kind: ptr
+    doc: |
+      Exclude match properties describe spans that should be excluded from the Collector Service pipeline,
+      all other spans should be included.
+      If both Include and Exclude are specified, Include filtering occurs first.
+    fields:
+    - name: match_type
+      type: filterset.MatchType
+      kind: string
+      default: ""
+    - name: regexp
+      type: '*regexp.Config'
+      kind: ptr
+      doc: |
+        Config represents the options for a NewFilterSet.
+      fields:
+      - name: cacheenabled
+        kind: bool
+        default: false
+        doc: |
+          CacheEnabled determines whether match results are LRU cached to make subsequent matches faster.
+          Cache size is unlimited unless CacheMaxNumEntries is also specified.
+      - name: cachemaxnumentries
+        kind: int
+        doc: |
+          CacheMaxNumEntries is the max number of entries of the LRU cache that stores match results.
+          CacheMaxNumEntries is ignored if CacheEnabled is false.
+    - name: services
+      type: '[]string'
+      kind: slice
+      doc: |
+        Services specify the list of items to match service name against.
+        A match occurs if the span's service name matches at least one item in this list.
+        This is an optional field.
+    - name: span_names
+      type: '[]string'
+      kind: slice
+      doc: |
+        SpanNames specify the list of items to match span name against.
+        A match occurs if the span name matches at least one item in this list.
+        This is an optional field.
+    - name: log_bodies
+      type: '[]string'
+      kind: slice
+      doc: |
+        LogBodies is a list of strings that the LogRecord's body field must match
+        against.
+    - name: log_severity_texts
+      type: '[]string'
+      kind: slice
+      doc: |
+        LogSeverityTexts is a list of strings that the LogRecord's severity text field must match
+        against.
+    - name: log_severity_number
+      type: '*filterconfig.LogSeverityNumberMatchProperties'
+      kind: ptr
+      doc: |
+        LogSeverityNumber defines how to match against a log record's SeverityNumber, if defined.
+      fields:
+      - name: min
+        type: plog.SeverityNumber
+        kind: int32
+        doc: |
+          Min is the lowest severity that may be matched.
+          e.g. if this is plog.SeverityNumberInfo, INFO, WARN, ERROR, and FATAL logs will match.
+      - name: match_undefined
+        kind: bool
+        default: false
+        doc: |
+          MatchUndefined controls whether logs with "undefined" severity matches.
+          If this is true, entries with undefined severity will match.
+    - name: metric_names
+      type: '[]string'
+      kind: slice
+      doc: |
+        MetricNames is a list of strings to match metric name against.
+        A match occurs if metric name matches at least one item in the list.
+        This field is optional.
+    - name: attributes
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        Attributes specifies the list of attributes to match against.
+        All of these attributes must match exactly for a match to occur.
+        Only match_type=strict is allowed if "attributes" are specified.
+        This is an optional field.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+    - name: resources
+      type: '[]filterconfig.Attribute'
+      kind: slice
+      doc: |
+        Resources specify the list of items to match the resources against.
+        A match occurs if the data's resources match at least one item in this list.
+        This is an optional field.
+      fields:
+      - name: key
+        kind: string
+        default: ""
+        doc: |
+          Key specifies the attribute key.
+      - name: value
+        type: interface {}
+        kind: interface
+        doc: |
+          Values specifies the value to match against.
+          If it is not set, any value will match.
+    - name: libraries
+      type: '[]filterconfig.InstrumentationLibrary'
+      kind: slice
+      doc: |
+        Libraries specify the list of items to match the implementation library against.
+        A match occurs if the span's implementation library matches at least one item in this list.
+        This is an optional field.
+      fields:
+      - name: name
+        kind: string
+        default: ""
+      - name: version
+        type: '*string'
+        kind: ptr
+        doc: |
+          version match
+           expected actual  match
+           nil      <blank> yes
+           nil      1       yes
+           <blank>  <blank> yes
+           <blank>  1       no
+           1        <blank> no
+           1        1       yes
+    - name: span_kinds
+      type: '[]string'
+      kind: slice
+      doc: |
+        SpanKinds specify the list of items to match the span kind against.
+        A match occurs if the span's span kind matches at least one item in this list.
+        This is an optional field

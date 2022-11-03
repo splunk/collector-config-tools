@@ -1,0 +1,14 @@
+type: '*bearertokenauthextension.Config'
+doc: |
+  Config specifies how the Per-RPC bearer token based authentication data should be obtained.
+fields:
+- name: token
+  kind: string
+  default: ""
+  doc: |
+    BearerToken specifies the bearer token to use for every RPC.
+- name: filename
+  kind: string
+  default: ""
+  doc: |
+    Filename points to a file that contains the bearer token to use for every RPC.

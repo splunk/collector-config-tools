@@ -1,0 +1,308 @@
+type: '*kafkaexporter.Config'
+doc: |
+  Config defines configuration for Kafka exporter.
+fields:
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 5s
+  doc: |
+    Timeout is the timeout for every attempt to send data to the backend.
+- name: sending_queue
+  type: exporterhelper.QueueSettings
+  kind: struct
+  doc: |
+    QueueSettings defines configuration for queueing batches before sending to the consumerSender.
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+    doc: |
+      Enabled indicates whether to not enqueue batches before sending to the consumerSender.
+  - name: num_consumers
+    kind: int
+    default: 10
+    doc: |
+      NumConsumers is the number of consumers from the queue.
+  - name: queue_size
+    kind: int
+    default: 5000
+    doc: |
+      QueueSize is the maximum number of batches allowed in queue at a given time.
+  - name: storage
+    type: '*config.ComponentID'
+    kind: ptr
+    doc: |
+      StorageID if not empty, enables the persistent storage and uses the component specified
+      as a storage extension for the persistent queue
+- name: retry_on_failure
+  type: exporterhelper.RetrySettings
+  kind: struct
+  doc: |
+    RetrySettings defines configuration for retrying batches in case of export failure.
+    The current supported strategy is exponential backoff.
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+    doc: |
+      Enabled indicates whether to not retry sending batches in case of export failure.
+  - name: initial_interval
+    type: time.Duration
+    kind: int64
+    default: 5s
+    doc: |
+      InitialInterval the time to wait after the first failure before retrying.
+  - name: max_interval
+    type: time.Duration
+    kind: int64
+    default: 30s
+    doc: |
+      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
+      consecutive retries will always be `MaxInterval`.
+  - name: max_elapsed_time
+    type: time.Duration
+    kind: int64
+    default: 5m0s
+    doc: |
+      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
+      Once this value is reached, the data is discarded.
+- name: brokers
+  type: '[]string'
+  kind: slice
+  doc: |
+    The list of kafka brokers (default localhost:9092)
+- name: protocol_version
+  kind: string
+  default: ""
+  doc: |
+    Kafka protocol version
+- name: topic
+  kind: string
+  default: ""
+  doc: |
+    The name of the kafka topic to export to (default otlp_spans for traces, otlp_metrics for metrics)
+- name: encoding
+  kind: string
+  default: otlp_proto
+  doc: |
+    Encoding of messages (default "otlp_proto")
+- name: metadata
+  type: kafkaexporter.Metadata
+  kind: struct
+  doc: |
+    Metadata is the namespace for metadata management properties used by the
+    Client, and shared by the Producer/Consumer.
+  fields:
+  - name: full
+    kind: bool
+    default: true
+    doc: |
+      Whether to maintain a full set of metadata for all topics, or just
+      the minimal set that has been necessary so far. The full set is simpler
+      and usually more convenient, but can take up a substantial amount of
+      memory if you have many topics and partitions. Defaults to true.
+  - name: retry
+    type: kafkaexporter.MetadataRetry
+    kind: struct
+    doc: |
+      Retry configuration for metadata.
+      This configuration is useful to avoid race conditions when broker
+      is starting at the same time as collector.
+    fields:
+    - name: max
+      kind: int
+      default: 3
+      doc: |
+        The total number of times to retry a metadata request when the
+        cluster is in the middle of a leader election or at startup (default 3).
+    - name: backoff
+      type: time.Duration
+      kind: int64
+      default: 250ms
+      doc: |
+        How long to wait for leader election to occur before retrying
+        (default 250ms). Similar to the JVM's `retry.backoff.ms`.
+- name: producer
+  type: kafkaexporter.Producer
+  kind: struct
+  doc: |
+    Producer is the namespaces for producer properties used only by the Producer
+  fields:
+  - name: max_message_bytes
+    kind: int
+    default: 1000000
+    doc: |
+      Maximum message bytes the producer will accept to produce.
+  - name: required_acks
+    type: sarama.RequiredAcks
+    kind: int16
+    default: 1
+    doc: |
+      RequiredAcks Number of acknowledgements required to assume that a message has been sent.
+      https://pkg.go.dev/github.com/Shopify/sarama@v1.30.0#RequiredAcks
+      The options are:
+        0 -> NoResponse.  doesn't send any response
+        1 -> WaitForLocal. waits for only the local commit to succeed before responding ( default )
+        -1 -> WaitForAll. waits for all in-sync replicas to commit before responding.
+  - name: compression
+    kind: string
+    default: none
+    doc: |
+      Compression Codec used to produce messages
+      https://pkg.go.dev/github.com/Shopify/sarama@v1.30.0#CompressionCodec
+      The options are: 'none', 'gzip', 'snappy', 'lz4', and 'zstd'
+  - name: flush_max_messages
+    kind: int
+    doc: |
+      The maximum number of messages the producer will send in a single
+      broker request. Defaults to 0 for unlimited. Similar to
+      `queue.buffering.max.messages` in the JVM producer.
+- name: auth
+  type: kafkaexporter.Authentication
+  kind: struct
+  doc: |
+    Authentication defines used authentication mechanism.
+  fields:
+  - name: plain_text
+    type: '*kafkaexporter.PlainTextConfig'
+    kind: ptr
+    doc: |
+      PlainTextConfig defines plaintext authentication.
+    fields:
+    - name: username
+      kind: string
+      default: ""
+    - name: password
+      kind: string
+      default: ""
+  - name: sasl
+    type: '*kafkaexporter.SASLConfig'
+    kind: ptr
+    doc: |
+      SASLConfig defines the configuration for the SASL authentication.
+    fields:
+    - name: username
+      kind: string
+      default: ""
+      doc: |
+        Username to be used on authentication
+    - name: password
+      kind: string
+      default: ""
+      doc: |
+        Password to be used on authentication
+    - name: mechanism
+      kind: string
+      default: ""
+      doc: |
+        SASL Mechanism to be used, possible values are: (PLAIN, AWS_MSK_IAM, SCRAM-SHA-256 or SCRAM-SHA-512).
+    - name: aws_msk
+      type: kafkaexporter.AWSMSKConfig
+      kind: struct
+      doc: |
+        AWSMSKConfig defines the additional SASL authentication
+        measures needed to use AWS_MSK_IAM mechanism
+      fields:
+      - name: region
+        kind: string
+        default: ""
+        doc: |
+          Region is the AWS region the MSK cluster is based in
+      - name: broker_addr
+        kind: string
+        default: ""
+        doc: |
+          BrokerAddr is the client is connecting to in order to perform the auth required
+  - name: tls
+    type: '*configtls.TLSClientSetting'
+    kind: ptr
+    doc: |
+      TLSClientSetting contains TLS configurations that are specific to client
+      connections in addition to the common configurations. This should be used by
+      components configuring TLS client connections.
+    fields:
+    - name: ca_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the CA cert. For a client this verifies the server certificate.
+        For a server this verifies client certificates. If empty uses system root CA.
+        (optional)
+    - name: cert_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the TLS cert to use for TLS required connections. (optional)
+    - name: key_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the TLS key to use for TLS required connections. (optional)
+    - name: min_version
+      kind: string
+      default: ""
+      doc: |
+        MinVersion sets the minimum TLS version that is acceptable.
+        If not set, TLS 1.2 will be used. (optional)
+    - name: max_version
+      kind: string
+      default: ""
+      doc: |
+        MaxVersion sets the maximum TLS version that is acceptable.
+        If not set, refer to crypto/tls for defaults. (optional)
+    - name: reload_interval
+      type: time.Duration
+      kind: int64
+      doc: |
+        ReloadInterval specifies the duration after which the certificate will be reloaded
+        If not set, it will never be reloaded (optional)
+    - name: insecure
+      kind: bool
+      default: false
+      doc: |
+        In gRPC when set to true, this is used to disable the client transport security.
+        See https://godoc.org/google.golang.org/grpc#WithInsecure.
+        In HTTP, this disables verifying the server's certificate chain and host name
+        (InsecureSkipVerify in the tls Config). Please refer to
+        https://godoc.org/crypto/tls#Config for more information.
+        (optional, default false)
+    - name: insecure_skip_verify
+      kind: bool
+      default: false
+      doc: |
+        InsecureSkipVerify will enable TLS but not verify the certificate.
+    - name: server_name_override
+      kind: string
+      default: ""
+      doc: |
+        ServerName requested by client for virtual hosting.
+        This sets the ServerName in the TLSConfig. Please refer to
+        https://godoc.org/crypto/tls#Config for more information. (optional)
+  - name: kerberos
+    type: '*kafkaexporter.KerberosConfig'
+    kind: ptr
+    doc: |
+      KerberosConfig defines kereros configuration.
+    fields:
+    - name: service_name
+      kind: string
+      default: ""
+    - name: realm
+      kind: string
+      default: ""
+    - name: use_keytab
+      kind: bool
+      default: false
+    - name: username
+      kind: string
+      default: ""
+    - name: password
+      kind: string
+      default: ""
+    - name: config_file
+      kind: string
+      default: ""
+    - name: keytab_file
+      kind: string
+      default: ""

@@ -1,0 +1,16 @@
+type: '*ballastextension.Config'
+doc: |
+  Config has the configuration for the ballast extension.
+fields:
+- name: size_mib
+  kind: uint64
+  default: 0
+  doc: |
+    SizeMiB is the size, in MiB, of the memory ballast
+    to be created for this process.
+- name: size_in_percentage
+  kind: uint64
+  default: 0
+  doc: |
+    SizeInPercentage is the maximum amount of memory ballast, in %, targeted to be
+    allocated. The fixed memory settings SizeMiB has a higher precedence.

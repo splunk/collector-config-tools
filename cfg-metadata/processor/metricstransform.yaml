@@ -1,0 +1,131 @@
+type: '*metricstransformprocessor.Config'
+doc: |
+  Config defines configuration for Resource processor.
+fields:
+- name: transforms
+  type: '[]metricstransformprocessor.Transform'
+  kind: slice
+  doc: |
+    Transform specifies a list of transforms on metrics with each transform focusing on one metric.
+  fields:
+  - name: include
+    kind: string
+    default: ""
+    doc: |
+      Include specifies the metric(s) to operate on.
+  - name: match_type
+    type: metricstransformprocessor.MatchType
+    kind: string
+    default: ""
+    doc: |
+      MatchType determines how the Include string is matched: <strict|regexp>.
+  - name: experimental_match_labels
+    type: map[string]string
+    kind: map
+    doc: |
+      MatchLabels specifies the label set against which the metric filter will work.
+      This field is optional.
+  - name: action
+    type: metricstransformprocessor.ConfigAction
+    kind: string
+    default: ""
+    doc: |
+      Action specifies the action performed on the matched metric. Action specifies
+      if the operations (specified below) are performed on metrics in place (update),
+      on an inserted clone (insert), or on a new combined metric that includes all
+      data points from the set of matching metrics (combine).
+      REQUIRED
+  - name: new_name
+    kind: string
+    default: ""
+    doc: |
+      NewName specifies the name of the new metric when inserting or updating.
+      REQUIRED only if Action is INSERT.
+  - name: group_resource_labels
+    type: map[string]string
+    kind: map
+    doc: |
+      GroupResourceLabels specifes resource labels that will be appended to this group's new ResourceMetrics message
+      REQUIRED only if Action is GROUP
+  - name: aggregation_type
+    type: metricstransformprocessor.AggregationType
+    kind: string
+    default: ""
+    doc: |
+      AggregationType specifies how to aggregate.
+      REQUIRED only if Action is COMBINE.
+  - name: submatch_case
+    type: metricstransformprocessor.SubmatchCase
+    kind: string
+    default: ""
+    doc: |
+      SubmatchCase specifies what case to use for label values created from regexp submatches.
+  - name: operations
+    type: '[]metricstransformprocessor.Operation'
+    kind: slice
+    doc: |
+      Operations contains a list of operations that will be performed on the resulting metric(s).
+    fields:
+    - name: action
+      type: metricstransformprocessor.OperationAction
+      kind: string
+      default: ""
+      doc: |
+        Action specifies the action performed for this operation.
+        REQUIRED
+    - name: label
+      kind: string
+      default: ""
+      doc: |
+        Label identifies the exact label to operate on.
+    - name: new_label
+      kind: string
+      default: ""
+      doc: |
+        NewLabel determines the name to rename the identified label to.
+    - name: label_set
+      type: '[]string'
+      kind: slice
+      doc: |
+        LabelSet is a list of labels to keep. All other labels are aggregated based on the AggregationType.
+    - name: aggregation_type
+      type: metricstransformprocessor.AggregationType
+      kind: string
+      default: ""
+      doc: |
+        AggregationType specifies how to aggregate.
+    - name: aggregated_values
+      type: '[]string'
+      kind: slice
+      doc: |
+        AggregatedValues is a list of label values to aggregate away.
+    - name: new_value
+      kind: string
+      default: ""
+      doc: |
+        NewValue is used to set a new label value either when the operation is `AggregatedValues` or `AddLabel`.
+    - name: value_actions
+      type: '[]metricstransformprocessor.ValueAction'
+      kind: slice
+      doc: |
+        ValueActions is a list of renaming actions for label values.
+      fields:
+      - name: value
+        kind: string
+        default: ""
+        doc: |
+          Value specifies the current label value.
+      - name: new_value
+        kind: string
+        default: ""
+        doc: |
+          NewValue specifies the label value to rename to.
+    - name: experimental_scale
+      kind: float64
+      doc: |
+        Scale is a scalar to multiply the values with.
+    - name: label_value
+      kind: string
+      default: ""
+      doc: |
+        LabelValue identifies the exact label value to operate on

@@ -1,0 +1,627 @@
+type: '*dockerstatsreceiver.Config'
+doc: |
+  ScraperControllerSettings defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of config.ReceiverSettings, and extend it with more fields if needed.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s
+- name: endpoint
+  kind: string
+  default: unix:///var/run/docker.sock
+  doc: |
+    The URL of the docker server.  Default is "unix:///var/run/docker.sock"
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 5s
+  doc: |
+    The maximum amount of time to wait for docker API responses.  Default is 5s
+- name: container_labels_to_metric_labels
+  type: map[string]string
+  kind: map
+  doc: |
+    A mapping of container label names to MetricDescriptor label keys.
+    The corresponding container label value will become the DataPoint label value
+    for the mapped name.  E.g. `io.kubernetes.container.name: container_spec_name`
+    would result in a MetricDescriptor label called `container_spec_name` whose
+    Metric DataPoints have the value of the `io.kubernetes.container.name` container label.
+- name: env_vars_to_metric_labels
+  type: map[string]string
+  kind: map
+  doc: |
+    A mapping of container environment variable names to MetricDescriptor label
+    keys.  The corresponding env var values become the DataPoint label value.
+    E.g. `APP_VERSION: version` would result MetricDescriptors having a label
+    key called `version` whose DataPoint label values are the value of the
+    `APP_VERSION` environment variable configured for that particular container, if
+    present.
+- name: excluded_images
+  type: '[]string'
+  kind: slice
+  doc: |
+    A list of filters whose matching images are to be excluded.  Supports literals, globs, and regex.
+- name: provide_per_core_cpu_metrics
+  kind: bool
+  default: false
+  doc: |
+    Whether to report all CPU metrics.  Default is false
+- name: api_version
+  kind: float64
+  doc: |
+    Docker client API version. Default is 1.22
+- name: metrics
+  type: metadata.MetricsSettings
+  kind: struct
+  doc: |
+    Metrics config. Enable or disable stats by name.
+  fields:
+  - name: container.blockio.io_merged_recursive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.blockio.io_queued_recursive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.blockio.io_service_bytes_recursive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.blockio.io_service_time_recursive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.blockio.io_serviced_recursive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.blockio.io_time_recursive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.blockio.io_wait_time_recursive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.blockio.sectors_recursive
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.cpu.percent
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.cpu.throttling_data.periods
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.cpu.throttling_data.throttled_periods
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.cpu.throttling_data.throttled_time
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.cpu.usage.kernelmode
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.cpu.usage.percpu
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.cpu.usage.system
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.cpu.usage.total
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.cpu.usage.usermode
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.memory.active_anon
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.active_file
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.cache
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.dirty
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.hierarchical_memory_limit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.hierarchical_memsw_limit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.inactive_anon
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.inactive_file
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.mapped_file
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.percent
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.memory.pgfault
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.pgmajfault
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.pgpgin
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.pgpgout
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.rss
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.rss_huge
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.swap
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_active_anon
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_active_file
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_cache
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.memory.total_dirty
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_inactive_anon
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_inactive_file
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_mapped_file
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_pgfault
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_pgmajfault
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_pgpgin
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_pgpgout
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_rss
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_rss_huge
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_swap
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_unevictable
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.total_writeback
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.unevictable
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.usage.limit
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.memory.usage.max
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.memory.usage.total
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.memory.writeback
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.network.io.usage.rx_bytes
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.network.io.usage.rx_dropped
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.network.io.usage.rx_errors
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.network.io.usage.rx_packets
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.network.io.usage.tx_bytes
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.network.io.usage.tx_dropped
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.network.io.usage.tx_errors
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: container.network.io.usage.tx_packets
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false

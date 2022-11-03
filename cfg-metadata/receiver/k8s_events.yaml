@@ -1,0 +1,18 @@
+type: '*k8seventsreceiver.Config'
+doc: |
+  Config defines configuration for kubernetes events receiver.
+fields:
+- name: auth_type
+  type: k8sconfig.AuthType
+  kind: string
+  default: serviceAccount
+  doc: |
+    How to authenticate to the K8s API server.  This can be one of `none`
+    (for no auth), `serviceAccount` (to use the standard service account
+    token provided to the agent pod), or `kubeConfig` to use credentials
+    from `~/.kube/config`.
+- name: namespaces
+  type: '[]string'
+  kind: slice
+  doc: |
+    List of ‘namespaces’ to collect events from.

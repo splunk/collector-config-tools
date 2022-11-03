@@ -1,0 +1,39 @@
+type: '*groupbytraceprocessor.Config'
+doc: |
+  Config is the configuration for the processor.
+fields:
+- name: num_traces
+  kind: int
+  default: 1000000
+  doc: |
+    NumTraces is the max number of traces to keep in memory waiting for the duration.
+    Default: 1_000_000.
+- name: num_workers
+  kind: int
+  default: 1
+  doc: |
+    NumWorkers is a number of workers processing event queue. Should be equal to physical processors number.
+    Default: 1.
+- name: wait_duration
+  type: time.Duration
+  kind: int64
+  default: 1s
+  doc: |
+    WaitDuration tells the processor to wait for the specified duration for the trace to be complete.
+    Default: 1s.
+- name: discard_orphans
+  kind: bool
+  default: false
+  doc: |
+    DiscardOrphans instructs the processor to discard traces without the root span.
+    This typically indicates that the trace is incomplete.
+    Default: false.
+    Not yet implemented, and an error will be returned when this option is used.
+- name: store_on_disk
+  kind: bool
+  default: false
+  doc: |
+    StoreOnDisk tells the processor to keep only the trace ID in memory, serializing the trace spans to disk.
+    Useful when the duration to wait for traces to complete is high.
+    Default: false.
+    Not yet implemented, and an error will be returned when this option is used.

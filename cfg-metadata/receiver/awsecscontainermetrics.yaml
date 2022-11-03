@@ -1,0 +1,10 @@
+type: '*awsecscontainermetricsreceiver.Config'
+doc: |
+  Config defines configuration for aws ecs container metrics receiver.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 20s
+  doc: |
+    CollectionInterval is the interval at which metrics should be collected

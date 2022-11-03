@@ -1,0 +1,122 @@
+type: '*iisreceiver.Config'
+doc: |
+  Config defines configuration for simple prometheus receiver.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 1m0s
+- name: metrics
+  type: metadata.MetricsSettings
+  kind: struct
+  doc: |
+    MetricsSettings provides settings for iisreceiver metrics.
+  fields:
+  - name: iis.connection.active
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.connection.anonymous
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.connection.attempt.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.network.blocked
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.network.file.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.network.io
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.request.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.request.queue.age.max
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.request.queue.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.request.rejected
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.thread.active
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: iis.uptime
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true

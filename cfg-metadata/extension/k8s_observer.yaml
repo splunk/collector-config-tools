@@ -1,0 +1,43 @@
+type: '*k8sobserver.Config'
+doc: |
+  Config defines configuration for k8s attributes processor.
+fields:
+- name: auth_type
+  type: k8sconfig.AuthType
+  kind: string
+  default: serviceAccount
+  doc: |
+    How to authenticate to the K8s API server.  This can be one of `none`
+    (for no auth), `serviceAccount` (to use the standard service account
+    token provided to the agent pod), or `kubeConfig` to use credentials
+    from `~/.kube/config`.
+- name: node
+  kind: string
+  default: ""
+  doc: |
+    Node is the node name to limit the discovery of pod, port, and node endpoints.
+    Providing no value (the default) results in discovering endpoints for all available nodes.
+    For example, node name can be set using the downward API inside the collector
+    pod spec as follows:
+
+    env:
+      - name: K8S_NODE_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: spec.nodeName
+
+    Then set this value to ${K8S_NODE_NAME} in the configuration.
+- name: observe_pods
+  kind: bool
+  default: true
+  doc: |
+    ObservePods determines whether to report observer pod and port endpoints. If `true` and Node is specified
+    it will only discover pod and port endpoints whose `spec.nodeName` matches the provided node name. If `true` and
+    Node isn't specified, it will discover all available pod and port endpoints. `true` by default.
+- name: observe_nodes
+  kind: bool
+  default: false
+  doc: |
+    ObserveNodes determines whether to report observer k8s.node endpoints. If `true` and Node is specified
+    it will only discover node endpoints whose `metadata.name` matches the provided node name. If `true` and
+    Node isn't specified, it will discover all available node endpoints. `false` by default.

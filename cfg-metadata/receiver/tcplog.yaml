@@ -1,0 +1,135 @@
+type: '*tcplogreceiver.TCPLogConfig'
+doc: |
+  TCPLogConfig defines configuration for the tcp receiver
+fields:
+- name: attributes
+  type: map[string]helper.ExprStringConfig
+  kind: map
+- name: resource
+  type: map[string]helper.ExprStringConfig
+  kind: map
+- name: id
+  kind: string
+  default: tcp_input
+- name: type
+  kind: string
+  default: tcp_input
+- name: output
+  type: '[]string'
+  kind: slice
+- name: max_log_size
+  type: helper.ByteSize
+  kind: int64
+- name: listen_address
+  kind: string
+  default: ""
+- name: tls
+  type: '*configtls.TLSServerSetting'
+  kind: ptr
+  doc: |
+    TLSServerSetting contains TLS configurations that are specific to server
+    connections in addition to the common configurations. This should be used by
+    components configuring TLS server connections.
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
+  - name: cert_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: key_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
+  - name: min_version
+    kind: string
+    default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
+  - name: max_version
+    kind: string
+    default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
+  - name: client_ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use by the server to verify a client certificate. (optional)
+      This sets the ClientCAs and ClientAuth to RequireAndVerifyClientCert in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
+- name: add_attributes
+  kind: bool
+  default: false
+- name: encoding
+  kind: string
+  default: utf-8
+- name: multiline
+  type: helper.MultilineConfig
+  kind: struct
+  doc: |
+    MultilineConfig is the configuration of a multiline helper
+  fields:
+  - name: line_start_pattern
+    kind: string
+    default: ""
+  - name: line_end_pattern
+    kind: string
+    default: ""
+- name: operators
+  type: '[]operator.Config'
+  kind: slice
+  doc: |
+    Config is the configuration of an operator
+  fields:
+  - name: builder
+    type: operator.Builder
+    kind: interface
+- name: converter
+  type: adapter.ConverterConfig
+  kind: struct
+  doc: |
+    ConverterConfig controls how the internal entry.Entry to plog.Logs converter
+    works.
+  fields:
+  - name: max_flush_count
+    kind: uint
+    default: 0
+    doc: |
+      MaxFlushCount defines the maximum number of entries that can be
+      accumulated before flushing them for further processing.
+  - name: flush_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      FlushInterval defines how often to flush the converted and accumulated
+      log entries.
+  - name: worker_count
+    kind: int
+    doc: |
+      WorkerCount defines how many worker goroutines used for entry.Entry to
+      log records translation should be spawned.
+      By default: math.Max(1, runtime.NumCPU()/4) workers are spawned.
+- name: storage
+  type: '*config.ComponentID'
+  kind: ptr
+  doc: |
+    ComponentID represents the identity for a component. It combines two values:
+    * type - the Type of the component.
+    * name - the name of that component.
+    The component ComponentID (combination type + name) is unique for a given component.Kind.

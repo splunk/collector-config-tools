@@ -1,0 +1,71 @@
+type: '*clickhouseexporter.Config'
+doc: |
+  Config defines configuration for Elastic exporter.
+fields:
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 5s
+  doc: |
+    Timeout is the timeout for every attempt to send data to the backend.
+- name: retry_on_failure
+  type: exporterhelper.RetrySettings
+  kind: struct
+  doc: |
+    RetrySettings defines configuration for retrying batches in case of export failure.
+    The current supported strategy is exponential backoff.
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+    doc: |
+      Enabled indicates whether to not retry sending batches in case of export failure.
+  - name: initial_interval
+    type: time.Duration
+    kind: int64
+    default: 5s
+    doc: |
+      InitialInterval the time to wait after the first failure before retrying.
+  - name: max_interval
+    type: time.Duration
+    kind: int64
+    default: 30s
+    doc: |
+      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
+      consecutive retries will always be `MaxInterval`.
+  - name: max_elapsed_time
+    type: time.Duration
+    kind: int64
+    default: 5m0s
+    doc: |
+      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
+      Once this value is reached, the data is discarded.
+- name: sending_queue
+  type: clickhouseexporter.QueueSettings
+  kind: struct
+  doc: |
+    QueueSettings is a subset of exporterhelper.QueueSettings,
+    because only QueueSize is user-settable.
+  fields:
+  - name: queue_size
+    kind: int
+    default: 5000
+    doc: |
+      QueueSize set the length of the sending queue
+- name: dsn
+  kind: string
+  default: ""
+  doc: |
+    DSN is the ClickHouse server Data Source Name.
+    For tcp protocol reference: [ClickHouse/clickhouse-go#dsn](https://github.com/ClickHouse/clickhouse-go#dsn).
+    For http protocol reference: [mailru/go-clickhouse/#dsn](https://github.com/mailru/go-clickhouse/#dsn).
+- name: logs_table_name
+  kind: string
+  default: otel_logs
+  doc: |
+    LogsTableName is the table name for logs. default is `otel_logs`.
+- name: ttl_days
+  kind: uint
+  default: 0
+  doc: |
+    TTLDays is The data time-to-live in days, 0 means no ttl.

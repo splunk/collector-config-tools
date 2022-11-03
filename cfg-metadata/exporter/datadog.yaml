@@ -1,0 +1,303 @@
+type: '*datadogexporter.Config'
+doc: |
+  Config defines configuration for the Datadog exporter.
+fields:
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 15s
+  doc: |
+    Timeout is the timeout for every attempt to send data to the backend.
+- name: sending_queue
+  type: exporterhelper.QueueSettings
+  kind: struct
+  doc: |
+    QueueSettings defines configuration for queueing batches before sending to the consumerSender.
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+    doc: |
+      Enabled indicates whether to not enqueue batches before sending to the consumerSender.
+  - name: num_consumers
+    kind: int
+    default: 10
+    doc: |
+      NumConsumers is the number of consumers from the queue.
+  - name: queue_size
+    kind: int
+    default: 5000
+    doc: |
+      QueueSize is the maximum number of batches allowed in queue at a given time.
+  - name: storage
+    type: '*config.ComponentID'
+    kind: ptr
+    doc: |
+      StorageID if not empty, enables the persistent storage and uses the component specified
+      as a storage extension for the persistent queue
+- name: retry_on_failure
+  type: exporterhelper.RetrySettings
+  kind: struct
+  doc: |
+    RetrySettings defines configuration for retrying batches in case of export failure.
+    The current supported strategy is exponential backoff.
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+    doc: |
+      Enabled indicates whether to not retry sending batches in case of export failure.
+  - name: initial_interval
+    type: time.Duration
+    kind: int64
+    default: 5s
+    doc: |
+      InitialInterval the time to wait after the first failure before retrying.
+  - name: max_interval
+    type: time.Duration
+    kind: int64
+    default: 30s
+    doc: |
+      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
+      consecutive retries will always be `MaxInterval`.
+  - name: max_elapsed_time
+    type: time.Duration
+    kind: int64
+    default: 5m0s
+    doc: |
+      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
+      Once this value is reached, the data is discarded.
+- name: tls
+  type: datadogexporter.LimitedTLSClientSettings
+  kind: struct
+  doc: |
+    LimitedTLSClientSetting is a subset of TLSClientSetting, see LimitedHTTPClientSettings for more details
+  fields:
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+    doc: |
+      InsecureSkipVerify controls whether a client verifies the server's
+      certificate chain and host name.
+- name: hostname
+  kind: string
+  default: ""
+  doc: |
+    Hostname is the host name for unified service tagging.
+    If unset, it is determined automatically.
+- name: api
+  type: datadogexporter.APIConfig
+  kind: struct
+  doc: |
+    API defines the Datadog API configuration.
+  fields:
+  - name: key
+    kind: string
+    default: ""
+    doc: |
+      Key is the Datadog API key to associate your Agent's data with your organization.
+      Create a new API key here: https://app.datadoghq.com/account/settings
+  - name: site
+    kind: string
+    default: datadoghq.com
+    doc: |
+      Site is the site of the Datadog intake to send data to.
+      The default value is "datadoghq.com".
+  - name: fail_on_invalid_key
+    kind: bool
+    default: false
+    doc: |
+      FailOnInvalidKey states whether to exit at startup on invalid API key.
+      The default value is false.
+- name: metrics
+  type: datadogexporter.MetricsConfig
+  kind: struct
+  doc: |
+    Metrics defines the Metrics exporter specific configuration
+  fields:
+  - name: delta_ttl
+    kind: int64
+    default: 3600
+    doc: |
+      DeltaTTL defines the time that previous points of a cumulative monotonic
+      metric are kept in memory to calculate deltas
+  - name: endpoint
+    kind: string
+    default: https://api.datadoghq.com
+    doc: |
+      Endpoint configures the address for this network connection.
+      The address has the form "host:port". The host must be a literal IP address, or a host name that can be
+      resolved to IP addresses. The port must be a literal port number or a service name.
+      If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
+      "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
+  - name: resource_attributes_as_tags
+    kind: bool
+    default: false
+    doc: |
+      ResourceAttributesAsTags, if set to true, will use the exporterhelper feature to transform all
+      resource attributes into metric labels, which are then converted into tags
+  - name: instrumentation_scope_metadata_as_tags
+    kind: bool
+    default: false
+    doc: |
+      InstrumentationScopeMetadataAsTags, if set to true, adds the name and version of the
+      instrumentation scope that created a metric to the metric tags
+  - name: histograms
+    type: datadogexporter.HistogramConfig
+    kind: struct
+    doc: |
+      HistConfig defines the export of OTLP Histograms.
+    fields:
+    - name: mode
+      type: datadogexporter.HistogramMode
+      kind: string
+      default: distributions
+      doc: |
+        Mode for exporting histograms. Valid values are 'distributions', 'counters' or 'nobuckets'.
+         - 'distributions' sends histograms as Datadog distributions (recommended).
+         - 'counters' sends histograms as Datadog counts, one metric per bucket.
+         - 'nobuckets' sends no bucket histogram metrics. .sum and .count metrics will still be sent
+           if `send_count_sum_metrics` is enabled.
+
+        The current default is 'distributions'.
+    - name: send_count_sum_metrics
+      kind: bool
+      default: false
+      doc: |
+        SendCountSum states if the export should send .sum and .count metrics for histograms.
+        The current default is false.
+  - name: sums
+    type: datadogexporter.SumConfig
+    kind: struct
+    doc: |
+      SumConfig defines the export of OTLP Sums.
+    fields:
+    - name: cumulative_monotonic_mode
+      type: datadogexporter.CumulativeMonotonicSumMode
+      kind: string
+      default: to_delta
+      doc: |
+        CumulativeMonotonicMode is the mode for exporting OTLP Cumulative Monotonic Sums.
+        Valid values are 'to_delta' or 'raw_value'.
+         - 'to_delta' calculates delta for cumulative monotonic sums and sends it as a Datadog count.
+         - 'raw_value' sends the raw value of cumulative monotonic sums as Datadog gauges.
+
+        The default is 'to_delta'.
+        See https://docs.datadoghq.com/metrics/otlp/?tab=sum#mapping for details and examples.
+  - name: summaries
+    type: datadogexporter.SummaryConfig
+    kind: struct
+    doc: |
+      SummaryConfig defines the export for OTLP Summaries.
+    fields:
+    - name: mode
+      type: datadogexporter.SummaryMode
+      kind: string
+      default: gauges
+      doc: |
+        Mode is the the mode for exporting OTLP Summaries.
+        Valid values are 'noquantiles' or 'gauges'.
+         - 'noquantiles' sends no `.quantile` metrics. `.sum` and `.count` metrics will still be sent.
+         - 'gauges' sends `.quantile` metrics as gauges tagged by the quantile.
+
+        The default is 'gauges'.
+        See https://docs.datadoghq.com/metrics/otlp/?tab=summary#mapping for details and examples.
+- name: traces
+  type: datadogexporter.TracesConfig
+  kind: struct
+  doc: |
+    Traces defines the Traces exporter specific configuration
+  fields:
+  - name: endpoint
+    kind: string
+    default: https://trace.agent.datadoghq.com
+    doc: |
+      Endpoint configures the address for this network connection.
+      The address has the form "host:port". The host must be a literal IP address, or a host name that can be
+      resolved to IP addresses. The port must be a literal port number or a service name.
+      If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
+      "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
+  - name: ignore_resources
+    type: '[]string'
+    kind: slice
+    doc: |
+      ignored resources
+      A blacklist of regular expressions can be provided to disable certain traces based on their resource name
+      all entries must be surrounded by double quotes and separated by commas.
+      ignore_resources: ["(GET|POST) /healthcheck"]
+  - name: span_name_remappings
+    type: map[string]string
+    kind: map
+    doc: |
+      SpanNameRemappings is the map of datadog span names and preferred name to map to. This can be used to
+      automatically map Datadog Span Operation Names to an updated value. All entries should be key/value pairs.
+      span_name_remappings:
+        io.opentelemetry.javaagent.spring.client: spring.client
+        instrumentation:express.server: express
+        go.opentelemetry.io_contrib_instrumentation_net_http_otelhttp.client: http.client
+  - name: span_name_as_resource_name
+    kind: bool
+    default: false
+    doc: |
+      If set to true the OpenTelemetry span name will used in the Datadog resource name.
+      If set to false the resource name will be filled with the instrumentation library name + span kind.
+      The default value is `false`.
+- name: logs
+  type: datadogexporter.LogsConfig
+  kind: struct
+  doc: |
+    Logs defines the Logs exporter specific configuration
+  fields:
+  - name: endpoint
+    kind: string
+    default: https://http-intake.logs.datadoghq.com
+    doc: |
+      Endpoint configures the address for this network connection.
+      The address has the form "host:port". The host must be a literal IP address, or a host name that can be
+      resolved to IP addresses. The port must be a literal port number or a service name.
+      If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
+      "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
+- name: host_metadata
+  type: datadogexporter.HostMetadataConfig
+  kind: struct
+  doc: |
+    HostMetadata defines the host metadata specific configuration
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+    doc: |
+      Enabled enables the host metadata functionality.
+  - name: hostname_source
+    type: datadogexporter.HostnameSource
+    kind: string
+    default: config_or_system
+    doc: |
+      HostnameSource is the source for the hostname of host metadata.
+      Valid values are 'first_resource' and 'config_or_system':
+      - 'first_resource' picks the host metadata hostname from the resource
+         attributes on the first OTLP payload that gets to the exporter.
+         If the first payload lacks hostname-like attributes, it will fallback to 'config_or_system'.
+         Do not use this hostname source if receiving data from multiple hosts.
+      - 'config_or_system' picks the host metadata hostname from the 'hostname' setting,
+         If this is empty it will use available system APIs and cloud provider endpoints.
+
+      The default is 'config_or_system'.
+  - name: tags
+    type: '[]string'
+    kind: slice
+    doc: |
+      Tags is a list of host tags.
+      These tags will be attached to telemetry signals that have the host metadata hostname.
+      To attach tags to telemetry signals regardless of the host, use a processor instead.
+- name: only_metadata
+  kind: bool
+  default: false
+  doc: |
+    OnlyMetadata defines whether to only send metadata
+    This is useful for agent-collector setups, so that
+    metadata about a host is sent to the backend even
+    when telemetry data is reported via a different host.
+
+    This flag is incompatible with disabling host metadata,
+    `use_resource_metadata`, or `host_metadata::hostname_source != first_resource`

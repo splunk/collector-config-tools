@@ -1,0 +1,30 @@
+type: '*podmanreceiver.Config'
+doc: |
+  ScraperControllerSettings defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of config.ReceiverSettings, and extend it with more fields if needed.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s
+- name: endpoint
+  kind: string
+  default: unix:///run/podman/podman.sock
+  doc: |
+    The URL of the podman server.  Default is "unix:///run/podman/podman.sock"
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 5s
+  doc: |
+    The maximum amount of time to wait for Podman API responses.  Default is 5s
+- name: api_version
+  kind: string
+  default: 3.3.1
+- name: ssh_key
+  kind: string
+  default: ""
+- name: ssh_passphrase
+  kind: string
+  default: ""

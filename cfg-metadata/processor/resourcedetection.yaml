@@ -1,0 +1,227 @@
+type: '*resourcedetectionprocessor.Config'
+doc: |
+  Config defines configuration for Resource processor.
+fields:
+- name: detectors
+  type: '[]string'
+  kind: slice
+  doc: |
+    Detectors is an ordered list of named detectors that should be
+    run to attempt to detect resource information.
+- name: override
+  kind: bool
+  default: true
+  doc: |
+    Override indicates whether any existing resource attributes
+    should be overridden or preserved. Defaults to true.
+- name: ec2
+  type: ec2.Config
+  kind: struct
+  doc: |
+    EC2Config contains user-specified configurations for the EC2 detector
+  fields:
+  - name: tags
+    type: '[]string'
+    kind: slice
+    doc: |
+      Tags is a list of regex's to match ec2 instance tag keys that users want
+      to add as resource attributes to processed data
+- name: consul
+  type: consul.Config
+  kind: struct
+  doc: |
+    ConsulConfig contains user-specified configurations for the Consul detector
+  fields:
+  - name: address
+    kind: string
+    default: ""
+    doc: |
+      Address is the address of the Consul server
+  - name: datacenter
+    kind: string
+    default: ""
+    doc: |
+      Datacenter to use. If not provided, the default agent datacenter is used.
+  - name: token
+    kind: string
+    default: ""
+    doc: |
+      Token is used to provide a per-request ACL token
+      which overrides the agent's default (empty) token.
+      Token or Tokenfile are only required if [Consul's ACL
+      System](https://www.consul.io/docs/security/acl/acl-system) is enabled.
+  - name: token_file
+    kind: string
+    default: ""
+    doc: |
+      TokenFile is a file containing the current token to use for this client.
+      If provided it is read once at startup and never again.
+      Token or Tokenfile are only required if [Consul's ACL
+      System](https://www.consul.io/docs/security/acl/acl-system) is enabled.
+  - name: namespace
+    kind: string
+    default: ""
+    doc: |
+      Namespace is the name of the namespace to send along for the request
+      when no other Namespace is present in the QueryOptions
+  - name: meta
+    type: map[string]interface {}
+    kind: map
+    doc: |
+      Allowlist of [Consul
+      Metadata](https://www.consul.io/docs/agent/options#node_meta) keys to use as
+      resource attributes.
+- name: system
+  type: system.Config
+  kind: struct
+  doc: |
+    SystemConfig contains user-specified configurations for the System detector
+  fields:
+  - name: hostname_sources
+    type: '[]string'
+    kind: slice
+    doc: |
+      The HostnameSources is a priority list of sources from which hostname will be fetched.
+      In case of the error in fetching hostname from source,
+      the next source from the list will be considered.(**default**: `["dns", "os"]`)
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    The target URL to send data to (e.g.: http://some.url:9411/v1/traces).
+- name: tls
+  type: configtls.TLSClientSetting
+  kind: struct
+  doc: |
+    TLSSetting struct exposes TLS client configuration.
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
+  - name: cert_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: key_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
+  - name: min_version
+    kind: string
+    default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
+  - name: max_version
+    kind: string
+    default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
+  - name: insecure
+    kind: bool
+    default: false
+    doc: |
+      In gRPC when set to true, this is used to disable the client transport security.
+      See https://godoc.org/google.golang.org/grpc#WithInsecure.
+      In HTTP, this disables verifying the server's certificate chain and host name
+      (InsecureSkipVerify in the tls Config). Please refer to
+      https://godoc.org/crypto/tls#Config for more information.
+      (optional, default false)
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+    doc: |
+      InsecureSkipVerify will enable TLS but not verify the certificate.
+  - name: server_name_override
+    kind: string
+    default: ""
+    doc: |
+      ServerName requested by client for virtual hosting.
+      This sets the ServerName in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
+- name: read_buffer_size
+  kind: int
+  doc: |
+    ReadBufferSize for HTTP client. See http.Transport.ReadBufferSize.
+- name: write_buffer_size
+  kind: int
+  doc: |
+    WriteBufferSize for HTTP client. See http.Transport.WriteBufferSize.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 5s
+  doc: |
+    Timeout parameter configures `http.Client.Timeout`.
+- name: headers
+  type: map[string]string
+  kind: map
+  doc: |
+    Additional headers attached to each HTTP request sent by the client.
+    Existing header values are overwritten if collision happens.
+- name: customroundtripper
+  type: func(http.RoundTripper) (http.RoundTripper, error)
+  kind: func
+  doc: |
+    Custom Round Tripper to allow for individual components to intercept HTTP requests
+- name: auth
+  type: '*configauth.Authentication'
+  kind: ptr
+  doc: |
+    Auth configuration for outgoing HTTP calls.
+  fields:
+  - name: authenticator
+    type: config.ComponentID
+    kind: struct
+    doc: |
+      AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
+- name: compression
+  type: configcompression.CompressionType
+  kind: string
+  default: ""
+  doc: |
+    The compression key for supported compression types within collector.
+- name: max_idle_conns
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxIdleConns is used to set a limit to the maximum idle HTTP connections the client can keep open.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: max_idle_conns_per_host
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxIdleConnsPerHost is used to set a limit to the maximum idle HTTP connections the host can keep open.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: max_conns_per_host
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxConnsPerHost limits the total number of connections per host, including connections in the dialing,
+    active, and idle states.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: idle_conn_timeout
+  type: '*time.Duration'
+  kind: ptr
+  doc: |
+    IdleConnTimeout is the maximum amount of time a connection will remain open before closing itself.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: attributes
+  type: '[]string'
+  kind: slice
+  doc: |
+    Attributes is an allowlist of attributes to add.
+    If a supplied attribute is not a valid atrtibute of a supplied detector it will be ignored.

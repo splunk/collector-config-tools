@@ -1,0 +1,119 @@
+type: '*solacereceiver.Config'
+doc: |
+  Config defines configuration for Solace receiver.
+fields:
+- name: broker
+  type: '[]string'
+  kind: slice
+  doc: |
+    The list of solace brokers (default localhost:5671)
+- name: queue
+  kind: string
+  default: ""
+  doc: |
+    The name of the solace queue to consume from, it is required parameter
+- name: max_unacknowledged
+  kind: uint32
+  default: 1000
+  doc: |
+    The maximum number of unacknowledged messages the Solace broker can transmit, to configure AMQP Link
+- name: tls
+  type: configtls.TLSClientSetting
+  kind: struct
+  doc: |
+    TLSClientSetting contains TLS configurations that are specific to client
+    connections in addition to the common configurations. This should be used by
+    components configuring TLS client connections.
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
+  - name: cert_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: key_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
+  - name: min_version
+    kind: string
+    default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
+  - name: max_version
+    kind: string
+    default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
+  - name: insecure
+    kind: bool
+    default: false
+    doc: |
+      In gRPC when set to true, this is used to disable the client transport security.
+      See https://godoc.org/google.golang.org/grpc#WithInsecure.
+      In HTTP, this disables verifying the server's certificate chain and host name
+      (InsecureSkipVerify in the tls Config). Please refer to
+      https://godoc.org/crypto/tls#Config for more information.
+      (optional, default false)
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+    doc: |
+      InsecureSkipVerify will enable TLS but not verify the certificate.
+  - name: server_name_override
+    kind: string
+    default: ""
+    doc: |
+      ServerName requested by client for virtual hosting.
+      This sets the ServerName in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
+- name: auth
+  type: solacereceiver.Authentication
+  kind: struct
+  doc: |
+    Authentication defines authentication strategies.
+  fields:
+  - name: sasl_plain
+    type: '*solacereceiver.SaslPlainTextConfig'
+    kind: ptr
+    doc: |
+      SaslPlainTextConfig defines SASL PLAIN authentication.
+    fields:
+    - name: username
+      kind: string
+      default: ""
+    - name: password
+      kind: string
+      default: ""
+  - name: sasl_xauth2
+    type: '*solacereceiver.SaslXAuth2Config'
+    kind: ptr
+    doc: |
+      SaslXAuth2Config defines the configuration for the SASL XAUTH2 authentication.
+    fields:
+    - name: username
+      kind: string
+      default: ""
+    - name: bearer
+      kind: string
+      default: ""
+  - name: sasl_external
+    type: '*solacereceiver.SaslExternalConfig'
+    kind: ptr
+    doc: |
+      SaslExternalConfig defines the configuration for the SASL External used in conjunction with TLS client authentication.

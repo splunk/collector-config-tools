@@ -1,0 +1,96 @@
+type: '*chronyreceiver.Config'
+doc: |
+  ScraperControllerSettings defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of config.ReceiverSettings, and extend it with more fields if needed.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 1m0s
+- name: metrics
+  type: metadata.MetricsSettings
+  kind: struct
+  doc: |
+    MetricsSettings provides settings for chrony receiver metrics.
+  fields:
+  - name: ntp.frequency.offset
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: ntp.skew
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: ntp.stratum
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: ntp.time.correction
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: ntp.time.last_offset
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: ntp.time.rms_offset
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: ntp.time.root_delay
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+- name: endpoint
+  kind: string
+  default: unix:///var/run/chrony/chronyd.sock
+  doc: |
+    Endpoint is the published address or unix socket
+    that allows clients to connect to:
+    The allowed format is:
+      unix:///path/to/chronyd/unix.sock
+      udp://localhost:323
+
+    The default value is unix:///var/run/chrony/chronyd.sock
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 10s
+  doc: |
+    Timeout controls the max time allowed to read data from chronyd

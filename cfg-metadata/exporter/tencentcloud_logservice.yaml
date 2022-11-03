@@ -1,0 +1,31 @@
+type: '*tencentcloudlogserviceexporter.Config'
+doc: |
+  Config defines configuration for TencentCloud Log Service exporter.
+fields:
+- name: region
+  kind: string
+  default: ""
+  doc: |
+    LogService's Region, https://cloud.tencent.com/document/product/614/18940
+    for TencentCloud Kubernetes(or CVM), set ap-{region}.cls.tencentyun.com, eg ap-beijing.cls.tencentyun.com;
+     others set ap-{region}.cls.tencentcs.com, eg ap-beijing.cls.tencentcs.com
+- name: logset
+  kind: string
+  default: ""
+  doc: |
+    LogService's LogSet Name
+- name: topic
+  kind: string
+  default: ""
+  doc: |
+    LogService's Topic Name
+- name: secret_id
+  kind: string
+  default: ""
+  doc: |
+    TencentCloud access key id
+- name: secret_key
+  kind: string
+  default: ""
+  doc: |
+    TencentCloud access key secret

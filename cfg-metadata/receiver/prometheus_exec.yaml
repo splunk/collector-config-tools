@@ -1,0 +1,41 @@
+type: '*prometheusexecreceiver.Config'
+doc: |
+  Config definition for prometheus_exec configuration
+fields:
+- name: scrape_interval
+  type: time.Duration
+  kind: int64
+  default: 1m0s
+  doc: |
+    ScrapeInterval is the time between each scrape completed by the Receiver
+- name: scrape_timeout
+  type: time.Duration
+  kind: int64
+  default: 10s
+  doc: |
+    ScrapeTimeout is the time to wait before throttling a scrape request
+- name: port
+  kind: int
+  doc: |
+    Port is the port assigned to the Receiver, and to the {{port}} template variables
+- name: exec
+  kind: string
+  default: ""
+  doc: |
+    Command is the command to be run (binary + flags, separated by commas)
+- name: env
+  type: '[]subprocessmanager.EnvConfig'
+  kind: slice
+  doc: |
+    Env is a list of env variables to pass to a specific command
+  fields:
+  - name: name
+    kind: string
+    default: ""
+    doc: |
+      Name is the name of the environment variable
+  - name: value
+    kind: string
+    default: ""
+    doc: |
+      Value is the value of the variable

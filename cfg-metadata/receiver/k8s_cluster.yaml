@@ -1,0 +1,41 @@
+type: '*k8sclusterreceiver.Config'
+doc: |
+  Config defines configuration for kubernetes cluster receiver.
+fields:
+- name: auth_type
+  type: k8sconfig.AuthType
+  kind: string
+  default: serviceAccount
+  doc: |
+    How to authenticate to the K8s API server.  This can be one of `none`
+    (for no auth), `serviceAccount` (to use the standard service account
+    token provided to the agent pod), or `kubeConfig` to use credentials
+    from `~/.kube/config`.
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s
+  doc: |
+    Collection interval for metrics.
+- name: node_conditions_to_report
+  type: '[]string'
+  kind: slice
+  doc: |
+    Node condition types to report. See all condition types, see
+    here: https://kubernetes.io/docs/concepts/architecture/nodes/#condition.
+- name: allocatable_types_to_report
+  type: '[]string'
+  kind: slice
+  doc: |
+    Allocate resource types to report. See all resource types, see
+    here: https://kubernetes.io/docs/concepts/architecture/nodes/#capacity
+- name: metadata_exporters
+  type: '[]string'
+  kind: slice
+  doc: |
+    List of exporters to which metadata from this receiver should be forwarded to.
+- name: distribution
+  kind: string
+  default: kubernetes
+  doc: |
+    Whether OpenShift supprot should be enabled or not.

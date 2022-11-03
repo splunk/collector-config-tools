@@ -1,0 +1,398 @@
+type: '*bigipreceiver.Config'
+doc: |
+  Config defines the configuration for the various elements of the receiver agent.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s
+- name: endpoint
+  kind: string
+  default: https://localhost:443
+  doc: |
+    The target URL to send data to (e.g.: http://some.url:9411/v1/traces).
+- name: tls
+  type: configtls.TLSClientSetting
+  kind: struct
+  doc: |
+    TLSSetting struct exposes TLS client configuration.
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
+  - name: cert_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: key_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
+  - name: min_version
+    kind: string
+    default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
+  - name: max_version
+    kind: string
+    default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
+  - name: insecure
+    kind: bool
+    default: false
+    doc: |
+      In gRPC when set to true, this is used to disable the client transport security.
+      See https://godoc.org/google.golang.org/grpc#WithInsecure.
+      In HTTP, this disables verifying the server's certificate chain and host name
+      (InsecureSkipVerify in the tls Config). Please refer to
+      https://godoc.org/crypto/tls#Config for more information.
+      (optional, default false)
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+    doc: |
+      InsecureSkipVerify will enable TLS but not verify the certificate.
+  - name: server_name_override
+    kind: string
+    default: ""
+    doc: |
+      ServerName requested by client for virtual hosting.
+      This sets the ServerName in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
+- name: read_buffer_size
+  kind: int
+  doc: |
+    ReadBufferSize for HTTP client. See http.Transport.ReadBufferSize.
+- name: write_buffer_size
+  kind: int
+  doc: |
+    WriteBufferSize for HTTP client. See http.Transport.WriteBufferSize.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 10s
+  doc: |
+    Timeout parameter configures `http.Client.Timeout`.
+- name: headers
+  type: map[string]string
+  kind: map
+  doc: |
+    Additional headers attached to each HTTP request sent by the client.
+    Existing header values are overwritten if collision happens.
+- name: customroundtripper
+  type: func(http.RoundTripper) (http.RoundTripper, error)
+  kind: func
+  doc: |
+    Custom Round Tripper to allow for individual components to intercept HTTP requests
+- name: auth
+  type: '*configauth.Authentication'
+  kind: ptr
+  doc: |
+    Auth configuration for outgoing HTTP calls.
+  fields:
+  - name: authenticator
+    type: config.ComponentID
+    kind: struct
+    doc: |
+      AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
+- name: compression
+  type: configcompression.CompressionType
+  kind: string
+  default: ""
+  doc: |
+    The compression key for supported compression types within collector.
+- name: max_idle_conns
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxIdleConns is used to set a limit to the maximum idle HTTP connections the client can keep open.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: max_idle_conns_per_host
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxIdleConnsPerHost is used to set a limit to the maximum idle HTTP connections the host can keep open.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: max_conns_per_host
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxConnsPerHost limits the total number of connections per host, including connections in the dialing,
+    active, and idle states.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: idle_conn_timeout
+  type: '*time.Duration'
+  kind: ptr
+  doc: |
+    IdleConnTimeout is the maximum amount of time a connection will remain open before closing itself.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: username
+  kind: string
+  default: ""
+- name: password
+  kind: string
+  default: ""
+- name: metrics
+  type: metadata.MetricsSettings
+  kind: struct
+  doc: |
+    MetricsSettings provides settings for bigipreceiver metrics.
+  fields:
+  - name: bigip.node.availability
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.node.connection.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.node.data.transmitted
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.node.enabled
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.node.packet.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.node.request.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.node.session.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool.availability
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool.connection.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool.data.transmitted
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool.enabled
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool.member.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool.packet.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool.request.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool_member.availability
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool_member.connection.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool_member.data.transmitted
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool_member.enabled
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool_member.packet.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool_member.request.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.pool_member.session.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.virtual_server.availability
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.virtual_server.connection.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.virtual_server.data.transmitted
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.virtual_server.enabled
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.virtual_server.packet.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: bigip.virtual_server.request.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true

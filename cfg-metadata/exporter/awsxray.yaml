@@ -1,0 +1,67 @@
+type: '*awsxrayexporter.Config'
+doc: |
+  Config defines configuration for AWS X-Ray exporter.
+fields:
+- name: num_workers
+  kind: int
+  default: 8
+  doc: |
+    Maximum number of concurrent calls to AWS X-Ray to upload documents.
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    X-Ray service endpoint to which the collector sends segment documents.
+- name: request_timeout_seconds
+  kind: int
+  default: 30
+  doc: |
+    Number of seconds before timing out a request.
+- name: max_retries
+  kind: int
+  default: 2
+  doc: |
+    Maximum number of retries before abandoning an attempt to post data.
+- name: no_verify_ssl
+  kind: bool
+  default: false
+  doc: |
+    Enable or disable TLS certificate verification.
+- name: proxy_address
+  kind: string
+  default: ""
+  doc: |
+    Upload segments to AWS X-Ray through a proxy.
+- name: region
+  kind: string
+  default: ""
+  doc: |
+    Send segments to AWS X-Ray service in a specific region.
+- name: local_mode
+  kind: bool
+  default: false
+  doc: |
+    Local mode to skip EC2 instance metadata check.
+- name: resource_arn
+  kind: string
+  default: ""
+  doc: |
+    Amazon Resource Name (ARN) of the AWS resource running the collector.
+- name: role_arn
+  kind: string
+  default: ""
+  doc: |
+    IAM role to upload segments to a different account.
+- name: indexed_attributes
+  type: '[]string'
+  kind: slice
+  doc: |
+    By default, OpenTelemetry attributes are converted to X-Ray metadata, which are not indexed.
+    Specify a list of attribute names to be converted to X-Ray annotations instead, which will be indexed.
+    See annotation vs. metadata: https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-annotations
+- name: index_all_attributes
+  kind: bool
+  default: false
+  doc: |
+    Set to true to convert all OpenTelemetry attributes to X-Ray annotation (indexed) ignoring the IndexedAttributes option.
+    Default value: false

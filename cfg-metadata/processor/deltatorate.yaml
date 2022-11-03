@@ -1,0 +1,9 @@
+type: '*deltatorateprocessor.Config'
+doc: |
+  Config defines the configuration for the processor.
+fields:
+- name: metrics
+  type: '[]string'
+  kind: slice
+  doc: |
+    List of delta sum metrics to convert to rates

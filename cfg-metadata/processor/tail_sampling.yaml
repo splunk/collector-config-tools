@@ -1,0 +1,80 @@
+type: '*tailsamplingprocessor.Config'
+doc: |
+  Config holds the configuration for tail-based sampling.
+fields:
+- name: decision_wait
+  type: time.Duration
+  kind: int64
+  default: 30s
+  doc: |
+    DecisionWait is the desired wait time from the arrival of the first span of
+    trace until the decision about sampling it or not is evaluated.
+- name: num_traces
+  kind: uint64
+  default: 50000
+  doc: |
+    NumTraces is the number of traces kept on memory. Typically most of the data
+    of a trace is released after a sampling decision is taken.
+- name: expected_new_traces_per_sec
+  kind: uint64
+  default: 0
+  doc: |
+    ExpectedNewTracesPerSec sets the expected number of new traces sending to the tail sampling processor
+    per second. This helps with allocating data structures with closer to actual usage size.
+- name: policies
+  type: '[]tailsamplingprocessor.PolicyCfg'
+  kind: slice
+  doc: |
+    PolicyCfgs sets the tail-based sampling policy which makes a sampling decision
+    for a given trace when requested.
+  fields:
+  - name: composite
+    type: tailsamplingprocessor.CompositeCfg
+    kind: struct
+    doc: |
+      Configs for defining composite policy
+    fields:
+    - name: max_total_spans_per_second
+      kind: int64
+    - name: policy_order
+      type: '[]string'
+      kind: slice
+    - name: composite_sub_policy
+      type: '[]tailsamplingprocessor.CompositeSubPolicyCfg'
+      kind: slice
+      doc: |
+        CompositeSubPolicyCfg holds the common configuration to all policies under composite policy.
+      fields:
+      - name: and
+        type: tailsamplingprocessor.AndCfg
+        kind: struct
+        doc: |
+          Configs for and policy evaluator.
+        fields:
+        - name: and_sub_policy
+          type: '[]tailsamplingprocessor.AndSubPolicyCfg'
+          kind: slice
+          doc: |
+            AndSubPolicyCfg holds the common configuration to all policies under and policy.
+    - name: rate_allocation
+      type: '[]tailsamplingprocessor.RateAllocationCfg'
+      kind: slice
+      doc: |
+        RateAllocationCfg  used within composite policy
+      fields:
+      - name: policy
+        kind: string
+        default: ""
+      - name: percent
+        kind: int64
+  - name: and
+    type: tailsamplingprocessor.AndCfg
+    kind: struct
+    doc: |
+      Configs for defining and policy
+    fields:
+    - name: and_sub_policy
+      type: '[]tailsamplingprocessor.AndSubPolicyCfg'
+      kind: slice
+      doc: |
+        AndSubPolicyCfg holds the common configuration to all policies under and policy.

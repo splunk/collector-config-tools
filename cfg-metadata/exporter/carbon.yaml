@@ -1,0 +1,18 @@
+type: '*carbonexporter.Config'
+doc: |
+  Config defines configuration for Carbon exporter.
+fields:
+- name: endpoint
+  kind: string
+  default: localhost:2003
+  doc: |
+    Endpoint specifies host and port to send metrics in the Carbon plaintext
+    format. The default value is defined by the DefaultEndpoint constant.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 5s
+  doc: |
+    Timeout is the maximum duration allowed to connecting and sending the
+    data to the Carbon/Graphite backend.
+    The default value is defined by the DefaultSendTimeout constant.

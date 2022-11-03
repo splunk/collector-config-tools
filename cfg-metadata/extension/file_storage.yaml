@@ -1,0 +1,60 @@
+type: '*filestorage.Config'
+doc: |
+  Config defines configuration for file storage extension.
+fields:
+- name: directory
+  kind: string
+  default: /var/lib/otelcol/file_storage
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 1s
+- name: compaction
+  type: '*filestorage.CompactionConfig'
+  kind: ptr
+  doc: |
+    CompactionConfig defines configuration for optional file storage compaction.
+  fields:
+  - name: on_start
+    kind: bool
+    default: false
+    doc: |
+      OnStart specifies that compaction is attempted each time on start
+  - name: on_rebound
+    kind: bool
+    default: false
+    doc: |
+      OnRebound specifies that compaction is attempted online, when rebound conditions are met.
+      This typically happens when storage usage has increased, which caused increase in space allocation
+      and afterwards it had most items removed. We want to run the compaction online only when there are
+      not too many elements still being stored (which is an indication that "heavy usage" period is over)
+      so compaction should be relatively fast and at the same time there is relatively large volume of space
+      that might be reclaimed.
+  - name: directory
+    kind: string
+    default: /var/lib/otelcol/file_storage
+    doc: |
+      Directory specifies where the temporary files for compaction will be stored
+  - name: rebound_needed_threshold_mib
+    kind: int64
+    default: 10
+    doc: |
+      ReboundNeededThresholdMiB specifies the minimum total allocated size (both used and empty)
+      to mark the need for online compaction
+  - name: rebound_trigger_threshold_mib
+    kind: int64
+    default: 100
+    doc: |
+      ReboundTriggerThresholdMiB is used when compaction is marked as needed. When allocated data size drops
+      below the specified value, the compactions starts and the flag marking need for compaction is cleared
+  - name: max_transaction_size
+    kind: int64
+    default: 65536
+    doc: |
+      MaxTransactionSize specifies the maximum number of items that might be present in single compaction iteration
+  - name: check_interval
+    type: time.Duration
+    kind: int64
+    default: 5s
+    doc: |
+      CheckInterval specifies frequency of compaction check

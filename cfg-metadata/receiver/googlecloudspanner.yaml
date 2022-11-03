@@ -1,0 +1,38 @@
+type: '*googlecloudspannerreceiver.Config'
+doc: |
+  ScraperControllerSettings defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of config.ReceiverSettings, and extend it with more fields if needed.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 1m0s
+- name: top_metrics_query_max_rows
+  kind: int
+  default: 100
+- name: backfill_enabled
+  kind: bool
+  default: false
+- name: cardinality_total_limit
+  kind: int
+- name: projects
+  type: '[]googlecloudspannerreceiver.Project'
+  kind: slice
+  fields:
+  - name: project_id
+    kind: string
+    default: ""
+  - name: service_account_key
+    kind: string
+    default: ""
+  - name: instances
+    type: '[]googlecloudspannerreceiver.Instance'
+    kind: slice
+    fields:
+    - name: instance_id
+      kind: string
+      default: ""
+    - name: databases
+      type: '[]string'
+      kind: slice

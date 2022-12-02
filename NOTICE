@@ -1,0 +1,4 @@
+"Module Name and Version Number","License","Repository"
+"opentelemetry-collector-contrib v0.62.0","Apache-2.0","github.com/open-telemetry/opentelemetry-collector-contrib"
+"opentelemetry-collector v0.62.0","Apache-2.0","github.com/open-telemetry/opentelemetry-collector"
+"testify v1.8.0","MIT","github.com/stretchr/testify"

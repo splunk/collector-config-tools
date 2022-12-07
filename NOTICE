@@ -1,4 +1,17 @@
-"Module Name and Version Number","License","Repository"
-"opentelemetry-collector-contrib v0.62.0","Apache-2.0","github.com/open-telemetry/opentelemetry-collector-contrib"
-"opentelemetry-collector v0.62.0","Apache-2.0","github.com/open-telemetry/opentelemetry-collector"
-"testify v1.8.0","MIT","github.com/stretchr/testify"
+Collector Config Tool
+Copyright 2022 Splunk Inc.
+
+================= OpenTelemetry Collector v0.62.0 =================
+Apache 2.0 | https://www.apache.org/licenses/LICENSE-2.0
+https://github.com/open-telemetry/opentelemetry-collector
+Copyright The OpenTelemetry Authors
+
+================= OpenTelemetry Collector Contrib v0.62.0 =================
+Apache 2.0 | https://www.apache.org/licenses/LICENSE-2.0
+https://github.com/open-telemetry/opentelemetry-collector-contrib
+Copyright The OpenTelemetry Authors
+
+================= Testify v1.8.0 =================
+MIT | https://opensource.org/licenses/MIT
+https://github.com/open-telemetry/opentelemetry-collector
+Copyright 2012-2020 Mat Ryer, Tyler Bunnell and contributors.

@@ -39,7 +39,13 @@ will be sent to the input of a processor, in addition to both of them sending th
 
 At any point, you may click the "Generate Collector YAML" button, which will create a Collector configuration YAML document and display it in a text area.
 
-## Copyright 2022 Splunk Inc.
+<br/>
+<br/>
+<br/>
+
+***
+
+Copyright 2022 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

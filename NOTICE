@@ -15,5 +15,5 @@ Copyright The OpenTelemetry Authors
 
 ================= Testify v1.8.0 =================
 MIT | https://opensource.org/licenses/MIT
-https://github.com/open-telemetry/opentelemetry-collector
+https://github.com/stretchr/testify
 Copyright 2012-2020 Mat Ryer, Tyler Bunnell and contributors.

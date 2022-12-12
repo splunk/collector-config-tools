@@ -1,4 +1,4 @@
-# Collector Config Tool Usage
+# Collector Config Tool
 
 ## Overview
 

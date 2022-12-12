@@ -4,6 +4,10 @@
 
 The Collector Config Tool (aka Otto) is a single-user web application to help you configure an OpenTelemetry Collector.
 
+## Stability Level: Development
+
+This tool is currently _in development_. Feel free to poke around, and some things will work, but often things will not.
+
 ## Starting the Otto server
 
 To start Otto:

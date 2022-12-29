@@ -56,6 +56,14 @@ func (w metricsReceiverWrapper) waitForStopMessage() {
 	w.repeater.waitForStopMessage()
 }
 
+func (w metricsReceiverWrapper) Start(ctx context.Context, host component.Host) error {
+	return w.Metrics.Start(ctx, host)
+}
+
+func (w metricsReceiverWrapper) Shutdown(ctx context.Context) error {
+	return w.Metrics.Shutdown(ctx)
+}
+
 type logsReceiverWrapper struct {
 	receiver.Logs
 	repeater *logsRepeater
@@ -81,6 +89,14 @@ func (w logsReceiverWrapper) setNextLogsConsumer(next consumer.Logs) {
 
 func (w logsReceiverWrapper) waitForStopMessage() {
 	w.repeater.waitForStopMessage()
+}
+
+func (w logsReceiverWrapper) Start(ctx context.Context, host component.Host) error {
+	return w.Logs.Start(ctx, host)
+}
+
+func (w logsReceiverWrapper) Shutdown(ctx context.Context) error {
+	return w.Logs.Shutdown(ctx)
 }
 
 type tracesReceiverWrapper struct {
@@ -110,6 +126,14 @@ func (w tracesReceiverWrapper) waitForStopMessage() {
 	w.repeater.waitForStopMessage()
 }
 
+func (w tracesReceiverWrapper) Start(ctx context.Context, host component.Host) error {
+	return w.Traces.Start(ctx, host)
+}
+
+func (w tracesReceiverWrapper) Shutdown(ctx context.Context) error {
+	return w.Traces.Shutdown(ctx)
+}
+
 type metricsProcessorWrapper struct {
 	processor.Metrics
 	repeater *metricsRepeater
@@ -135,6 +159,14 @@ func (w metricsProcessorWrapper) setNextMetricsConsumer(next consumer.Metrics) {
 
 func (w metricsProcessorWrapper) waitForStopMessage() {
 	w.repeater.waitForStopMessage()
+}
+
+func (w metricsProcessorWrapper) Start(ctx context.Context, host component.Host) error {
+	return w.Metrics.Start(ctx, host)
+}
+
+func (w metricsProcessorWrapper) Shutdown(ctx context.Context) error {
+	return w.Metrics.Shutdown(ctx)
 }
 
 type logsProcessorWrapper struct {
@@ -164,6 +196,14 @@ func (w logsProcessorWrapper) waitForStopMessage() {
 	w.repeater.waitForStopMessage()
 }
 
+func (w logsProcessorWrapper) Start(ctx context.Context, host component.Host) error {
+	return w.Logs.Start(ctx, host)
+}
+
+func (w logsProcessorWrapper) Shutdown(ctx context.Context) error {
+	return w.Logs.Shutdown(ctx)
+}
+
 type tracesProcessorWrapper struct {
 	processor.Traces
 	repeater *tracesRepeater
@@ -191,6 +231,14 @@ func (w tracesProcessorWrapper) waitForStopMessage() {
 	w.repeater.waitForStopMessage()
 }
 
+func (w tracesProcessorWrapper) Start(ctx context.Context, host component.Host) error {
+	return w.Traces.Start(ctx, host)
+}
+
+func (w tracesProcessorWrapper) Shutdown(ctx context.Context) error {
+	return w.Traces.Shutdown(ctx)
+}
+
 type metricsExporterWrapper struct {
 	exporter.Metrics
 	repeater *metricsRepeater
@@ -211,6 +259,14 @@ func newMetricsExporterWrapper(logger *zap.Logger, ws *websocket.Conn, cfg compo
 
 func (w metricsExporterWrapper) waitForStopMessage() {
 	w.repeater.waitForStopMessage()
+}
+
+func (w metricsExporterWrapper) Start(ctx context.Context, host component.Host) error {
+	return w.Metrics.Start(ctx, host)
+}
+
+func (w metricsExporterWrapper) Shutdown(ctx context.Context) error {
+	return w.Metrics.Shutdown(ctx)
 }
 
 type logsExporterWrapper struct {
@@ -236,6 +292,14 @@ func (w logsExporterWrapper) waitForStopMessage() {
 	w.repeater.waitForStopMessage()
 }
 
+func (w logsExporterWrapper) Start(ctx context.Context, host component.Host) error {
+	return w.Logs.Start(ctx, host)
+}
+
+func (w logsExporterWrapper) Shutdown(ctx context.Context) error {
+	return w.Logs.Shutdown(ctx)
+}
+
 type tracesExporterWrapper struct {
 	exporter.Traces
 	repeater *tracesRepeater
@@ -255,4 +319,12 @@ func newTracesExporterWrapper(logger *zap.Logger, ws *websocket.Conn, cfg compon
 
 func (w tracesExporterWrapper) waitForStopMessage() {
 	w.repeater.waitForStopMessage()
+}
+
+func (w tracesExporterWrapper) Start(ctx context.Context, host component.Host) error {
+	return w.Traces.Start(ctx, host)
+}
+
+func (w tracesExporterWrapper) Shutdown(ctx context.Context) error {
+	return w.Traces.Shutdown(ctx)
 }

@@ -17,7 +17,6 @@ package otto
 import (
 	"context"
 	"go.opentelemetry.io/collector/component"
-	"go.opentelemetry.io/collector/component/componenttest"
 	"go.opentelemetry.io/collector/confmap"
 	"go.opentelemetry.io/collector/exporter"
 	"go.uber.org/zap"
@@ -25,6 +24,7 @@ import (
 )
 
 type exporterSocketHandler struct {
+	host            component.Host
 	logger          *zap.Logger
 	pipeline        *pipeline
 	exporterFactory exporter.Factory
@@ -68,7 +68,7 @@ func (h exporterSocketHandler) connectMetricsExporter(
 		return
 	}
 	h.pipeline.connectMetricsExporterWrapper(&wrapper)
-	err = wrapper.Start(context.Background(), componenttest.NewNopHost())
+	err = wrapper.Start(context.Background(), h.host)
 	if err != nil {
 		sendErr(ws, h.logger, "failed to start metrics exporter", err)
 		return
@@ -92,7 +92,7 @@ func (h exporterSocketHandler) connectLogsExporter(
 		return
 	}
 	h.pipeline.connectLogsExporterWrapper(&wrapper)
-	err = wrapper.Start(context.Background(), componenttest.NewNopHost())
+	err = wrapper.Start(context.Background(), h.host)
 	if err != nil {
 		sendErr(ws, h.logger, "failed to start logs exporter", err)
 		return
@@ -116,7 +116,7 @@ func (h exporterSocketHandler) connectTracesExporter(
 		return
 	}
 	h.pipeline.connectTracesExporterWrapper(&wrapper)
-	err = wrapper.Start(context.Background(), componenttest.NewNopHost())
+	err = wrapper.Start(context.Background(), h.host)
 	if err != nil {
 		sendErr(ws, h.logger, "failed to start traces exporter", err)
 		return

@@ -15,6 +15,7 @@
 package otto
 
 import (
+	"context"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/confmap"
 	"go.opentelemetry.io/collector/processor"
@@ -23,6 +24,7 @@ import (
 )
 
 type processorSocketHandler struct {
+	host             component.Host
 	logger           *zap.Logger
 	pipeline         *pipeline
 	processorFactory processor.Factory
@@ -66,6 +68,11 @@ func (h processorSocketHandler) attachMetricsProcessor(
 		return
 	}
 	h.pipeline.connectMetricsProcessorWrapper(wrapper)
+	err = wrapper.Start(context.Background(), h.host)
+	if err != nil {
+		sendErr(ws, h.logger, "failed to start metrics processor", err)
+		return
+	}
 	wrapper.waitForStopMessage()
 	h.pipeline.disconnectMetricsProcessorWrapper()
 }
@@ -80,6 +87,11 @@ func (h processorSocketHandler) attachLogsProcessor(
 		return
 	}
 	h.pipeline.connectLogsProcessorWrapper(wrapper)
+	err = wrapper.Start(context.Background(), h.host)
+	if err != nil {
+		sendErr(ws, h.logger, "failed to start logs processor", err)
+		return
+	}
 	wrapper.waitForStopMessage()
 	h.pipeline.disconnectLogsProcessorWrapper()
 }
@@ -94,6 +106,11 @@ func (h processorSocketHandler) attachTracesProcessor(
 		return
 	}
 	h.pipeline.connectTracesProcessorWrapper(wrapper)
+	err = wrapper.Start(context.Background(), h.host)
+	if err != nil {
+		sendErr(ws, h.logger, "failed to start traces processor", err)
+		return
+	}
 	wrapper.waitForStopMessage()
 	h.pipeline.disconnectTracesProcessorWrapper()
 }

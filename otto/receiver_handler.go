@@ -17,7 +17,6 @@ package otto
 import (
 	"context"
 	"go.opentelemetry.io/collector/component"
-	"go.opentelemetry.io/collector/component/componenttest"
 	"go.opentelemetry.io/collector/confmap"
 	"go.opentelemetry.io/collector/receiver"
 	"go.uber.org/zap"
@@ -25,6 +24,7 @@ import (
 )
 
 type receiverSocketHandler struct {
+	host            component.Host
 	logger          *zap.Logger
 	pipeline        *pipeline
 	receiverFactory receiver.Factory
@@ -68,7 +68,7 @@ func (h receiverSocketHandler) startMetricsReceiver(
 		return
 	}
 	h.pipeline.connectMetricsReceiverWrapper(wrapper)
-	err = wrapper.Start(context.Background(), componenttest.NewNopHost())
+	err = wrapper.Start(context.Background(), h.host)
 	if err != nil {
 		sendErr(ws, h.logger, "failed to start metrics receiver", err)
 		return
@@ -92,7 +92,7 @@ func (h receiverSocketHandler) startLogsReceiver(
 		return
 	}
 	h.pipeline.connectLogsReceiverWrapper(wrapper)
-	err = wrapper.Start(context.Background(), componenttest.NewNopHost())
+	err = wrapper.Start(context.Background(), h.host)
 	if err != nil {
 		sendErr(ws, h.logger, "failed to start logs receiver", err)
 		return
@@ -116,7 +116,7 @@ func (h receiverSocketHandler) startTracesReceiver(
 		return
 	}
 	h.pipeline.connectTracesReceiverWrapper(wrapper)
-	err = wrapper.Start(context.Background(), componenttest.NewNopHost())
+	err = wrapper.Start(context.Background(), h.host)
 	if err != nil {
 		sendErr(ws, h.logger, "failed to start traces receiver", err)
 		return

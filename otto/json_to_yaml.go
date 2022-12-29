@@ -27,7 +27,7 @@ type jsonToYAMLHandler struct {
 	logger *zap.Logger
 }
 
-func (h jsonToYAMLHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
+func (h *jsonToYAMLHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	bytes, err := io.ReadAll(req.Body)
 	if err != nil {
 		h.logger.Info("jsonToYAMLHandler: ServeHTTP: error reading request", zap.Error(err))

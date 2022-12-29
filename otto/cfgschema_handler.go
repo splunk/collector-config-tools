@@ -15,31 +15,33 @@
 package otto
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
 	"go.uber.org/zap"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strings"
 
 	"gopkg.in/yaml.v3"
 )
 
+//go:embed cfg-metadata
+var cfgMetadata embed.FS
+
 type cfgschemaHandler struct {
 	logger   *zap.Logger
 	pipeline *pipeline
 }
 
-func (h cfgschemaHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
+func (h *cfgschemaHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	// e.g. "/cfg-metadata/receiver/redis"
 	parts := strings.Split(req.RequestURI, "/")
 	componentType := parts[2]
 	componentName := parts[3]
 
-	// todo fix potential security hole
 	path := filepath.Join("cfg-metadata", componentType, componentName+".yaml")
-	yamlFile, err := os.ReadFile(path)
+	yamlFile, err := cfgMetadata.ReadFile(path)
 	if err != nil {
 		h.logger.Info("cfgschemaHandler: ServeHTTP: error reading yaml file", zap.Error(err))
 		resp.WriteHeader(http.StatusInternalServerError)

@@ -47,29 +47,30 @@ func createMux(logger *zap.Logger, host component.Host, supportedReceivers []com
 	})
 
 	ottoPipeline := &pipeline{}
-	mux.Handle("/cfg-metadata/", cfgschemaHandler{
+	mux.Handle("/cfg-metadata/", &cfgschemaHandler{
 		logger:   logger,
 		pipeline: ottoPipeline,
 	})
 
-	mux.Handle("/jsonToYAML", jsonToYAMLHandler{
+	mux.Handle("/jsonToYAML", &jsonToYAMLHandler{
 		logger: logger,
 	})
 
 	wsHandlers := map[string]wsHandler{}
-	registerReceiverHandlers(logger, registry, wsHandlers, ottoPipeline)
-	registerProcessorHandlers(logger, registry, wsHandlers, ottoPipeline)
-	registerExporterHandlers(logger, registry, wsHandlers, ottoPipeline)
+	registerReceiverHandlers(logger, registry, host, wsHandlers, ottoPipeline)
+	registerProcessorHandlers(logger, registry, host, wsHandlers, ottoPipeline)
+	registerExporterHandlers(logger, registry, host, wsHandlers, ottoPipeline)
 	mux.Handle("/ws/", httpWsHandler{handlers: wsHandlers})
 
 	return mux, nil
 }
 
-func registerReceiverHandlers(logger *zap.Logger, registry *componentRegistry, handlers map[string]wsHandler, ppln *pipeline) {
+func registerReceiverHandlers(logger *zap.Logger, registry *componentRegistry, host component.Host, handlers map[string]wsHandler, ppln *pipeline) {
 	for componentName, factory := range registry.receivers() {
 		const componentType = "receiver"
 		path := "/ws/" + componentType + "/" + componentName.String()
 		handlers[path] = receiverSocketHandler{
+			host:            host,
 			logger:          logger,
 			pipeline:        ppln,
 			receiverFactory: factory,
@@ -77,11 +78,12 @@ func registerReceiverHandlers(logger *zap.Logger, registry *componentRegistry, h
 	}
 }
 
-func registerProcessorHandlers(logger *zap.Logger, registry *componentRegistry, handlers map[string]wsHandler, ppln *pipeline) {
+func registerProcessorHandlers(logger *zap.Logger, registry *componentRegistry, host component.Host, handlers map[string]wsHandler, ppln *pipeline) {
 	for componentName, factory := range registry.processors() {
 		const componentType = "processor"
 		path := "/ws/" + componentType + "/" + componentName.String()
 		handlers[path] = processorSocketHandler{
+			host:             host,
 			logger:           logger,
 			pipeline:         ppln,
 			processorFactory: factory,
@@ -89,11 +91,12 @@ func registerProcessorHandlers(logger *zap.Logger, registry *componentRegistry, 
 	}
 }
 
-func registerExporterHandlers(logger *zap.Logger, registry *componentRegistry, handlers map[string]wsHandler, ppln *pipeline) {
+func registerExporterHandlers(logger *zap.Logger, registry *componentRegistry, host component.Host, handlers map[string]wsHandler, ppln *pipeline) {
 	for componentName, factory := range registry.exporters() {
 		const componentType = "exporter"
 		path := "/ws/" + componentType + "/" + componentName.String()
 		handlers[path] = exporterSocketHandler{
+			host:            host,
 			logger:          logger,
 			pipeline:        ppln,
 			exporterFactory: factory,

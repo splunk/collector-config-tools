@@ -17,7 +17,7 @@ package otto
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -27,7 +27,7 @@ import (
 )
 
 type cfgschemaHandler struct {
-	logger   *log.Logger
+	logger   *zap.Logger
 	pipeline *pipeline
 }
 
@@ -41,7 +41,7 @@ func (h cfgschemaHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request)
 	path := filepath.Join("cfg-metadata", componentType, componentName+".yaml")
 	yamlFile, err := os.ReadFile(path)
 	if err != nil {
-		h.logger.Printf("cfgschemaHandler: ServeHTTP: error reading yaml file: %v", err)
+		h.logger.Info("cfgschemaHandler: ServeHTTP: error reading yaml file", zap.Error(err))
 		resp.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -49,28 +49,28 @@ func (h cfgschemaHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request)
 	yamlMap := map[string]any{}
 	err = yaml.Unmarshal(yamlFile, &yamlMap)
 	if err != nil {
-		h.logger.Printf("cfgschemaHandler: ServeHTTP: error unmarshaling yaml: %v", err)
+		h.logger.Info("cfgschemaHandler: ServeHTTP: error unmarshaling yaml", zap.Error(err))
 		resp.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	converted, err := convertAnyMapsToStringMaps(yamlMap)
 	if err != nil {
-		h.logger.Printf("cfgschemaHandler: ServeHTTP: error coercing any keys to string keys: %v", err)
+		h.logger.Info("cfgschemaHandler: ServeHTTP: error coercing any keys to string keys", zap.Error(err))
 		resp.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	fjson, err := json.Marshal(converted)
 	if err != nil {
-		h.logger.Printf("cfgschemaHandler: ServeHTTP: error marshaling fieldInfo to json: %v", err)
+		h.logger.Info("cfgschemaHandler: ServeHTTP: error marshaling fieldInfo to json", zap.Error(err))
 		resp.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	_, err = resp.Write(fjson)
 	if err != nil {
-		h.logger.Printf("cfgschemaHandler: ServeHTTP: error writing response: %v", err)
+		h.logger.Info("cfgschemaHandler: ServeHTTP: error writing response", zap.Error(err))
 	}
 }
 

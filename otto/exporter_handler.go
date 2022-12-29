@@ -16,19 +16,18 @@ package otto
 
 import (
 	"context"
-	"log"
-
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/component/componenttest"
-	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/confmap"
+	"go.opentelemetry.io/collector/exporter"
+	"go.uber.org/zap"
 	"golang.org/x/net/websocket"
 )
 
 type exporterSocketHandler struct {
-	logger          *log.Logger
+	logger          *zap.Logger
 	pipeline        *pipeline
-	exporterFactory component.ExporterFactory
+	exporterFactory exporter.Factory
 }
 
 func (h exporterSocketHandler) handle(ws *websocket.Conn) {
@@ -61,7 +60,7 @@ func (h exporterSocketHandler) doHandle(ws *websocket.Conn) error {
 
 func (h exporterSocketHandler) connectMetricsExporter(
 	ws *websocket.Conn,
-	cfg config.Exporter,
+	cfg component.Config,
 ) {
 	wrapper, err := newMetricsExporterWrapper(h.logger, ws, cfg, h.exporterFactory)
 	if err != nil {
@@ -85,7 +84,7 @@ func (h exporterSocketHandler) connectMetricsExporter(
 
 func (h exporterSocketHandler) connectLogsExporter(
 	ws *websocket.Conn,
-	cfg config.Exporter,
+	cfg component.Config,
 ) {
 	wrapper, err := newLogsExporterWrapper(h.logger, ws, cfg, h.exporterFactory)
 	if err != nil {
@@ -109,7 +108,7 @@ func (h exporterSocketHandler) connectLogsExporter(
 
 func (h exporterSocketHandler) connectTracesExporter(
 	ws *websocket.Conn,
-	cfg config.Exporter,
+	cfg component.Config,
 ) {
 	wrapper, err := newTracesExporterWrapper(h.logger, ws, cfg, h.exporterFactory)
 	if err != nil {
@@ -131,9 +130,9 @@ func (h exporterSocketHandler) connectTracesExporter(
 	h.pipeline.disconnectTracesExporterWrapper()
 }
 
-func unmarshalExporterConfig(exporterConfig config.Exporter, conf *confmap.Conf) error {
+func unmarshalExporterConfig(exporterConfig component.Config, conf *confmap.Conf) error {
 	if unmarshallable, ok := exporterConfig.(confmap.Unmarshaler); ok {
 		return unmarshallable.Unmarshal(conf)
 	}
-	return conf.UnmarshalExact(exporterConfig)
+	return conf.Unmarshal(exporterConfig)
 }

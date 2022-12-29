@@ -16,31 +16,35 @@ package otto
 
 import (
 	"context"
-	"log"
 
 	"go.opentelemetry.io/collector/component"
-	"go.opentelemetry.io/collector/component/componenttest"
-	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/consumer"
+	"go.opentelemetry.io/collector/exporter"
+	"go.opentelemetry.io/collector/exporter/exportertest"
+	"go.opentelemetry.io/collector/processor"
+	"go.opentelemetry.io/collector/processor/processortest"
+	"go.opentelemetry.io/collector/receiver"
+	"go.opentelemetry.io/collector/receiver/receivertest"
+	"go.uber.org/zap"
 	"golang.org/x/net/websocket"
 )
 
 type metricsReceiverWrapper struct {
-	component.MetricsReceiver
+	receiver.Metrics
 	repeater *metricsRepeater
 }
 
-func newMetricsReceiverWrapper(logger *log.Logger, ws *websocket.Conn, cfg config.Receiver, factory component.ReceiverFactory) (metricsReceiverWrapper, error) {
+func newMetricsReceiverWrapper(logger *zap.Logger, ws *websocket.Conn, cfg component.Config, factory receiver.Factory) (metricsReceiverWrapper, error) {
 	repeater := newMetricsRepeater(logger, ws)
-	receiver, err := factory.CreateMetricsReceiver(
+	r, err := factory.CreateMetricsReceiver(
 		context.Background(),
-		componenttest.NewNopReceiverCreateSettings(),
+		receivertest.NewNopCreateSettings(),
 		cfg,
 		repeater,
 	)
 	return metricsReceiverWrapper{
-		MetricsReceiver: receiver,
-		repeater:        repeater,
+		Metrics:  r,
+		repeater: repeater,
 	}, err
 }
 
@@ -53,21 +57,21 @@ func (w metricsReceiverWrapper) waitForStopMessage() {
 }
 
 type logsReceiverWrapper struct {
-	component.LogsReceiver
+	receiver.Logs
 	repeater *logsRepeater
 }
 
-func newLogsReceiverWrapper(logger *log.Logger, ws *websocket.Conn, cfg config.Receiver, factory component.ReceiverFactory) (logsReceiverWrapper, error) {
+func newLogsReceiverWrapper(logger *zap.Logger, ws *websocket.Conn, cfg component.Config, factory receiver.Factory) (logsReceiverWrapper, error) {
 	repeater := newLogsRepeater(logger, ws)
-	receiver, err := factory.CreateLogsReceiver(
+	r, err := factory.CreateLogsReceiver(
 		context.Background(),
-		componenttest.NewNopReceiverCreateSettings(),
+		receivertest.NewNopCreateSettings(),
 		cfg,
 		repeater,
 	)
 	return logsReceiverWrapper{
-		LogsReceiver: receiver,
-		repeater:     repeater,
+		Logs:     r,
+		repeater: repeater,
 	}, err
 }
 
@@ -80,21 +84,21 @@ func (w logsReceiverWrapper) waitForStopMessage() {
 }
 
 type tracesReceiverWrapper struct {
-	component.TracesReceiver
+	receiver.Traces
 	repeater *tracesRepeater
 }
 
-func newTracesReceiverWrapper(logger *log.Logger, ws *websocket.Conn, cfg config.Receiver, factory component.ReceiverFactory) (tracesReceiverWrapper, error) {
+func newTracesReceiverWrapper(logger *zap.Logger, ws *websocket.Conn, cfg component.Config, factory receiver.Factory) (tracesReceiverWrapper, error) {
 	repeater := newTracesRepeater(logger, ws)
-	receiver, err := factory.CreateTracesReceiver(
+	r, err := factory.CreateTracesReceiver(
 		context.Background(),
-		componenttest.NewNopReceiverCreateSettings(),
+		receivertest.NewNopCreateSettings(),
 		cfg,
 		repeater,
 	)
 	return tracesReceiverWrapper{
-		TracesReceiver: receiver,
-		repeater:       repeater,
+		Traces:   r,
+		repeater: repeater,
 	}, err
 }
 
@@ -107,21 +111,21 @@ func (w tracesReceiverWrapper) waitForStopMessage() {
 }
 
 type metricsProcessorWrapper struct {
-	component.MetricsProcessor
+	processor.Metrics
 	repeater *metricsRepeater
 }
 
-func newMetricsProcessorWrapper(logger *log.Logger, ws *websocket.Conn, cfg config.Processor, factory component.ProcessorFactory) (metricsProcessorWrapper, error) {
+func newMetricsProcessorWrapper(logger *zap.Logger, ws *websocket.Conn, cfg component.Config, factory processor.Factory) (metricsProcessorWrapper, error) {
 	repeater := newMetricsRepeater(logger, ws)
-	processor, err := factory.CreateMetricsProcessor(
+	p, err := factory.CreateMetricsProcessor(
 		context.Background(),
-		componenttest.NewNopProcessorCreateSettings(),
+		processortest.NewNopCreateSettings(),
 		cfg,
 		repeater,
 	)
 	return metricsProcessorWrapper{
-		MetricsProcessor: processor,
-		repeater:         repeater,
+		Metrics:  p,
+		repeater: repeater,
 	}, err
 }
 
@@ -134,21 +138,21 @@ func (w metricsProcessorWrapper) waitForStopMessage() {
 }
 
 type logsProcessorWrapper struct {
-	component.LogsProcessor
+	processor.Logs
 	repeater *logsRepeater
 }
 
-func newLogsProcessorWrapper(logger *log.Logger, ws *websocket.Conn, cfg config.Processor, factory component.ProcessorFactory) (logsProcessorWrapper, error) {
+func newLogsProcessorWrapper(logger *zap.Logger, ws *websocket.Conn, cfg component.Config, factory processor.Factory) (logsProcessorWrapper, error) {
 	repeater := newLogsRepeater(logger, ws)
-	processor, err := factory.CreateLogsProcessor(
+	p, err := factory.CreateLogsProcessor(
 		context.Background(),
-		componenttest.NewNopProcessorCreateSettings(),
+		processortest.NewNopCreateSettings(),
 		cfg,
 		repeater,
 	)
 	return logsProcessorWrapper{
-		LogsProcessor: processor,
-		repeater:      repeater,
+		Logs:     p,
+		repeater: repeater,
 	}, err
 }
 
@@ -161,21 +165,21 @@ func (w logsProcessorWrapper) waitForStopMessage() {
 }
 
 type tracesProcessorWrapper struct {
-	component.TracesProcessor
+	processor.Traces
 	repeater *tracesRepeater
 }
 
-func newTracesProcessorWrapper(logger *log.Logger, ws *websocket.Conn, cfg config.Processor, factory component.ProcessorFactory) (tracesProcessorWrapper, error) {
+func newTracesProcessorWrapper(logger *zap.Logger, ws *websocket.Conn, cfg component.Config, factory processor.Factory) (tracesProcessorWrapper, error) {
 	repeater := newTracesRepeater(logger, ws)
-	processor, err := factory.CreateTracesProcessor(
+	p, err := factory.CreateTracesProcessor(
 		context.Background(),
-		componenttest.NewNopProcessorCreateSettings(),
+		processortest.NewNopCreateSettings(),
 		cfg,
 		repeater,
 	)
 	return tracesProcessorWrapper{
-		TracesProcessor: processor,
-		repeater:        repeater,
+		Traces:   p,
+		repeater: repeater,
 	}, err
 }
 
@@ -188,20 +192,20 @@ func (w tracesProcessorWrapper) waitForStopMessage() {
 }
 
 type metricsExporterWrapper struct {
-	component.MetricsExporter
+	exporter.Metrics
 	repeater *metricsRepeater
 }
 
-func newMetricsExporterWrapper(logger *log.Logger, ws *websocket.Conn, cfg config.Exporter, factory component.ExporterFactory) (metricsExporterWrapper, error) {
+func newMetricsExporterWrapper(logger *zap.Logger, ws *websocket.Conn, cfg component.Config, factory exporter.Factory) (metricsExporterWrapper, error) {
 	repeater := newMetricsRepeater(logger, ws)
-	exporter, err := factory.CreateMetricsExporter(
+	e, err := factory.CreateMetricsExporter(
 		context.Background(),
-		componenttest.NewNopExporterCreateSettings(),
+		exportertest.NewNopCreateSettings(),
 		cfg,
 	)
 	return metricsExporterWrapper{
-		MetricsExporter: exporter,
-		repeater:        repeater,
+		Metrics:  e,
+		repeater: repeater,
 	}, err
 }
 
@@ -210,19 +214,21 @@ func (w metricsExporterWrapper) waitForStopMessage() {
 }
 
 type logsExporterWrapper struct {
-	component.LogsExporter
+	exporter.Logs
 	repeater *logsRepeater
 }
 
-func newLogsExporterWrapper(logger *log.Logger, ws *websocket.Conn, cfg config.Exporter, factory component.ExporterFactory) (logsExporterWrapper, error) {
-	exporter, err := factory.CreateLogsExporter(
+func newLogsExporterWrapper(logger *zap.Logger, ws *websocket.Conn, cfg component.Config, factory exporter.Factory) (logsExporterWrapper, error) {
+	settings := exportertest.NewNopCreateSettings()
+	settings.TelemetrySettings.Logger = logger
+	e, err := factory.CreateLogsExporter(
 		context.Background(),
-		componenttest.NewNopExporterCreateSettings(),
+		settings,
 		cfg,
 	)
 	return logsExporterWrapper{
-		LogsExporter: exporter,
-		repeater:     newLogsRepeater(logger, ws),
+		Logs:     e,
+		repeater: newLogsRepeater(logger, ws),
 	}, err
 }
 
@@ -231,19 +237,19 @@ func (w logsExporterWrapper) waitForStopMessage() {
 }
 
 type tracesExporterWrapper struct {
-	component.TracesExporter
+	exporter.Traces
 	repeater *tracesRepeater
 }
 
-func newTracesExporterWrapper(logger *log.Logger, ws *websocket.Conn, cfg config.Exporter, factory component.ExporterFactory) (tracesExporterWrapper, error) {
-	exporter, err := factory.CreateTracesExporter(
+func newTracesExporterWrapper(logger *zap.Logger, ws *websocket.Conn, cfg component.Config, factory exporter.Factory) (tracesExporterWrapper, error) {
+	e, err := factory.CreateTracesExporter(
 		context.Background(),
-		componenttest.NewNopExporterCreateSettings(),
+		exportertest.NewNopCreateSettings(),
 		cfg,
 	)
 	return tracesExporterWrapper{
-		TracesExporter: exporter,
-		repeater:       newTracesRepeater(logger, ws),
+		Traces:   e,
+		repeater: newTracesRepeater(logger, ws),
 	}, err
 }
 

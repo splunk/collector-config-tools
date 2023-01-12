@@ -8,7 +8,7 @@ Otto is a single page web application that runs all of its UI in vanilla JavaScr
 
 * `/components` returns a JSON representation of all registered Collector components 
 
-* `/cfg-metadata/{componentType}/{componentName}` returns config schema JSON for individual components, e.g. `/cfgschema/receiver/redis`
+* `/cfg-metadata/{componentType}/{componentName}` returns config schema JSON for individual components, e.g. `/cfg-metadata/receiver/redis`
  
 * `/jsonToYAML` converts JSON to YAML
 

@@ -18,10 +18,10 @@ import (
 	"log"
 	"net/http"
 
-	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/otelcol"
 )
 
-func Server(logger *log.Logger, addr string, factories component.Factories) {
+func Server(logger *log.Logger, addr string, factories otelcol.Factories) {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("web/static")))
 
@@ -59,7 +59,7 @@ func Server(logger *log.Logger, addr string, factories component.Factories) {
 	}
 }
 
-func registerReceiverHandlers(logger *log.Logger, factories component.Factories, handlers map[string]wsHandler, ppln *pipeline) {
+func registerReceiverHandlers(logger *log.Logger, factories otelcol.Factories, handlers map[string]wsHandler, ppln *pipeline) {
 	for componentName, factory := range factories.Receivers {
 		const componentType = "receiver"
 		path := "/ws/" + componentType + "/" + string(componentName)
@@ -71,7 +71,7 @@ func registerReceiverHandlers(logger *log.Logger, factories component.Factories,
 	}
 }
 
-func registerProcessorHandlers(logger *log.Logger, factories component.Factories, handlers map[string]wsHandler, ppln *pipeline) {
+func registerProcessorHandlers(logger *log.Logger, factories otelcol.Factories, handlers map[string]wsHandler, ppln *pipeline) {
 	for componentName, factory := range factories.Processors {
 		const componentType = "processor"
 		path := "/ws/" + componentType + "/" + string(componentName)
@@ -83,7 +83,7 @@ func registerProcessorHandlers(logger *log.Logger, factories component.Factories
 	}
 }
 
-func registerExporterHandlers(logger *log.Logger, factories component.Factories, handlers map[string]wsHandler, ppln *pipeline) {
+func registerExporterHandlers(logger *log.Logger, factories otelcol.Factories, handlers map[string]wsHandler, ppln *pipeline) {
 	for componentName, factory := range factories.Exporters {
 		const componentType = "exporter"
 		path := "/ws/" + componentType + "/" + string(componentName)

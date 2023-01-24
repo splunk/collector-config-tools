@@ -30,17 +30,17 @@ type wsMessageEnvelope struct {
 type metrics pmetric.Metrics
 
 func (m metrics) MarshalJSON() ([]byte, error) {
-	return pmetric.NewJSONMarshaler().MarshalMetrics(pmetric.Metrics(m))
+	return (&pmetric.JSONMarshaler{}).MarshalMetrics(pmetric.Metrics(m))
 }
 
 type traces ptrace.Traces
 
 func (t traces) MarshalJSON() ([]byte, error) {
-	return ptrace.NewJSONMarshaler().MarshalTraces(ptrace.Traces(t))
+	return (&ptrace.JSONMarshaler{}).MarshalTraces(ptrace.Traces(t))
 }
 
 type logs plog.Logs
 
 func (l logs) MarshalJSON() ([]byte, error) {
-	return plog.NewJSONMarshaler().MarshalLogs(plog.Logs(l))
+	return (&plog.JSONMarshaler{}).MarshalLogs(plog.Logs(l))
 }

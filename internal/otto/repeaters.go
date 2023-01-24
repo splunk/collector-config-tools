@@ -39,7 +39,7 @@ func newMetricsRepeater(logger *log.Logger, ws *websocket.Conn) *metricsRepeater
 	return &metricsRepeater{
 		logger:    logger,
 		ws:        ws,
-		marshaler: pmetric.NewJSONMarshaler(),
+		marshaler: &pmetric.JSONMarshaler{},
 		stop:      make(chan struct{}),
 	}
 }
@@ -80,7 +80,7 @@ func newLogsRepeater(logger *log.Logger, ws *websocket.Conn) *logsRepeater {
 	return &logsRepeater{
 		logger:    logger,
 		ws:        ws,
-		marshaler: plog.NewJSONMarshaler(),
+		marshaler: &plog.JSONMarshaler{},
 		stop:      make(chan struct{}),
 	}
 }
@@ -121,7 +121,7 @@ func newTracesRepeater(logger *log.Logger, ws *websocket.Conn) *tracesRepeater {
 	return &tracesRepeater{
 		logger:    logger,
 		ws:        ws,
-		marshaler: ptrace.NewJSONMarshaler(),
+		marshaler: &ptrace.JSONMarshaler{},
 		stop:      make(chan struct{}),
 	}
 }

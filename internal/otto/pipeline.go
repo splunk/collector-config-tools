@@ -15,11 +15,11 @@
 package otto
 
 import (
-	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/otelcol"
 )
 
 type pipeline struct {
-	factories component.Factories
+	factories otelcol.Factories
 
 	metricsReceiverWrapper  *metricsReceiverWrapper
 	metricsProcessorWrapper *metricsProcessorWrapper

@@ -18,15 +18,15 @@ import (
 	"log"
 
 	"go.opentelemetry.io/collector/component"
-	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/confmap"
+	"go.opentelemetry.io/collector/processor"
 	"golang.org/x/net/websocket"
 )
 
 type processorSocketHandler struct {
 	logger           *log.Logger
 	pipeline         *pipeline
-	processorFactory component.ProcessorFactory
+	processorFactory processor.Factory
 }
 
 func (h processorSocketHandler) handle(ws *websocket.Conn) {
@@ -59,7 +59,7 @@ func (h processorSocketHandler) doHandle(ws *websocket.Conn) error {
 
 func (h processorSocketHandler) attachMetricsProcessor(
 	ws *websocket.Conn,
-	cfg config.Processor,
+	cfg component.Config,
 ) {
 	wrapper, err := newMetricsProcessorWrapper(h.logger, ws, cfg, h.processorFactory)
 	if err != nil {
@@ -73,7 +73,7 @@ func (h processorSocketHandler) attachMetricsProcessor(
 
 func (h processorSocketHandler) attachLogsProcessor(
 	ws *websocket.Conn,
-	cfg config.Processor,
+	cfg component.Config,
 ) {
 	wrapper, err := newLogsProcessorWrapper(h.logger, ws, cfg, h.processorFactory)
 	if err != nil {
@@ -87,7 +87,7 @@ func (h processorSocketHandler) attachLogsProcessor(
 
 func (h processorSocketHandler) attachTracesProcessor(
 	ws *websocket.Conn,
-	cfg config.Processor,
+	cfg component.Config,
 ) {
 	wrapper, err := newTracesProcessorWrapper(h.logger, ws, cfg, h.processorFactory)
 	if err != nil {
@@ -99,9 +99,9 @@ func (h processorSocketHandler) attachTracesProcessor(
 	h.pipeline.disconnectTracesProcessorWrapper()
 }
 
-func unmarshalProcessorConfig(processorConfig config.Processor, conf *confmap.Conf) error {
+func unmarshalProcessorConfig(processorConfig component.Config, conf *confmap.Conf) error {
 	if unmarshallable, ok := processorConfig.(confmap.Unmarshaler); ok {
 		return unmarshallable.Unmarshal(conf)
 	}
-	return conf.UnmarshalExact(processorConfig)
+	return component.UnmarshalConfig(conf, processorConfig)
 }

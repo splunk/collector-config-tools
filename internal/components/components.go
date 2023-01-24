@@ -61,25 +61,29 @@ import (
 	"github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/receiver/tcplogreceiver"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zipkinreceiver"
-	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/exporter/loggingexporter"
 	"go.opentelemetry.io/collector/exporter/otlpexporter"
 	"go.opentelemetry.io/collector/exporter/otlphttpexporter"
+	"go.opentelemetry.io/collector/extension"
+	"go.opentelemetry.io/collector/otelcol"
+	"go.opentelemetry.io/collector/processor"
 	"go.opentelemetry.io/collector/processor/batchprocessor"
 	"go.opentelemetry.io/collector/processor/memorylimiterprocessor"
+	"go.opentelemetry.io/collector/receiver"
 	"go.opentelemetry.io/collector/receiver/otlpreceiver"
 )
 
-func Components() (component.Factories, error) {
+func Components() (otelcol.Factories, error) {
 	var err error
-	factories := component.Factories{}
-	factories.Extensions, err = component.MakeExtensionFactoryMap(
+	factories := otelcol.Factories{}
+	factories.Extensions, err = extension.MakeFactoryMap(
 		healthcheckextension.NewFactory(),
 	)
 	if err != nil {
-		return component.Factories{}, err
+		return otelcol.Factories{}, err
 	}
-	factories.Receivers, err = component.MakeReceiverFactoryMap(
+	factories.Receivers, err = receiver.MakeFactoryMap(
 		carbonreceiver.NewFactory(),
 		cloudfoundryreceiver.NewFactory(),
 		collectdreceiver.NewFactory(),
@@ -110,9 +114,9 @@ func Components() (component.Factories, error) {
 		zipkinreceiver.NewFactory(),
 	)
 	if err != nil {
-		return component.Factories{}, err
+		return otelcol.Factories{}, err
 	}
-	factories.Exporters, err = component.MakeExporterFactoryMap(
+	factories.Exporters, err = exporter.MakeFactoryMap(
 		fileexporter.NewFactory(),
 		kafkaexporter.NewFactory(),
 		loggingexporter.NewFactory(),
@@ -123,9 +127,9 @@ func Components() (component.Factories, error) {
 		splunkhecexporter.NewFactory(),
 	)
 	if err != nil {
-		return component.Factories{}, err
+		return otelcol.Factories{}, err
 	}
-	factories.Processors, err = component.MakeProcessorFactoryMap(
+	factories.Processors, err = processor.MakeFactoryMap(
 		attributesprocessor.NewFactory(),
 		batchprocessor.NewFactory(),
 		filterprocessor.NewFactory(),
@@ -143,7 +147,7 @@ func Components() (component.Factories, error) {
 		transformprocessor.NewFactory(),
 	)
 	if err != nil {
-		return component.Factories{}, err
+		return otelcol.Factories{}, err
 	}
 	return factories, nil
 }

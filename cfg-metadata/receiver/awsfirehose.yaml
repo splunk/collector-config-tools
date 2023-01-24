@@ -1,11 +1,6 @@
 type: '*awsfirehosereceiver.Config'
 doc: |
-  ReceiverSettings defines common settings for a component.Receiver configuration.
-  Specific receivers can embed this struct and extend it with more fields if needed.
-
-  It is highly recommended to "override" the Validate() function.
-
-  When embedded in the receiver config it must be with `mapstructure:",squash"` tag.
+  HTTPServerSettings defines settings for creating an HTTP server.
 fields:
 - name: endpoint
   kind: string
@@ -96,7 +91,7 @@ fields:
     Auth for this receiver
   fields:
   - name: authenticator
-    type: config.ComponentID
+    type: component.ID
     kind: struct
     doc: |
       AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.

@@ -48,12 +48,12 @@ fields:
     default: ""
     doc: |
       Value represents a possible value for the field specified under FromAttribute.
-      Required when 'Expression' isn't provided.
-  - name: expression
+      Required when Statement isn't provided.
+  - name: statement
     kind: string
     default: ""
     doc: |
-      Expression is a OTTL expression on which signals routing is based.
+      Statement is a OTTL statement used for making a routing decision.
       Required when 'Value' isn't provided.
   - name: exporters
     type: '[]string'

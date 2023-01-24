@@ -6,3 +6,8 @@ fields:
   type: time.Duration
   kind: int64
   default: 1m0s
+- name: root_path
+  kind: string
+  default: ""
+  doc: |
+    RootPath is the host's root directory (linux only).

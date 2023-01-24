@@ -1,30 +1,35 @@
 type: '*transformprocessor.Config'
-doc: |
-  ProcessorSettings defines common settings for a component.Processor configuration.
-  Specific processors can embed this struct and extend it with more fields if needed.
-
-  It is highly recommended to "override" the Validate() function.
-
-  When embedded in the processor config it must be with `mapstructure:",squash"` tag.
 fields:
-- name: traces
-  type: transformprocessor.SignalConfig
-  kind: struct
+- name: trace_statements
+  type: '[]common.ContextStatements'
+  kind: slice
   fields:
+  - name: context
+    type: common.ContextID
+    kind: string
+    default: ""
   - name: statements
     type: '[]string'
     kind: slice
-- name: metrics
-  type: transformprocessor.SignalConfig
-  kind: struct
+- name: metric_statements
+  type: '[]common.ContextStatements'
+  kind: slice
   fields:
+  - name: context
+    type: common.ContextID
+    kind: string
+    default: ""
   - name: statements
     type: '[]string'
     kind: slice
-- name: logs
-  type: transformprocessor.SignalConfig
-  kind: struct
+- name: log_statements
+  type: '[]common.ContextStatements'
+  kind: slice
   fields:
+  - name: context
+    type: common.ContextID
+    kind: string
+    default: ""
   - name: statements
     type: '[]string'
     kind: slice

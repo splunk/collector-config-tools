@@ -2,7 +2,13 @@ type: '*bearertokenauthextension.Config'
 doc: |
   Config specifies how the Per-RPC bearer token based authentication data should be obtained.
 fields:
+- name: scheme
+  kind: string
+  default: Bearer
+  doc: |
+    Scheme specifies the auth-scheme for the token. Defaults to "Bearer"
 - name: token
+  type: configopaque.String
   kind: string
   default: ""
   doc: |

@@ -2,7 +2,7 @@ type: '*kubeletstatsreceiver.Config'
 doc: |
   ScraperControllerSettings defines common settings for a scraper controller
   configuration. Scraper controller receivers can embed this struct, instead
-  of config.ReceiverSettings, and extend it with more fields if needed.
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration
@@ -309,43 +309,7 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: k8s.node.network.errors.receive
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: k8s.node.network.errors.transmit
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
   - name: k8s.node.network.io
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: k8s.node.network.io.receive
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: k8s.node.network.io.transmit
     type: metadata.MetricSettings
     kind: struct
     doc: |
@@ -462,43 +426,7 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: k8s.pod.network.errors.receive
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: k8s.pod.network.errors.transmit
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
   - name: k8s.pod.network.io
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: k8s.pod.network.io.receive
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: k8s.pod.network.io.transmit
     type: metadata.MetricSettings
     kind: struct
     doc: |

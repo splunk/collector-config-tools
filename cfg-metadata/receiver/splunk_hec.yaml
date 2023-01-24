@@ -91,7 +91,7 @@ fields:
     Auth for this receiver
   fields:
   - name: authenticator
-    type: config.ComponentID
+    type: component.ID
     kind: struct
     doc: |
       AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
@@ -110,16 +110,16 @@ fields:
   default: false
   doc: |
     AccessTokenPassthrough indicates whether to associate datapoints with an organization access token received in request.
-- name: path
-  kind: string
-  default: ""
-  doc: |
-    Path was used to map the receiver to a specific subset of the path. Now ignored as we match all incoming requests.
 - name: raw_path
   kind: string
   default: /services/collector/raw
   doc: |
     RawPath for raw data collection, default is '/services/collector/raw'
+- name: health_path
+  kind: string
+  default: /services/collector/health
+  doc: |
+    HealthPath for health API, default is '/services/collector/health'
 - name: hec_metadata_to_otel_attrs
   type: splunk.HecToOtelAttrs
   kind: struct

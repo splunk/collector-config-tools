@@ -1,0 +1,43 @@
+type: '*servicegraphprocessor.Config'
+doc: |
+  Config defines the configuration options for servicegraphprocessor.
+fields:
+- name: metrics_exporter
+  kind: string
+  default: ""
+  doc: |
+    MetricsExporter is the name of the metrics exporter to use to ship metrics.
+- name: latency_histogram_buckets
+  type: '[]time.Duration'
+  kind: slice
+  doc: |
+    LatencyHistogramBuckets is the list of durations representing latency histogram buckets.
+    See defaultLatencyHistogramBucketsMs in processor.go for the default value.
+- name: dimensions
+  type: '[]string'
+  kind: slice
+  doc: |
+    Dimensions defines the list of additional dimensions on top of the provided:
+    - client
+    - server
+    - failed
+    - connection_type
+    The dimensions will be fetched from the span's attributes. Examples of some conventionally used attributes:
+    https://github.com/open-telemetry/opentelemetry-collector/blob/main/model/semconv/opentelemetry.go.
+- name: store
+  type: servicegraphprocessor.StoreConfig
+  kind: struct
+  doc: |
+    Store contains the config for the in-memory store used to find requests between services by pairing spans.
+  fields:
+  - name: max_items
+    kind: int
+    default: 1000
+    doc: |
+      MaxItems is the maximum number of items to keep in the store.
+  - name: ttl
+    type: time.Duration
+    kind: int64
+    default: 2s
+    doc: |
+      TTL is the time to live for items in the store.

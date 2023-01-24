@@ -24,7 +24,7 @@ fields:
     doc: |
       QueueSize is the maximum number of batches allowed in queue at a given time.
   - name: storage
-    type: '*config.ComponentID'
+    type: '*component.ID'
     kind: ptr
     doc: |
       StorageID if not empty, enables the persistent storage and uses the component specified
@@ -176,7 +176,7 @@ fields:
     WaitForReady parameter configures client to wait for ready state before sending data.
     (https://github.com/grpc/grpc/blob/master/doc/wait-for-ready.md)
 - name: headers
-  type: map[string]string
+  type: map[string]configopaque.String
   kind: map
   doc: |
     The headers associated with gRPC requests.
@@ -193,7 +193,7 @@ fields:
     Auth configuration for outgoing RPCs.
   fields:
   - name: authenticator
-    type: config.ComponentID
+    type: component.ID
     kind: struct
     doc: |
       AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
@@ -312,7 +312,7 @@ fields:
       WaitForReady parameter configures client to wait for ready state before sending data.
       (https://github.com/grpc/grpc/blob/master/doc/wait-for-ready.md)
   - name: headers
-    type: map[string]string
+    type: map[string]configopaque.String
     kind: map
     doc: |
       The headers associated with gRPC requests.
@@ -329,7 +329,7 @@ fields:
       Auth configuration for outgoing RPCs.
     fields:
     - name: authenticator
-      type: config.ComponentID
+      type: component.ID
       kind: struct
       doc: |
         AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
@@ -449,7 +449,7 @@ fields:
       WaitForReady parameter configures client to wait for ready state before sending data.
       (https://github.com/grpc/grpc/blob/master/doc/wait-for-ready.md)
   - name: headers
-    type: map[string]string
+    type: map[string]configopaque.String
     kind: map
     doc: |
       The headers associated with gRPC requests.
@@ -466,7 +466,7 @@ fields:
       Auth configuration for outgoing RPCs.
     fields:
     - name: authenticator
-      type: config.ComponentID
+      type: component.ID
       kind: struct
       doc: |
         AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
@@ -585,7 +585,7 @@ fields:
       WaitForReady parameter configures client to wait for ready state before sending data.
       (https://github.com/grpc/grpc/blob/master/doc/wait-for-ready.md)
   - name: headers
-    type: map[string]string
+    type: map[string]configopaque.String
     kind: map
     doc: |
       The headers associated with gRPC requests.
@@ -602,11 +602,12 @@ fields:
       Auth configuration for outgoing RPCs.
     fields:
     - name: authenticator
-      type: config.ComponentID
+      type: component.ID
       kind: struct
       doc: |
         AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
 - name: private_key
+  type: configopaque.String
   kind: string
   default: ""
   doc: |

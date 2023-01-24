@@ -30,7 +30,7 @@ fields:
     doc: |
       QueueSize is the maximum number of batches allowed in queue at a given time.
   - name: storage
-    type: '*config.ComponentID'
+    type: '*component.ID'
     kind: ptr
     doc: |
       StorageID if not empty, enables the persistent storage and uses the component specified
@@ -78,6 +78,7 @@ fields:
   doc: |
     ProfilingDataEnabled can be used to disable sending profiling data by the exporter.
 - name: token
+  type: configopaque.String
   kind: string
   default: ""
   doc: |
@@ -246,8 +247,13 @@ fields:
     default: otel.log.severity.number
     doc: |
       SeverityNumber informs the exporter to map the severity number field to a specific HEC field.
-  - name: name
-    kind: string
-    default: otel.log.name
-    doc: |
-      Name informs the exporter to map the name field to a specific HEC field.
+- name: health_path
+  kind: string
+  default: /services/collector/health
+  doc: |
+    HealthPath for health API, default is '/services/collector/health'
+- name: health_check_enabled
+  kind: bool
+  default: false
+  doc: |
+    HecHealthCheckEnabled can be used to verify Splunk HEC health on exporter's startup

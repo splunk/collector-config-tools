@@ -1,6 +1,6 @@
 type: '*zpagesextension.Config'
 doc: |
-  Config has the configuration for the extension enabling the zPages extension.
+  TCPAddr represents a TCP endpoint address.
 fields:
 - name: endpoint
   kind: string

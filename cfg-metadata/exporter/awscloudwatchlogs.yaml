@@ -54,6 +54,11 @@ fields:
     are forwarded to. https://docs.aws.amazon.com/general/latest/gr/cwl_region.html
     e.g. logs.us-east-1.amazonaws.com
     Optional.
+- name: log_retention
+  kind: int64
+  doc: |
+    LogRetention is the option to set the log retention policy for the CloudWatch Log Group. Defaults to Never Expire if not specified or set to 0
+    Possible values are 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 2192, 2557, 2922, 3288, or 3653
 - name: sending_queue
   type: awscloudwatchlogsexporter.QueueSettings
   kind: struct

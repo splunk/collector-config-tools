@@ -1,19 +1,15 @@
 type: '*loggingexporter.Config'
-doc: |
-  Config defines configuration for logging exporter.
 fields:
 - name: loglevel
   type: zapcore.Level
   kind: int8
-  doc: |
-    LogLevel defines log level of the logging exporter; options are debug, info, warn, error.
+- name: verbosity
+  type: configtelemetry.Level
+  kind: int32
+  default: 1
 - name: sampling_initial
   kind: int
   default: 2
-  doc: |
-    SamplingInitial defines how many samples are initially logged during each second.
 - name: sampling_thereafter
   kind: int
   default: 500
-  doc: |
-    SamplingThereafter defines the sampling rate after the initial samples are logged.

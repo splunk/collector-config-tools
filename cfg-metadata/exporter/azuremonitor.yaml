@@ -6,6 +6,7 @@ fields:
   kind: string
   default: https://dc.services.visualstudio.com/v2/track
 - name: instrumentation_key
+  type: configopaque.String
   kind: string
   default: ""
 - name: maxbatchsize
@@ -15,3 +16,6 @@ fields:
   type: time.Duration
   kind: int64
   default: 10s
+- name: spaneventsenabled
+  kind: bool
+  default: false

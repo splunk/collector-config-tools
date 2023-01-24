@@ -30,7 +30,7 @@ fields:
     doc: |
       QueueSize is the maximum number of batches allowed in queue at a given time.
   - name: storage
-    type: '*config.ComponentID'
+    type: '*component.ID'
     kind: ptr
     doc: |
       StorageID if not empty, enables the persistent storage and uses the component specified
@@ -92,6 +92,7 @@ fields:
     API defines the Datadog API configuration.
   fields:
   - name: key
+    type: configopaque.String
     kind: string
     default: ""
     doc: |
@@ -257,6 +258,11 @@ fields:
       resolved to IP addresses. The port must be a literal port number or a service name.
       If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
       "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
+  - name: dump_payloads
+    kind: bool
+    default: false
+    doc: |
+      DumpPayloads report whether payloads should be dumped when logging level is debug.
 - name: host_metadata
   type: datadogexporter.HostMetadataConfig
   kind: struct

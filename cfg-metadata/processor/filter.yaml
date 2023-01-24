@@ -147,6 +147,20 @@ fields:
       doc: |
         CacheMaxNumEntries is the max number of entries of the LRU cache that stores match results.
         CacheMaxNumEntries is ignored if CacheEnabled is false.
+  - name: metric
+    type: '[]string'
+    kind: slice
+    doc: |
+      MetricConditions is a list of OTTL conditions for an ottlmetric context.
+      If any condition resolves to true, the metric will be dropped.
+      Supports `and`, `or`, and `()`
+  - name: datapoint
+    type: '[]string'
+    kind: slice
+    doc: |
+      DataPointConditions is a list of OTTL conditions for an ottldatapoint context.
+      If any condition resolves to true, the datapoint will be dropped.
+      Supports `and`, `or`, and `()`
 - name: logs
   type: filterprocessor.LogFilters
   kind: struct
@@ -319,19 +333,32 @@ fields:
       doc: |
         LogBodies is a list of strings that the LogRecord's body field must match
         against.
+  - name: log_record
+    type: '[]string'
+    kind: slice
+    doc: |
+      LogConditions is a list of OTTL conditions for an ottllog context.
+      If any condition resolves to true, the log event will be dropped.
+      Supports `and`, `or`, and `()`
 - name: spans
-  type: filterprocessor.SpanFilters
+  type: filterconfig.MatchConfig
   kind: struct
   doc: |
-    SpanFilters filters by Span attributes and various other fields, Regexp config is per matcher
+    MatchConfig has two optional MatchProperties one to define what is processed
+    by the processor, captured under the 'include' and the second, exclude, to
+    define what is excluded from the processor.
   fields:
   - name: include
     type: '*filterconfig.MatchProperties'
     kind: ptr
     doc: |
-      Include match properties describe spans that should be included in the Collector Service pipeline,
-      all other spans should be dropped from further processing.
-      If both Include and Exclude are specified, Include filtering occurs first.
+      Include specifies the set of input data properties that must be present in order
+      for this processor to apply to it.
+      Note: If `exclude` is specified, the input data is compared against those
+      properties after the `include` properties.
+      This is an optional field. If neither `include` and `exclude` are set, all input data
+      are processed. If `include` is set and `exclude` isn't set, then all
+      input data matching the properties in this structure are processed.
     fields:
     - name: match_type
       type: filterset.MatchType
@@ -478,9 +505,15 @@ fields:
     type: '*filterconfig.MatchProperties'
     kind: ptr
     doc: |
-      Exclude match properties describe spans that should be excluded from the Collector Service pipeline,
-      all other spans should be included.
-      If both Include and Exclude are specified, Include filtering occurs first.
+      Exclude specifies when this processor will not be applied to the input data
+      which match the specified properties.
+      Note: The `exclude` properties are checked after the `include` properties,
+      if they exist, are checked.
+      If `include` isn't specified, the `exclude` properties are checked against
+      all input data.
+      This is an optional field. If neither `include` and `exclude` are set, all input data
+      is processed. If `exclude` is set and `include` isn't set, then all the
+      input data that does not match the properties in this structure are processed.
     fields:
     - name: match_type
       type: filterset.MatchType
@@ -623,3 +656,23 @@ fields:
         SpanKinds specify the list of items to match the span kind against.
         A match occurs if the span's span kind matches at least one item in this list.
         This is an optional field
+- name: traces
+  type: filterprocessor.TraceFilters
+  kind: struct
+  doc: |
+    TraceFilters filters by OTTL conditions
+  fields:
+  - name: span
+    type: '[]string'
+    kind: slice
+    doc: |
+      SpanConditions is a list of OTTL conditions for an ottlspan context.
+      If any condition resolves to true, the span will be dropped.
+      Supports `and`, `or`, and `()`
+  - name: spanevent
+    type: '[]string'
+    kind: slice
+    doc: |
+      SpanEventConditions is a list of OTTL conditions for an ottlspanevent context.
+      If any condition resolves to true, the span event will be dropped.
+      Supports `and`, `or`, and `()`

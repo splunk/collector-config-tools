@@ -28,6 +28,7 @@ fields:
       based on age.
   - name: max_backups
     kind: int
+    default: 100
     doc: |
       MaxBackups is the maximum number of old log files to retain. The default
       is to 100 files.

@@ -9,6 +9,7 @@ fields:
     ClientID is the application's ID.
     See https://datatracker.ietf.org/doc/html/rfc6749#section-2.2
 - name: client_secret
+  type: configopaque.String
   kind: string
   default: ""
   doc: |

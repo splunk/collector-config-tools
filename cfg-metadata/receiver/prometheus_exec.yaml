@@ -7,6 +7,7 @@ fields:
   kind: int64
   default: 1m0s
   doc: |
+    Generic receiver config
     ScrapeInterval is the time between each scrape completed by the Receiver
 - name: scrape_timeout
   type: time.Duration

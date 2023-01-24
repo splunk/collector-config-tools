@@ -1,0 +1,59 @@
+type: '*awscloudwatchreceiver.Config'
+doc: |
+  Config is the overall config structure for the awscloudwatchreceiver
+fields:
+- name: region
+  kind: string
+  default: ""
+- name: profile
+  kind: string
+  default: ""
+- name: imds_endpoint
+  kind: string
+  default: ""
+- name: logs
+  type: '*awscloudwatchreceiver.LogsConfig'
+  kind: ptr
+  doc: |
+    LogsConfig is the configuration for the logs portion of this receiver
+  fields:
+  - name: poll_interval
+    type: time.Duration
+    kind: int64
+    default: 1m0s
+  - name: max_events_per_request
+    kind: int
+    default: 1000
+  - name: groups
+    type: awscloudwatchreceiver.GroupConfig
+    kind: struct
+    doc: |
+      GroupConfig is the configuration for log group collection
+    fields:
+    - name: autodiscover
+      type: '*awscloudwatchreceiver.AutodiscoverConfig'
+      kind: ptr
+      doc: |
+        AutodiscoverConfig is the configuration for the autodiscovery functionality of log groups
+      fields:
+      - name: prefix
+        kind: string
+        default: ""
+      - name: limit
+        kind: int
+        default: 50
+      - name: streams
+        type: awscloudwatchreceiver.StreamConfig
+        kind: struct
+        doc: |
+          StreamConfig represents the configuration for the log stream filtering
+        fields:
+        - name: prefixes
+          type: '[]*string'
+          kind: slice
+        - name: names
+          type: '[]*string'
+          kind: slice
+    - name: named
+      type: map[string]awscloudwatchreceiver.StreamConfig
+      kind: map

@@ -1,12 +1,8 @@
 type: '*otlpreceiver.Config'
-doc: |
-  Config defines configuration for OTLP receiver.
 fields:
 - name: protocols
   type: otlpreceiver.Protocols
   kind: struct
-  doc: |
-    Protocols is the configuration for the supported protocols, currently gRPC and HTTP (Proto and JSON).
   fields:
   - name: grpc
     type: '*configgrpc.GRPCServerSettings'
@@ -150,7 +146,7 @@ fields:
         Auth for this receiver
       fields:
       - name: authenticator
-        type: config.ComponentID
+        type: component.ID
         kind: struct
         doc: |
           AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
@@ -255,7 +251,7 @@ fields:
         Auth for this receiver
       fields:
       - name: authenticator
-        type: config.ComponentID
+        type: component.ID
         kind: struct
         doc: |
           AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.

@@ -1,11 +1,6 @@
 type: '*ecstaskobserver.Config'
 doc: |
-  ExtensionSettings defines common settings for a component.Extension configuration.
-  Specific processors can embed this struct and extend it with more fields if needed.
-
-  It is highly recommended to "override" the Validate() function.
-
-  When embedded in the extension config, it must be with `mapstructure:",squash"` tag.
+  HTTPClientSettings defines settings for creating an HTTP client.
 fields:
 - name: endpoint
   kind: string
@@ -89,11 +84,12 @@ fields:
   doc: |
     Timeout parameter configures `http.Client.Timeout`.
 - name: headers
-  type: map[string]string
+  type: map[string]configopaque.String
   kind: map
   doc: |
     Additional headers attached to each HTTP request sent by the client.
     Existing header values are overwritten if collision happens.
+    Header values are opaque since they may be sensitive.
 - name: customroundtripper
   type: func(http.RoundTripper) (http.RoundTripper, error)
   kind: func
@@ -106,7 +102,7 @@ fields:
     Auth configuration for outgoing HTTP calls.
   fields:
   - name: authenticator
-    type: config.ComponentID
+    type: component.ID
     kind: struct
     doc: |
       AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.

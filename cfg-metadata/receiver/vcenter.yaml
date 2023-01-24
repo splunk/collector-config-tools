@@ -185,24 +185,6 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: vcenter.host.disk.latency.avg.read
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.host.disk.latency.avg.write
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
   - name: vcenter.host.disk.latency.max
     type: metadata.MetricSettings
     kind: struct
@@ -213,24 +195,6 @@ fields:
       kind: bool
       default: true
   - name: vcenter.host.disk.throughput
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.host.disk.throughput.read
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.host.disk.throughput.write
     type: metadata.MetricSettings
     kind: struct
     doc: |
@@ -266,24 +230,6 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: vcenter.host.network.packet.count.receive
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.host.network.packet.count.transmit
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
   - name: vcenter.host.network.packet.errors
     type: metadata.MetricSettings
     kind: struct
@@ -293,43 +239,7 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: vcenter.host.network.packet.errors.receive
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.host.network.packet.errors.transmit
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
   - name: vcenter.host.network.throughput
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.host.network.throughput.receive
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.host.network.throughput.transmit
     type: metadata.MetricSettings
     kind: struct
     doc: |
@@ -392,24 +302,6 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: vcenter.vm.disk.latency.avg.read
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.vm.disk.latency.avg.write
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
   - name: vcenter.vm.disk.latency.max
     type: metadata.MetricSettings
     kind: struct
@@ -455,6 +347,24 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: vcenter.vm.memory.swapped
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: vcenter.vm.memory.swapped_ssd
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
   - name: vcenter.vm.memory.usage
     type: metadata.MetricSettings
     kind: struct
@@ -473,43 +383,7 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: vcenter.vm.network.packet.count.receive
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.vm.network.packet.count.transmit
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
   - name: vcenter.vm.network.throughput
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.vm.network.throughput.receive
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: vcenter.vm.network.throughput.transmit
     type: metadata.MetricSettings
     kind: struct
     doc: |

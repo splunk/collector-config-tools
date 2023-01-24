@@ -79,6 +79,24 @@ fields:
     doc: |
       DefaultLogName sets the fallback log name to use when one isn't explicitly set
       for a log entry. If unset, logs without a log name will raise an error.
+  - name: resource_filters
+    type: '[]collector.ResourceFilter'
+    kind: slice
+    doc: |
+      ResourceFilters, if provided, provides a list of resource filters.
+      Resource attributes matching any filter will be included in LogEntry labels.
+      Defaults to empty, which won't include any additional resource labels.
+    fields:
+    - name: prefix
+      kind: string
+      default: ""
+      doc: |
+        Match resource keys by prefix
+    - name: regex
+      kind: string
+      default: ""
+      doc: |
+        Match resource keys by regex
   - name: getclientoptions
     type: func() []option.ClientOption
     kind: func
@@ -142,6 +160,11 @@ fields:
       default: ""
       doc: |
         Match resource keys by prefix
+    - name: regex
+      kind: string
+      default: ""
+      doc: |
+        Match resource keys by regex
   - name: getclientoptions
     type: func() []option.ClientOption
     kind: func
@@ -235,7 +258,7 @@ fields:
     doc: |
       QueueSize is the maximum number of batches allowed in queue at a given time.
   - name: storage
-    type: '*config.ComponentID'
+    type: '*component.ID'
     kind: ptr
     doc: |
       StorageID if not empty, enables the persistent storage and uses the component specified

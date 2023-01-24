@@ -39,3 +39,9 @@ fields:
     type: protocol.ObserverType
     kind: string
     default: ""
+  - name: histogram
+    type: protocol.HistogramConfig
+    kind: struct
+    fields:
+    - name: max_size
+      kind: int32

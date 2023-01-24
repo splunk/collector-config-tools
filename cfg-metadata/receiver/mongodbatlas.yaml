@@ -2,7 +2,7 @@ type: '*mongodbatlasreceiver.Config'
 doc: |
   ScraperControllerSettings defines common settings for a scraper controller
   configuration. Scraper controller receivers can embed this struct, instead
-  of config.ReceiverSettings, and extend it with more fields if needed.
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration
@@ -740,10 +740,5 @@ fields:
       MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
       Once this value is reached, the data is discarded.
 - name: storage
-  type: '*config.ComponentID'
+  type: '*component.ID'
   kind: ptr
-  doc: |
-    ComponentID represents the identity for a component. It combines two values:
-    * type - the Type of the component.
-    * name - the name of that component.
-    The component ComponentID (combination type + name) is unique for a given component.Kind.

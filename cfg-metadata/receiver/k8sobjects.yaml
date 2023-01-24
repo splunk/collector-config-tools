@@ -1,0 +1,39 @@
+type: '*k8sobjectsreceiver.Config'
+doc: |
+  APIConfig contains options relevant to connecting to the K8s API
+fields:
+- name: auth_type
+  type: k8sconfig.AuthType
+  kind: string
+  default: serviceAccount
+  doc: |
+    How to authenticate to the K8s API server.  This can be one of `none`
+    (for no auth), `serviceAccount` (to use the standard service account
+    token provided to the agent pod), or `kubeConfig` to use credentials
+    from `~/.kube/config`.
+- name: objects
+  type: '[]*k8sobjectsreceiver.K8sObjectsConfig'
+  kind: slice
+  fields:
+  - name: name
+    kind: string
+    default: ""
+  - name: group
+    kind: string
+    default: ""
+  - name: namespaces
+    type: '[]string'
+    kind: slice
+  - name: mode
+    type: k8sobjectsreceiver.mode
+    kind: string
+    default: ""
+  - name: label_selector
+    kind: string
+    default: ""
+  - name: field_selector
+    kind: string
+    default: ""
+  - name: interval
+    type: time.Duration
+    kind: int64

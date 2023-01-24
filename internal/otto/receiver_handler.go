@@ -20,15 +20,15 @@ import (
 
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/component/componenttest"
-	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/confmap"
+	"go.opentelemetry.io/collector/receiver"
 	"golang.org/x/net/websocket"
 )
 
 type receiverSocketHandler struct {
 	logger          *log.Logger
 	pipeline        *pipeline
-	receiverFactory component.ReceiverFactory
+	receiverFactory receiver.Factory
 }
 
 func (h receiverSocketHandler) handle(ws *websocket.Conn) {
@@ -61,7 +61,7 @@ func (h receiverSocketHandler) doHandle(ws *websocket.Conn) error {
 
 func (h receiverSocketHandler) startMetricsReceiver(
 	ws *websocket.Conn,
-	cfg config.Receiver,
+	cfg component.Config,
 ) {
 	wrapper, err := newMetricsReceiverWrapper(h.logger, ws, cfg, h.receiverFactory)
 	if err != nil {
@@ -85,7 +85,7 @@ func (h receiverSocketHandler) startMetricsReceiver(
 
 func (h receiverSocketHandler) startLogsReceiver(
 	ws *websocket.Conn,
-	cfg config.Receiver,
+	cfg component.Config,
 ) {
 	wrapper, err := newLogsReceiverWrapper(h.logger, ws, cfg, h.receiverFactory)
 	if err != nil {
@@ -109,7 +109,7 @@ func (h receiverSocketHandler) startLogsReceiver(
 
 func (h receiverSocketHandler) startTracesReceiver(
 	ws *websocket.Conn,
-	cfg config.Receiver,
+	cfg component.Config,
 ) {
 	wrapper, err := newTracesReceiverWrapper(h.logger, ws, cfg, h.receiverFactory)
 	if err != nil {
@@ -131,9 +131,9 @@ func (h receiverSocketHandler) startTracesReceiver(
 	h.pipeline.disconnectTracesReceiverWrapper()
 }
 
-func unmarshalReceiverConfig(receiverConfig config.Receiver, conf *confmap.Conf) error {
+func unmarshalReceiverConfig(receiverConfig component.Config, conf *confmap.Conf) error {
 	if unmarshallable, ok := receiverConfig.(confmap.Unmarshaler); ok {
 		return unmarshallable.Unmarshal(conf)
 	}
-	return conf.UnmarshalExact(receiverConfig)
+	return component.UnmarshalConfig(conf, receiverConfig)
 }

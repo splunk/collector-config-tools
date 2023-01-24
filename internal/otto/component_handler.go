@@ -21,12 +21,15 @@ import (
 	"reflect"
 	"sort"
 
-	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/exporter"
+	"go.opentelemetry.io/collector/otelcol"
+	"go.opentelemetry.io/collector/processor"
+	"go.opentelemetry.io/collector/receiver"
 )
 
 type componentHandler struct {
 	logger    *log.Logger
-	factories component.Factories
+	factories otelcol.Factories
 }
 
 func (h componentHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
@@ -42,7 +45,7 @@ func (h componentHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request)
 	}
 }
 
-func factoriesToComponentTypeJSON(factories component.Factories) ([]byte, error) {
+func factoriesToComponentTypeJSON(factories otelcol.Factories) ([]byte, error) {
 	cmp := factoriesToComponentTypes(factories)
 	return json.Marshal(cmp)
 }
@@ -59,7 +62,7 @@ type rpe struct {
 	Exporters  []string `json:"exporters"`
 }
 
-func factoriesToComponentTypes(factories component.Factories) componentTypes {
+func factoriesToComponentTypes(factories otelcol.Factories) componentTypes {
 	out := componentTypes{}
 	for name, factory := range factories.Receivers {
 		sp := receiverSupportedPipelines(factory)
@@ -118,49 +121,49 @@ type supportedPipelines struct {
 	logs    bool
 }
 
-func receiverSupportedPipelines(fact component.ReceiverFactory) supportedPipelines {
+func receiverSupportedPipelines(fact receiver.Factory) supportedPipelines {
 	out := supportedPipelines{}
 	factV := reflect.ValueOf(fact).Elem()
-	if !factV.FieldByName("CreateMetricsReceiverFunc").IsNil() {
+	if !factV.FieldByName("CreateMetricsFunc").IsNil() {
 		out.metrics = true
 	}
-	if !factV.FieldByName("CreateTracesReceiverFunc").IsNil() {
+	if !factV.FieldByName("CreateTracesFunc").IsNil() {
 		out.traces = true
 	}
-	if !factV.FieldByName("CreateLogsReceiverFunc").IsNil() {
+	if !factV.FieldByName("CreateLogsFunc").IsNil() {
 		out.logs = true
 	}
 	return out
 }
 
-func processorSupportedPipelines(fact component.ProcessorFactory) supportedPipelines {
+func processorSupportedPipelines(fact processor.Factory) supportedPipelines {
 	out := supportedPipelines{}
 	factV := reflect.ValueOf(fact).Elem()
-	if !factV.FieldByName("CreateMetricsProcessorFunc").IsNil() {
+	if !factV.FieldByName("CreateMetricsFunc").IsNil() {
 		out.metrics = true
 	}
-	if !factV.FieldByName("CreateTracesProcessorFunc").IsNil() {
+	if !factV.FieldByName("CreateTracesFunc").IsNil() {
 		out.traces = true
 	}
-	if !factV.FieldByName("CreateLogsProcessorFunc").IsNil() {
+	if !factV.FieldByName("CreateLogsFunc").IsNil() {
 		out.logs = true
 	}
 	return out
 }
 
-func exporterSupportedPipelines(fact component.ExporterFactory) supportedPipelines {
+func exporterSupportedPipelines(fact exporter.Factory) supportedPipelines {
 	out := supportedPipelines{}
 	factV := reflect.ValueOf(fact).Elem()
 	if !factV.IsValid() {
 		return out
 	}
-	if f := factV.FieldByName("CreateMetricsExporterFunc"); f.IsValid() && !f.IsNil() {
+	if f := factV.FieldByName("CreateMetricsFunc"); f.IsValid() && !f.IsNil() {
 		out.metrics = true
 	}
-	if f := factV.FieldByName("CreateTracesExporterFunc"); f.IsValid() && !f.IsNil() {
+	if f := factV.FieldByName("CreateTracesFunc"); f.IsValid() && !f.IsNil() {
 		out.traces = true
 	}
-	if f := factV.FieldByName("CreateLogsExporterFunc"); f.IsValid() && !f.IsNil() {
+	if f := factV.FieldByName("CreateLogsFunc"); f.IsValid() && !f.IsNil() {
 		out.logs = true
 	}
 	return out

@@ -56,11 +56,13 @@ fields:
   doc: |
     User is used to configure HTTP Basic Authentication.
 - name: password
+  type: configopaque.String
   kind: string
   default: ""
   doc: |
     Password is used to configure HTTP Basic Authentication.
 - name: api_key
+  type: configopaque.String
   kind: string
   default: ""
   doc: |

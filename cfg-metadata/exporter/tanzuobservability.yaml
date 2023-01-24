@@ -24,7 +24,7 @@ fields:
     doc: |
       QueueSize is the maximum number of batches allowed in queue at a given time.
   - name: storage
-    type: '*config.ComponentID'
+    type: '*component.ID'
     kind: ptr
     doc: |
       StorageID if not empty, enables the persistent storage and uses the component specified
@@ -149,11 +149,12 @@ fields:
     doc: |
       Timeout parameter configures `http.Client.Timeout`.
   - name: headers
-    type: map[string]string
+    type: map[string]configopaque.String
     kind: map
     doc: |
       Additional headers attached to each HTTP request sent by the client.
       Existing header values are overwritten if collision happens.
+      Header values are opaque since they may be sensitive.
   - name: customroundtripper
     type: func(http.RoundTripper) (http.RoundTripper, error)
     kind: func
@@ -166,7 +167,7 @@ fields:
       Auth configuration for outgoing HTTP calls.
     fields:
     - name: authenticator
-      type: config.ComponentID
+      type: component.ID
       kind: struct
       doc: |
         AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
@@ -289,11 +290,12 @@ fields:
     doc: |
       Timeout parameter configures `http.Client.Timeout`.
   - name: headers
-    type: map[string]string
+    type: map[string]configopaque.String
     kind: map
     doc: |
       Additional headers attached to each HTTP request sent by the client.
       Existing header values are overwritten if collision happens.
+      Header values are opaque since they may be sensitive.
   - name: customroundtripper
     type: func(http.RoundTripper) (http.RoundTripper, error)
     kind: func
@@ -306,7 +308,7 @@ fields:
       Auth configuration for outgoing HTTP calls.
     fields:
     - name: authenticator
-      type: config.ComponentID
+      type: component.ID
       kind: struct
       doc: |
         AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
@@ -341,15 +343,12 @@ fields:
     doc: |
       IdleConnTimeout is the maximum amount of time a connection will remain open before closing itself.
       There's an already set value, and we want to override it only if an explicit value provided
-  - name: resource_attributes
-    type: resourcetotelemetry.Settings
-    kind: struct
-    doc: "Settings defines configuration for converting resource attributes to telemetry
-      attributes.\nWhen used, it must be embedded in the exporter configuration:\n\n\ttype
-      Config struct {\n\t  // ...\n\t  resourcetotelemetry.Settings `mapstructure:\"resource_to_telemetry_conversion\"`\n\t}\n"
-    fields:
-    - name: enabled
-      kind: bool
-      default: false
-      doc: |
-        Enabled indicates whether to convert resource attributes to telemetry attributes. Default is `false`.
+  - name: resource_attrs_included
+    kind: bool
+    default: false
+  - name: app_tags_excluded
+    kind: bool
+    default: false
+    doc: |
+      AppTagsExcluded will exclude the Resource Attributes `application`, `service.name` -> (service),
+      `cluster`, and `shard` from the transformed TObs metric if set to true.

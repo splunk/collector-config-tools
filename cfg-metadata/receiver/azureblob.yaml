@@ -1,0 +1,41 @@
+type: '*azureblobreceiver.Config'
+fields:
+- name: connection_string
+  kind: string
+  default: ""
+  doc: |
+    Azure Blob Storage connection key,
+    which can be found in the Azure Blob Storage resource on the Azure Portal. (no default)
+- name: event_hub
+  type: azureblobreceiver.EventHubConfig
+  kind: struct
+  doc: |
+    Configurations of Azure Event Hub triggering on the `Blob Create` event
+  fields:
+  - name: endpoint
+    kind: string
+    default: ""
+    doc: |
+      Azure Event Hub endpoint triggering on the `Blob Create` event
+- name: logs
+  type: azureblobreceiver.LogsConfig
+  kind: struct
+  doc: |
+    Logs related configurations
+  fields:
+  - name: container_name
+    kind: string
+    default: logs
+    doc: |
+      Name of the blob container with the logs (default = "logs")
+- name: traces
+  type: azureblobreceiver.TracesConfig
+  kind: struct
+  doc: |
+    Traces related configurations
+  fields:
+  - name: container_name
+    kind: string
+    default: traces
+    doc: |
+      Name of the blob container with the traces (default = "traces")

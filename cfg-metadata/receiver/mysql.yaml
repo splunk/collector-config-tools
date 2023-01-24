@@ -2,7 +2,7 @@ type: '*mysqlreceiver.Config'
 doc: |
   ScraperControllerSettings defines common settings for a scraper controller
   configuration. Scraper controller receivers can embed this struct, instead
-  of config.ReceiverSettings, and extend it with more fields if needed.
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration
@@ -95,6 +95,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mysql.client.network.io
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mysql.commands
     type: metadata.MetricSettings
     kind: struct
@@ -103,7 +112,25 @@ fields:
     fields:
     - name: enabled
       kind: bool
-      default: true
+      default: false
+  - name: mysql.connection.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.connection.errors
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mysql.double_writes
     type: metadata.MetricSettings
     kind: struct
@@ -140,6 +167,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mysql.joins
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mysql.locked_connects
     type: metadata.MetricSettings
     kind: struct
@@ -167,6 +203,33 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mysql.mysqlx_connections
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mysql.mysqlx_worker_threads
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.opened_resources
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
   - name: mysql.operations
     type: metadata.MetricSettings
     kind: struct
@@ -185,6 +248,60 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mysql.prepared_statements
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mysql.query.client.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.query.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.query.slow.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.replica.sql_delay
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.replica.time_behind_source
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mysql.row_locks
     type: metadata.MetricSettings
     kind: struct
@@ -212,6 +329,24 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mysql.statement_event.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.statement_event.wait.time
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mysql.table.io.wait.count
     type: metadata.MetricSettings
     kind: struct
@@ -230,6 +365,51 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mysql.table.lock_wait.read.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.table.lock_wait.read.time
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.table.lock_wait.write.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.table.lock_wait.write.time
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.table_open_cache
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mysql.threads
     type: metadata.MetricSettings
     kind: struct
@@ -248,3 +428,17 @@ fields:
     - name: enabled
       kind: bool
       default: true
+- name: statement_events
+  type: mysqlreceiver.StatementEventsConfig
+  kind: struct
+  fields:
+  - name: digest_text_limit
+    kind: int
+    default: 120
+  - name: limit
+    kind: int
+    default: 250
+  - name: time_limit
+    type: time.Duration
+    kind: int64
+    default: 24h0m0s

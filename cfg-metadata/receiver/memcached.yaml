@@ -2,7 +2,7 @@ type: '*memcachedreceiver.Config'
 doc: |
   ScraperControllerSettings defines common settings for a scraper controller
   configuration. Scraper controller receivers can embed this struct, instead
-  of config.ReceiverSettings, and extend it with more fields if needed.
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration
@@ -99,24 +99,6 @@ fields:
       kind: bool
       default: true
   - name: memcached.network
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: memcached.network.received
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: memcached.network.sent
     type: metadata.MetricSettings
     kind: struct
     doc: |

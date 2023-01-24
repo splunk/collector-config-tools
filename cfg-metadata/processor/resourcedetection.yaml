@@ -43,6 +43,7 @@ fields:
     doc: |
       Datacenter to use. If not provided, the default agent datacenter is used.
   - name: token
+    type: configopaque.String
     kind: string
     default: ""
     doc: |
@@ -84,6 +85,22 @@ fields:
       The HostnameSources is a priority list of sources from which hostname will be fetched.
       In case of the error in fetching hostname from source,
       the next source from the list will be considered.(**default**: `["dns", "os"]`)
+- name: openshift
+  type: openshift.Config
+  kind: struct
+  doc: |
+    OpenShift contains user-specified configurations for the Openshift detector
+  fields:
+  - name: address
+    kind: string
+    default: ""
+    doc: |
+      Address is the address of the openshift api server
+  - name: token
+    kind: string
+    default: ""
+    doc: |
+      Token is used to identify against the openshift api server
 - name: endpoint
   kind: string
   default: ""
@@ -167,11 +184,12 @@ fields:
   doc: |
     Timeout parameter configures `http.Client.Timeout`.
 - name: headers
-  type: map[string]string
+  type: map[string]configopaque.String
   kind: map
   doc: |
     Additional headers attached to each HTTP request sent by the client.
     Existing header values are overwritten if collision happens.
+    Header values are opaque since they may be sensitive.
 - name: customroundtripper
   type: func(http.RoundTripper) (http.RoundTripper, error)
   kind: func
@@ -184,7 +202,7 @@ fields:
     Auth configuration for outgoing HTTP calls.
   fields:
   - name: authenticator
-    type: config.ComponentID
+    type: component.ID
     kind: struct
     doc: |
       AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.

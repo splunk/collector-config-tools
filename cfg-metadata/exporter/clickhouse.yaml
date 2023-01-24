@@ -64,8 +64,18 @@ fields:
   default: otel_logs
   doc: |
     LogsTableName is the table name for logs. default is `otel_logs`.
+- name: traces_table_name
+  kind: string
+  default: otel_traces
+  doc: |
+    TracesTableName is the table name for logs. default is `otel_traces`.
+- name: metrics_table_name
+  kind: string
+  default: otel_metrics
+  doc: |
+    MetricsTableName is the table name for metrics. default is `otel_metrics`.
 - name: ttl_days
   kind: uint
-  default: 0
+  default: 7
   doc: |
     TTLDays is The data time-to-live in days, 0 means no ttl.

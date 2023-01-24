@@ -9,6 +9,7 @@ fields:
   kind: string
   default: ""
 - name: application_key
+  type: configopaque.String
   kind: string
   default: ""
 - name: tenant_id

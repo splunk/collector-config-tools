@@ -1,14 +1,10 @@
-type: '*rabbitmqreceiver.Config'
+type: '*purefareceiver.Config'
 doc: |
-  Config defines the configuration for the various elements of the receiver agent.
+  Config relating to Array Metric Scraper.
 fields:
-- name: collection_interval
-  type: time.Duration
-  kind: int64
-  default: 10s
 - name: endpoint
   kind: string
-  default: http://localhost:15672
+  default: ""
   doc: |
     The target URL to send data to (e.g.: http://some.url:9411/v1/traces).
 - name: tls
@@ -85,7 +81,6 @@ fields:
 - name: timeout
   type: time.Duration
   kind: int64
-  default: 10s
   doc: |
     Timeout parameter configures `http.Client.Timeout`.
 - name: headers
@@ -142,69 +137,138 @@ fields:
   doc: |
     IdleConnTimeout is the maximum amount of time a connection will remain open before closing itself.
     There's an already set value, and we want to override it only if an explicit value provided
-- name: username
-  kind: string
-  default: ""
-- name: password
-  kind: string
-  default: ""
-- name: metrics
-  type: metadata.MetricsSettings
-  kind: struct
+- name: settings
+  type: '*purefareceiver.Settings'
+  kind: ptr
   doc: |
-    MetricsSettings provides settings for rabbitmqreceiver metrics.
+    Settings contains settings for the individual scrapers
   fields:
-  - name: rabbitmq.consumer.count
-    type: metadata.MetricSettings
+  - name: reload_intervals
+    type: '*purefareceiver.ReloadIntervals'
+    kind: ptr
+    fields:
+    - name: array
+      type: time.Duration
+      kind: int64
+      default: 15s
+    - name: host
+      type: time.Duration
+      kind: int64
+      default: 15s
+    - name: directories
+      type: time.Duration
+      kind: int64
+      default: 15s
+    - name: pods
+      type: time.Duration
+      kind: int64
+      default: 15s
+    - name: volumes
+      type: time.Duration
+      kind: int64
+      default: 15s
+- name: arrays
+  type: '[]internal.ScraperConfig'
+  kind: slice
+  doc: |
+    Arrays represents the list of arrays to query
+  fields:
+  - name: address
+    kind: string
+    default: ""
+  - name: auth
+    type: configauth.Authentication
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      Authentication defines the auth settings for the receiver.
     fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: rabbitmq.message.acknowledged
-    type: metadata.MetricSettings
+    - name: authenticator
+      type: component.ID
+      kind: struct
+      doc: |
+        AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
+- name: hosts
+  type: '[]internal.ScraperConfig'
+  kind: slice
+  doc: |
+    Hosts represents the list of hosts to query
+  fields:
+  - name: address
+    kind: string
+    default: ""
+  - name: auth
+    type: configauth.Authentication
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      Authentication defines the auth settings for the receiver.
     fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: rabbitmq.message.current
-    type: metadata.MetricSettings
+    - name: authenticator
+      type: component.ID
+      kind: struct
+      doc: |
+        AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
+- name: directories
+  type: '[]internal.ScraperConfig'
+  kind: slice
+  doc: |
+    Directories represents the list of directories to query
+  fields:
+  - name: address
+    kind: string
+    default: ""
+  - name: auth
+    type: configauth.Authentication
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      Authentication defines the auth settings for the receiver.
     fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: rabbitmq.message.delivered
-    type: metadata.MetricSettings
+    - name: authenticator
+      type: component.ID
+      kind: struct
+      doc: |
+        AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
+- name: pods
+  type: '[]internal.ScraperConfig'
+  kind: slice
+  doc: |
+    Pods represents the list of pods to query
+  fields:
+  - name: address
+    kind: string
+    default: ""
+  - name: auth
+    type: configauth.Authentication
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      Authentication defines the auth settings for the receiver.
     fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: rabbitmq.message.dropped
-    type: metadata.MetricSettings
+    - name: authenticator
+      type: component.ID
+      kind: struct
+      doc: |
+        AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
+- name: volumes
+  type: '[]internal.ScraperConfig'
+  kind: slice
+  doc: |
+    Volumes represents the list of volumes to query
+  fields:
+  - name: address
+    kind: string
+    default: ""
+  - name: auth
+    type: configauth.Authentication
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      Authentication defines the auth settings for the receiver.
     fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: rabbitmq.message.published
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
+    - name: authenticator
+      type: component.ID
+      kind: struct
+      doc: |
+        AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
+- name: env
+  kind: string
+  default: ""
+  doc: |
+    Env represents the respective environment value valid to scrape

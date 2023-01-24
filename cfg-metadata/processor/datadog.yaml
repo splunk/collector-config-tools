@@ -1,0 +1,10 @@
+type: '*datadogprocessor.Config'
+doc: |
+  Config defines the configuration options for datadogprocessor.
+fields:
+- name: metrics_exporter
+  type: component.ID
+  kind: struct
+  doc: |
+    MetricsExporter specifies the name of the metrics exporter to be used when
+    exporting stats metrics.

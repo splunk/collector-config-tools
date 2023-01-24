@@ -117,3 +117,19 @@ fields:
     kind: ptr
     doc: |
       SaslExternalConfig defines the configuration for the SASL External used in conjunction with TLS client authentication.
+- name: flow_control
+  type: solacereceiver.FlowControl
+  kind: struct
+  doc: |
+    FlowControl defines the configuration for what to do in backpressure scenarios, e.g. memorylimiter errors
+  fields:
+  - name: delayed_retry
+    type: '*solacereceiver.FlowControlDelayedRetry'
+    kind: ptr
+    doc: |
+      FlowControlDelayedRetry represents the strategy of waiting for a defined amount of time (in time.Duration) and attempt redelivery
+    fields:
+    - name: delay
+      type: time.Duration
+      kind: int64
+      default: 10ms

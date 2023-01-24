@@ -9,6 +9,7 @@ fields:
     Endpoint is the destination to where traces will be sent to in SAPM format.
     It must be a full URL and include the scheme, port and path e.g, https://ingest.signalfx.com/v2/trace
 - name: access_token
+  type: configopaque.String
   kind: string
   default: ""
   doc: |
@@ -67,7 +68,7 @@ fields:
     doc: |
       QueueSize is the maximum number of batches allowed in queue at a given time.
   - name: storage
-    type: '*config.ComponentID'
+    type: '*component.ID'
     kind: ptr
     doc: |
       StorageID if not empty, enables the persistent storage and uses the component specified

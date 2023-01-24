@@ -3,7 +3,7 @@ doc: |
   Config defines configuration for receiver_creator.
 fields:
 - name: watch_observers
-  type: '[]config.ComponentID'
+  type: '[]component.ID'
   kind: slice
   doc: |
     WatchObservers are the extensions to listen to endpoints from.

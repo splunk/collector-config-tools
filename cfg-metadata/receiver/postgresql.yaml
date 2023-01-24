@@ -2,7 +2,7 @@ type: '*postgresqlreceiver.Config'
 doc: |
   ScraperControllerSettings defines common settings for a scraper controller
   configuration. Scraper controller receivers can embed this struct, instead
-  of config.ReceiverSettings, and extend it with more fields if needed.
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration

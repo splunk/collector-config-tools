@@ -23,6 +23,12 @@ fields:
 - name: location
   kind: string
   default: ""
+- name: enable_octet_counting
+  kind: bool
+  default: false
+- name: non_transparent_framing_trailer
+  type: '*string'
+  kind: ptr
 - name: tcp
   type: '*tcp.BaseConfig'
   kind: ptr
@@ -139,36 +145,6 @@ fields:
   - name: builder
     type: operator.Builder
     kind: interface
-- name: converter
-  type: adapter.ConverterConfig
-  kind: struct
-  doc: |
-    ConverterConfig controls how the internal entry.Entry to plog.Logs converter
-    works.
-  fields:
-  - name: max_flush_count
-    kind: uint
-    default: 0
-    doc: |
-      MaxFlushCount defines the maximum number of entries that can be
-      accumulated before flushing them for further processing.
-  - name: flush_interval
-    type: time.Duration
-    kind: int64
-    doc: |
-      FlushInterval defines how often to flush the converted and accumulated
-      log entries.
-  - name: worker_count
-    kind: int
-    doc: |
-      WorkerCount defines how many worker goroutines used for entry.Entry to
-      log records translation should be spawned.
-      By default: math.Max(1, runtime.NumCPU()/4) workers are spawned.
 - name: storage
-  type: '*config.ComponentID'
+  type: '*component.ID'
   kind: ptr
-  doc: |
-    ComponentID represents the identity for a component. It combines two values:
-    * type - the Type of the component.
-    * name - the name of that component.
-    The component ComponentID (combination type + name) is unique for a given component.Kind.

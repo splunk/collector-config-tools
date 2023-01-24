@@ -65,3 +65,6 @@ fields:
   doc: |
     Set to true to convert all OpenTelemetry attributes to X-Ray annotation (indexed) ignoring the IndexedAttributes option.
     Default value: false
+- name: aws_log_groups
+  type: '[]string'
+  kind: slice

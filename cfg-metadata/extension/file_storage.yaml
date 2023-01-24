@@ -37,13 +37,13 @@ fields:
       Directory specifies where the temporary files for compaction will be stored
   - name: rebound_needed_threshold_mib
     kind: int64
-    default: 10
+    default: 100
     doc: |
       ReboundNeededThresholdMiB specifies the minimum total allocated size (both used and empty)
       to mark the need for online compaction
   - name: rebound_trigger_threshold_mib
     kind: int64
-    default: 100
+    default: 10
     doc: |
       ReboundTriggerThresholdMiB is used when compaction is marked as needed. When allocated data size drops
       below the specified value, the compactions starts and the flag marking need for compaction is cleared

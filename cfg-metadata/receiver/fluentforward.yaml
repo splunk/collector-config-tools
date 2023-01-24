@@ -1,6 +1,6 @@
 type: '*fluentforwardreceiver.Config'
 doc: |
-  Config defines configuration for the SignalFx receiver.
+  Config defines configuration for the fluentforward receiver.
 fields:
 - name: endpoint
   kind: string

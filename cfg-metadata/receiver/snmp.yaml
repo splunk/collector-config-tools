@@ -6,3 +6,85 @@ fields:
   type: time.Duration
   kind: int64
   default: 10s
+- name: endpoint
+  kind: string
+  default: udp://localhost:161
+  doc: |
+    Endpoint is the SNMP target to request data from. Must be formatted as [udp|tcp|][4|6|]://{host}:{port}.
+    Default: udp://localhost:161
+    If no scheme is given, udp4 is assumed.
+    If no port is given, 161 is assumed.
+- name: version
+  kind: string
+  default: v2c
+  doc: |
+    Version is the version of SNMP to use for this connection.
+    Valid options: v1, v2c, v3.
+    Default: v2c
+- name: community
+  kind: string
+  default: public
+  doc: |
+    Community is the SNMP community string to use.
+    Only valid for versions "v1" and "v2c"
+    Default: public
+- name: user
+  kind: string
+  default: ""
+  doc: |
+    User is the SNMP User for this connection.
+    Only valid for version “v3”
+- name: security_level
+  kind: string
+  default: no_auth_no_priv
+  doc: |
+    SecurityLevel is the security level to use for this SNMP connection.
+    Only valid for version “v3”
+    Valid options: “no_auth_no_priv”, “auth_no_priv”, “auth_priv”
+    Default: "no_auth_no_priv"
+- name: auth_type
+  kind: string
+  default: MD5
+  doc: |
+    AuthType is the type of authentication protocol to use for this SNMP connection.
+    Only valid for version “v3” and if “no_auth_no_priv” is not selected for SecurityLevel
+    Valid options: “md5”, “sha”, “sha224”, “sha256”, “sha384”, “sha512”
+    Default: "md5"
+- name: auth_password
+  kind: string
+  default: ""
+  doc: |
+    AuthPassword is the authentication password used for this SNMP connection.
+    Only valid for version "v3" and if "no_auth_no_priv" is not selected for SecurityLevel
+- name: privacy_type
+  kind: string
+  default: DES
+  doc: |
+    PrivacyType is the type of privacy protocol to use for this SNMP connection.
+    Only valid for version “v3” and if "auth_priv" is selected for SecurityLevel
+    Valid options: “des”, “aes”, “aes192”, “aes256”, “aes192c”, “aes256c”
+    Default: "des"
+- name: privacy_password
+  kind: string
+  default: ""
+  doc: |
+    PrivacyPassword is the authentication password used for this SNMP connection.
+    Only valid for version “v3” and if "auth_priv" is selected for SecurityLevel
+- name: resource_attributes
+  type: map[string]*snmpreceiver.ResourceAttributeConfig
+  kind: map
+  doc: |
+    ResourceAttributes defines what resource attributes will be used for this receiver and is composed
+    of resource attribute names along with their resource attribute configurations
+- name: attributes
+  type: map[string]*snmpreceiver.AttributeConfig
+  kind: map
+  doc: |
+    Attributes defines what attributes will be used on metrics for this receiver and is composed of
+    attribute names along with their attribute configurations
+- name: metrics
+  type: map[string]*snmpreceiver.MetricConfig
+  kind: map
+  doc: |
+    Metrics defines what SNMP metrics will be collected for this receiver and is composed of metric
+    names along with their metric configurations

@@ -1,4 +1,4 @@
-type: '*rabbitmqreceiver.Config'
+type: '*httpcheckreceiver.Config'
 doc: |
   Config defines the configuration for the various elements of the receiver agent.
 fields:
@@ -8,7 +8,7 @@ fields:
   default: 10s
 - name: endpoint
   kind: string
-  default: http://localhost:15672
+  default: http://localhost:80
   doc: |
     The target URL to send data to (e.g.: http://some.url:9411/v1/traces).
 - name: tls
@@ -142,19 +142,13 @@ fields:
   doc: |
     IdleConnTimeout is the maximum amount of time a connection will remain open before closing itself.
     There's an already set value, and we want to override it only if an explicit value provided
-- name: username
-  kind: string
-  default: ""
-- name: password
-  kind: string
-  default: ""
 - name: metrics
   type: metadata.MetricsSettings
   kind: struct
   doc: |
-    MetricsSettings provides settings for rabbitmqreceiver metrics.
+    MetricsSettings provides settings for httpcheckreceiver metrics.
   fields:
-  - name: rabbitmq.consumer.count
+  - name: httpcheck.duration
     type: metadata.MetricSettings
     kind: struct
     doc: |
@@ -163,7 +157,7 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: rabbitmq.message.acknowledged
+  - name: httpcheck.error
     type: metadata.MetricSettings
     kind: struct
     doc: |
@@ -172,7 +166,7 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: rabbitmq.message.current
+  - name: httpcheck.status
     type: metadata.MetricSettings
     kind: struct
     doc: |
@@ -181,30 +175,6 @@ fields:
     - name: enabled
       kind: bool
       default: true
-  - name: rabbitmq.message.delivered
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: rabbitmq.message.dropped
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: rabbitmq.message.published
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
+- name: method
+  kind: string
+  default: GET

@@ -86,11 +86,12 @@ fields:
   doc: |
     Timeout parameter configures `http.Client.Timeout`.
 - name: headers
-  type: map[string]string
+  type: map[string]configopaque.String
   kind: map
   doc: |
     Additional headers attached to each HTTP request sent by the client.
     Existing header values are overwritten if collision happens.
+    Header values are opaque since they may be sensitive.
 - name: customroundtripper
   type: func(http.RoundTripper) (http.RoundTripper, error)
   kind: func
@@ -103,7 +104,7 @@ fields:
     Auth configuration for outgoing HTTP calls.
   fields:
   - name: authenticator
-    type: config.ComponentID
+    type: component.ID
     kind: struct
     doc: |
       AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
@@ -160,7 +161,7 @@ fields:
     doc: |
       QueueSize is the maximum number of batches allowed in queue at a given time.
   - name: storage
-    type: '*config.ComponentID'
+    type: '*component.ID'
     kind: ptr
     doc: |
       StorageID if not empty, enables the persistent storage and uses the component specified
@@ -200,18 +201,12 @@ fields:
 - name: traces_endpoint
   kind: string
   default: ""
-  doc: |
-    The URL to send traces to. If omitted the Endpoint + "/v1/traces" will be used.
 - name: metrics_endpoint
   kind: string
   default: ""
-  doc: |
-    The URL to send metrics to. If omitted the Endpoint + "/v1/metrics" will be used.
 - name: logs_endpoint
   kind: string
   default: ""
-  doc: |
-    The URL to send logs to. If omitted the Endpoint + "/v1/logs" will be used.
 - name: source
   kind: string
   default: ""

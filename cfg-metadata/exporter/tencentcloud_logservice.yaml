@@ -25,6 +25,7 @@ fields:
   doc: |
     TencentCloud access key id
 - name: secret_key
+  type: configopaque.String
   kind: string
   default: ""
   doc: |

@@ -1,6 +1,4 @@
 type: '*alibabacloudlogserviceexporter.Config'
-doc: |
-  Config defines configuration for AlibabaCloud Log Service exporter.
 fields:
 - name: endpoint
   kind: string
@@ -25,6 +23,7 @@ fields:
   doc: |
     AlibabaCloud access key id
 - name: access_key_secret
+  type: configopaque.String
   kind: string
   default: ""
   doc: |

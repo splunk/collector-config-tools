@@ -2,7 +2,7 @@ type: '*mongodbreceiver.Config'
 doc: |
   ScraperControllerSettings defines common settings for a scraper controller
   configuration. Scraper controller receivers can embed this struct, instead
-  of config.ReceiverSettings, and extend it with more fields if needed.
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration
@@ -169,6 +169,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mongodb.health
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mongodb.index.access.count
     type: metadata.MetricSettings
     kind: struct
@@ -196,6 +205,42 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mongodb.lock.acquire.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mongodb.lock.acquire.time
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mongodb.lock.acquire.wait_count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mongodb.lock.deadlock.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mongodb.memory.usage
     type: metadata.MetricSettings
     kind: struct
@@ -250,6 +295,24 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mongodb.operation.latency.time
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mongodb.operation.repl.count
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mongodb.operation.time
     type: metadata.MetricSettings
     kind: struct
@@ -277,6 +340,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: mongodb.uptime
+    type: metadata.MetricSettings
+    kind: struct
+    doc: |
+      MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
 - name: hosts
   type: '[]confignet.NetAddr'
   kind: slice

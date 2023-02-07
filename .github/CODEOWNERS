@@ -1,0 +1,4 @@
+*.md @splunk/o11y-platform-docs
+*.yaml @splunk/o11y-platform-docs
+docs/ @splunk/o11y-platform-docs
+README* @splunk/o11y-platform-docs

@@ -12,8 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-window.onload = main;
+class MainView extends View {
 
-function main() {
-  new MainController(document, new StyleBundle());
+  constructor(document, sb) {
+    super(document.body);
+    document.documentElement.style.height = '100%';
+    this.addClass('MainView');
+    this.setBackgoundColor(sb.darkBgColor);
+    this.setColor(sb.textColor);
+    this.setMargin(0);
+    this.setDisplay('flex');
+    this.setHeight('100%');
+    this.setFontFamily('sans-serif');
+  }
+
 }

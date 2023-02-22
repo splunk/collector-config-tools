@@ -1,10 +1,10 @@
-// Copyright The OpenTelemetry Authors
+// Copyright Splunk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//       http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,12 +14,64 @@
 
 class View {
 
-  constructor(tagName) {
-    this.rootEl = document.createElement(tagName === undefined ? 'div' : tagName);
+  constructor(v) {
+    if (typeof v === 'object') {
+      this.rootEl = v;
+    } else {
+      this.rootEl = document.createElement(v === undefined ? 'div' : v);
+    }
   }
 
   getRootEl() {
     return this.rootEl;
+  }
+
+  setBackgoundColor(v) {
+    this.rootEl.style.backgroundColor = v;
+  }
+
+  setPadding(v) {
+    this.rootEl.style.padding = v;
+  }
+
+  setHeight(v) {
+    this.rootEl.style.height = v;
+  }
+
+  setWidth(v) {
+    this.rootEl.style.width = v;
+  }
+
+  setColor(v) {
+    this.rootEl.style.color = v;
+  }
+
+  setMargin(v) {
+    this.rootEl.style.margin = v;
+  }
+
+  setFontFamily(v) {
+    this.rootEl.style.fontFamily = v;
+  }
+
+  setDisplay(v) {
+    this.rootEl.style.display = v;
+  }
+
+  setGridTemplateColumns(v) {
+    this.rootEl.style.gridTemplateColumns = v;
+  }
+
+  setGridtemplateRows(v) {
+    this.rootEl.style.gridTemplateRows = v;
+  }
+
+  setGridTemplateAreas(v) {
+    this.rootEl.style.gridTemplateAreas = v;
+  }
+
+  setGridArea(v) {
+    this.rootEl.style.gridArea = v;
   }
 
   setAttribute(k, v) {

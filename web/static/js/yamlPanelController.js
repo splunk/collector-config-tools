@@ -1,10 +1,10 @@
-// Copyright The OpenTelemetry Authors
+// Copyright Splunk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//       http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-class BoolSelectView extends SelectWidget {
+class YamlPanelController {
 
-  constructor(name, defaultVal) {
-    super(name);
-    let topLabel = '';
-    if (defaultVal !== null) {
-      topLabel += 'default (' + defaultVal + ')';
-    }
-    this.addOption(topLabel, null);
-    this.addOption('false', 'false')
-    this.addOption('true', 'true')
+  constructor(sb) {
+    this.yamlView = new YamlPanelView(sb)
+  }
+
+  getRootView() {
+    return this.yamlView;
   }
 
 }

@@ -12,8 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-window.onload = main;
+class StyleBundle {
 
-function main() {
-  new MainController(document, new StyleBundle());
+  constructor() {
+    this.darkBgColor = 'rgb(29, 29, 29)';
+    this.sidebarBgColor = 'rgb(40, 41, 43)';
+    this.textColor = 'rgb(202, 209, 216)';
+  }
+
 }

@@ -1,10 +1,10 @@
-// Copyright The OpenTelemetry Authors
+// Copyright Splunk
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//       http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,7 @@ class SelectWidget extends View {
 
   constructor(name) {
     super('select');
-    this.addClass('select-widget');
+    this.addClass('SelectWidget');
     if (name !== undefined) {
       this.setAttribute('name', name);
     }
@@ -43,6 +43,7 @@ class DivWidget extends View {
 
   constructor(className) {
     super();
+    this.addClass('DivWidget');
     if (className !== undefined) {
       this.addClass(className);
     }
@@ -54,6 +55,7 @@ class FieldsetWidget extends View {
 
   constructor(name) {
     super('fieldset');
+    this.addClass('FieldsetWidget');
     const legend = document.createElement('legend');
     legend.appendChild(document.createTextNode(name));
     this.appendElement(legend);
@@ -65,6 +67,7 @@ class ButtonWidget extends View {
 
   constructor(text) {
     super('input');
+    this.addClass('ButtonWidget');
     this.setAttribute('type', 'button');
     this.setAttribute('value', text);
   }
@@ -75,6 +78,7 @@ class TextInputWidget extends View {
 
   constructor(name, placeholder, userInput) {
     super('input');
+    this.addClass('TextInputWidget');
     this.setAttribute('type', 'text');
     this.setAttribute('name', name);
     if (userInput !== undefined) {
@@ -91,6 +95,7 @@ class LinkWidget extends View {
 
   constructor(content, onClick, className) {
     super('a');
+    this.addClass('LinkWidget');
     this.addClass(className);
     this.appendElement(document.createTextNode(content));
     this.onClick(onClick);
@@ -100,9 +105,11 @@ class LinkWidget extends View {
 
 class TextareaWidget extends View {
 
-  constructor() {
+  constructor(sb) {
     super('textarea');
-    this.addClass('textarea-widget');
+    this.addClass('TextareaWidget');
+    this.setBackgoundColor(sb.darkBgColor);
+    this.setColor(sb.textColor);
   }
 
   setText(text) {
@@ -123,6 +130,7 @@ class FormWidget extends View {
 
   constructor() {
     super('form');
+    this.addClass('FormWidget');
   }
 
   forEachFormElement(f) {

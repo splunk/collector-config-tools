@@ -12,8 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-window.onload = main;
+class SidebarView extends View {
 
-function main() {
-  new MainController(document, new StyleBundle());
+  constructor(sb) {
+    super();
+    this.addClass('SidebarView');
+    this.setBackgoundColor(sb.sidebarBgColor);
+    this.setPadding('24px');
+    this.appendText('sb');
+  }
+
 }

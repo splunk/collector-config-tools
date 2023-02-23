@@ -12,8 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-window.onload = main;
+class YamlPanelView extends View {
 
-function main() {
-  new MainController(document, new StyleBundle());
+  constructor(sb) {
+    super();
+    this.addClass('YamlPanelView');
+    this.setPadding('24px');
+    this.ta = new TextareaWidget(sb);
+    this.ta.setHeight('100%');
+    this.ta.setWidth('800px');
+    this.appendView(this.ta);
+  }
+
 }

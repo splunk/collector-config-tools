@@ -12,8 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-window.onload = main;
+class SidebarController {
 
-function main() {
-  new MainController(document, new StyleBundle());
+  constructor(sb) {
+    this.rootView = new SidebarView(sb);
+  }
+
+  getRootView() {
+    return this.rootView;
+  }
+
 }

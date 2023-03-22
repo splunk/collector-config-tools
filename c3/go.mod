@@ -1,4 +1,4 @@
-module github.com/signalfx/collector-config-tool
+module github.com/splunk/collector-config-tools/c3
 
 go 1.19
 

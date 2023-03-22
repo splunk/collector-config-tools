@@ -12,19 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package otto
 
 import (
 	"log"
+	"net/http"
 
-	"github.com/signalfx/collector-config-tool/internal/components"
-	"github.com/signalfx/collector-config-tool/internal/otto"
+	"go.opentelemetry.io/collector/otelcol"
 )
 
-func main() {
-	factories, err := components.Components()
-	if err != nil {
-		log.Fatalf("failed to load collector components: %v", err)
+func Server(logger *log.Logger, addr string, factories otelcol.Factories) {
+	mux := http.NewServeMux()
+	mux.Handle("/", http.FileServer(http.Dir("web/static")))
+
+	mux.Handle("/components", componentHandler{
+		logger:    logger,
+		factories: factories,
+	})
+
+	mux.Handle("/cfg-metadata/", cfgschemaHandler{
+		logger: logger,
+	})
+
+	mux.Handle("/json-to-yaml", jsonToYAMLHandler{
+		logger: logger,
+	})
+
+	svr := http.Server{
+		Addr:    addr,
+		Handler: mux,
 	}
-	otto.Server(log.Default(), ":8888", factories)
+	println("c3 started")
+	err := svr.ListenAndServe()
+	if err != nil {
+		logger.Fatalf("http serve error: %v", err)
+	}
 }

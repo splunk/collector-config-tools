@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+function assertExpectedEqActual(expected, actual) {
+  const pass = expected === actual;
+  console.log(pass ? 'pass' : 'fail');
+  console.assert(pass, 'expected [' + expected + '] got [' + actual + ']');
+  return pass;
+}
 
-import (
-	"log"
+class TestWrapperView extends View {
 
-	"github.com/splunk/collector-config-tools/c3/internal/c3"
-	"github.com/splunk/collector-config-tools/c3/internal/components"
-)
+  constructor(sb) {
+    super();
+    sb.styleTestWrapper(this);
+  }
 
-func main() {
-	factories, err := components.Components()
-	if err != nil {
-		log.Fatalf("failed to load collector components: %v", err)
-	}
-	c3.Server(log.Default(), ":9999", factories)
 }

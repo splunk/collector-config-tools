@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package otto
+package c3
 
 import (
 	"encoding/json"
@@ -34,14 +34,14 @@ func (h jsonToYAMLHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request
 		resp.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	m := map[string]interface{}{}
+	m := map[string]any{}
 	err = json.Unmarshal(bytes, &m)
 	if err != nil {
-		h.logger.Printf("jsonToYAMLHandler: ServeHTTP: error unmarshaling request: %v", err)
+		h.logger.Printf("jsonToYAMLHandler: ServeHTTP: error unmarshaling JSON: %v", err)
 		resp.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	yml, err := yaml.Marshal(m)
+	yml, err := toYaml(m)
 	if err != nil {
 		h.logger.Printf("jsonToYAMLHandler: ServeHTTP: error converting JSON to YAML: %v", err)
 		resp.WriteHeader(http.StatusInternalServerError)
@@ -50,5 +50,35 @@ func (h jsonToYAMLHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request
 	_, err = resp.Write(yml)
 	if err != nil {
 		h.logger.Printf("jsonToYAMLHandler: ServeHTTP: error writing response: %v", err)
+	}
+}
+
+type yamlToJSONHandler struct {
+	logger *log.Logger
+}
+
+func (h yamlToJSONHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
+	bytes, err := io.ReadAll(req.Body)
+	if err != nil {
+		h.logger.Printf("yamlToJSONHandler: ServeHTTP: error reading request: %v", err)
+		resp.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	m := map[string]any{}
+	err = yaml.Unmarshal(bytes, &m)
+	if err != nil {
+		h.logger.Printf("yamlToJSONHandler: ServeHTTP: error unmarshaling YAML: %v", err)
+		resp.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(m)
+	if err != nil {
+		h.logger.Printf("yamlToJSONHandler: ServeHTTP: error converting YAML to JSON: %v", err)
+		resp.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	_, err = resp.Write(jsn)
+	if err != nil {
+		h.logger.Printf("yamlToJSONHandler: ServeHTTP: error writing response: %v", err)
 	}
 }

@@ -91,8 +91,8 @@ class LinkWidget extends View {
 
   constructor(content, onClick, className) {
     super('a');
-    this.addClass(className);
     this.appendElement(document.createTextNode(content));
+    this.addClass(className);
     this.onClick(onClick);
   }
 

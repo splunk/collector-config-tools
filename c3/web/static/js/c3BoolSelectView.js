@@ -12,19 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+class C3BoolSelectView extends SelectWidget {
 
-import (
-	"log"
+  constructor(name, defaultVal) {
+    super(name);
+    let topLabel = '';
+    if (defaultVal !== null) {
+      topLabel += 'default (' + defaultVal + ')';
+    }
+    this.addOption(topLabel, null);
+    this.addOption('false', 'false')
+    this.addOption('true', 'true')
+  }
 
-	"github.com/splunk/collector-config-tools/c3/internal/c3"
-	"github.com/splunk/collector-config-tools/c3/internal/components"
-)
-
-func main() {
-	factories, err := components.Components()
-	if err != nil {
-		log.Fatalf("failed to load collector components: %v", err)
-	}
-	c3.Server(log.Default(), ":9999", factories)
 }

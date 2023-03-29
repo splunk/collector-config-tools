@@ -18,12 +18,7 @@ class MainView extends View {
     super(document.body);
     document.documentElement.style.height = '100%';
     this.addClass('MainView');
-    this.setBackgoundColor(sb.darkBgColor);
-    this.setColor(sb.textColor);
-    this.setMargin(0);
-    this.setDisplay('flex');
-    this.setHeight('100%');
-    this.setFontFamily('sans-serif');
+    sb.styleMainView(this);
   }
 
 }

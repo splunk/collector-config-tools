@@ -12,19 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+window.onload = main;
 
-import (
-	"log"
+function main() {
+  testEventBus();
+}
 
-	"github.com/splunk/collector-config-tools/c3/internal/c3"
-	"github.com/splunk/collector-config-tools/c3/internal/components"
-)
+function testEventBus() {
 
-func main() {
-	factories, err := components.Components()
-	if err != nil {
-		log.Fatalf("failed to load collector components: %v", err)
-	}
-	c3.Server(log.Default(), ":9999", factories)
+  class X {
+
+    constructor(eventBus) {
+      this.eventBus = eventBus;
+      this.val = 0;
+      this.callback = () => this.val++;
+      eventBus.on('event', this.callback);
+    }
+
+    unregister() {
+      this.eventBus.off('event', this.callback);
+    }
+
+  }
+
+  const eb = new EventBus();
+  const x = new X(eb);
+  assertExpectedEqActual(0, x.val);
+  eb.emit('event');
+  assertExpectedEqActual(1, x.val);
+  x.unregister();
+  eb.emit('event');
+  assertExpectedEqActual(1, x.val);
 }

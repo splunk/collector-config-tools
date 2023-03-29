@@ -16,7 +16,7 @@ class TableWidget extends View {
 
   constructor() {
     super('table');
-    this.addClass('table-widget');
+    this.addClass('TableWidget');
   }
 
 }
@@ -25,7 +25,7 @@ class HeaderTableRowWidget extends View {
 
   constructor() {
     super('tr');
-    this.addClass('table-header-widget');
+    this.addClass('HeaderTableRowWidget');
   }
 
 }
@@ -45,7 +45,7 @@ class TableHeaderWidget extends View {
 
   constructor(text, hoverText) {
     super('th');
-    this.addClass('table-header-text-widget');
+    this.addClass('TableHeaderWidget');
     this.appendView(new HoverTextView(text, hoverText));
   }
 
@@ -53,11 +53,13 @@ class TableHeaderWidget extends View {
 
 class AutoTableRowWidget extends View {
 
-  constructor(stringArray) {
+  constructor(stringArray, styleFunc) {
     super('tr');
-    this.addClass('table-row-widget');
+    this.addClass('AutoTableRowWidget');
     for (const text of stringArray) {
-      this.appendView(new TableDataTextWidget(text));
+      const td = new TableDataTextWidget(text);
+      styleFunc(td);
+      this.appendView(td);
     }
   }
 
@@ -67,6 +69,7 @@ class HoverTextView extends View {
 
   constructor(text, hoverText) {
     super('span');
+    this.addClass('HoverTextView');
     if (hoverText !== undefined) {
       this.setAttribute('title', hoverText);
     }
@@ -79,7 +82,7 @@ class TableDataTextWidget extends View {
 
   constructor(text) {
     super('td');
-    this.addClass('table-data-text-widget');
+    this.addClass('TableDataTextWidget');
     this.appendElement(document.createTextNode(text));
   }
 

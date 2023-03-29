@@ -15,27 +15,37 @@
 
 class TabController {
 
-  constructor(tabBarParentView, tabPanelParentView) {
-    this.tabBarParentView = tabBarParentView;
-    this.tabPanelParentView = tabPanelParentView;
-
-    this.tabBarContainerView = new DivWidget('tab-bar');
-    tabBarParentView.appendView(this.tabBarContainerView);
-    this.tabPanelContainerView = new DivWidget('tab-panel');
-    tabPanelParentView.appendView(this.tabPanelContainerView);
+  constructor(tabBarContainerView, tabPanelContainerView, deselectedFunc, selectedFunc) {
+    this.tabBarContainerView = tabBarContainerView;
+    this.tabPanelContainerView = tabPanelContainerView;
+    this.deselectedFunc = deselectedFunc;
+    this.selectedFunc = selectedFunc;
     this.tabPairs = [];
   }
 
-  addTab(name, tabContentView) {
-    const tabBarItemView = new TabBarItemView(this.tabPairs.length, name);
+  addTab(name, tabContentView, tabWrapperStyler) {
+    const tabBarItemView = new TabBarItemView(
+      this.tabPairs.length,
+      name,
+      this.deselectedFunc,
+      this.selectedFunc
+    );
     tabBarItemView.onSelect(idx => this.select(idx));
     this.tabBarContainerView.appendView(tabBarItemView);
 
-    const tabPanelItemView = new DivWidget('tab-content-view');
-    tabPanelItemView.appendView(tabContentView);
-    this.tabPanelContainerView.appendView(tabPanelItemView);
+    const tabContentWrapperView = new DivWidget('tabContentWrapperView');
+    tabWrapperStyler(tabContentWrapperView);
+    tabContentWrapperView.appendView(tabContentView);
+    this.tabPanelContainerView.appendView(tabContentWrapperView);
 
-    this.tabPairs.push(new TabPair(tabBarItemView, tabPanelItemView));
+    this.tabPairs.push(new TabPair(tabBarItemView, tabContentWrapperView));
+  }
+
+  removeTab(idx) {
+    const tabPair = this.tabPairs[idx];
+    this.tabBarContainerView.removeView(tabPair.getTabBarItemView());
+    this.tabPanelContainerView.removeView(tabPair.getTabPanelItemView());
+    this.tabPairs.splice(idx, 1);
   }
 
   select(idx) {
@@ -44,15 +54,6 @@ class TabController {
     }
     this.selectedIdx = idx;
     this.tabPairs[idx].select();
-  }
-
-  reset() {
-    if (this.tabBarContainerView !== undefined) {
-      this.tabBarParentView.removeView(this.tabBarContainerView);
-      this.tabPanelParentView.removeView(this.tabPanelContainerView);
-      this.tabBarContainerView = undefined;
-      this.tabPanelContainerView = undefined;
-    }
   }
 
 }
@@ -75,23 +76,36 @@ class TabPair {
     this.tabPanelItemView.hide();
   }
 
+  getTabBarItemView() {
+    return this.tabBarItemView;
+  }
+
+  getTabPanelItemView() {
+    return this.tabPanelItemView;
+  }
+
 }
 
 class TabBarItemView extends View {
 
-  constructor(idx, name) {
+  constructor(idx, name, deselectStyleFunc, selectStyleFunc) {
     super();
     this.idx = idx;
-    this.addClass('tab-view');
+    this.addClass('TabBarItemView');
     this.appendElement(document.createTextNode(name));
+    this.deselectStyleFunc = deselectStyleFunc;
+    this.selectStyleFunc = selectStyleFunc;
+    this.deselect();
   }
 
   select() {
     this.addClass('selected');
+    this.selectStyleFunc(this);
   }
 
   deselect() {
     this.removeClass('selected');
+    this.deselectStyleFunc(this);
   }
 
   onSelect(f) {

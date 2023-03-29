@@ -37,6 +37,10 @@ class SelectWidget extends View {
     return this.getRootEl().value;
   }
 
+  selectIndex(i) {
+    this.getRootEl().selectedIndex = i;
+  }
+
 }
 
 class DivWidget extends View {
@@ -47,6 +51,26 @@ class DivWidget extends View {
     if (className !== undefined) {
       this.addClass(className);
     }
+  }
+
+}
+
+class LabelWidget extends View {
+
+  constructor(text) {
+    super();
+    this.addClass('LabelWidget');
+    this.appendText(text);
+  }
+
+}
+
+class FormLabelWidget extends View {
+
+  constructor(text) {
+    super('label');
+    this.addClass('FormLabelWidget');
+    this.appendText(text);
   }
 
 }
@@ -105,23 +129,22 @@ class LinkWidget extends View {
 
 class TextareaWidget extends View {
 
-  constructor(sb) {
+  constructor() {
     super('textarea');
+    this.setAttribute('spellcheck', 'false');
     this.addClass('TextareaWidget');
-    this.setBackgoundColor(sb.darkBgColor);
-    this.setColor(sb.textColor);
-  }
-
-  setText(text) {
-    if (this.textNode !== undefined) {
-      this.removeElement(this.textNode);
-    }
-    this.textNode = document.createTextNode(text);
-    this.appendElement(this.textNode);
   }
 
   reset() {
     this.setText('');
+  }
+
+  setText(text) {
+    this.setValue(text);
+  }
+
+  getText() {
+    return this.getValue();
   }
 
 }
@@ -130,13 +153,14 @@ class FormWidget extends View {
 
   constructor() {
     super('form');
+    this.setAttribute('autocomplete', 'off');
     this.addClass('FormWidget');
   }
 
   forEachFormElement(f) {
     const formEl = this.getRootEl();
     for (let i = 0; i < formEl.elements.length; i++) {
-      f(this.rootEl.elements[i]);
+      f(this.el.elements[i]);
     }
   }
 
@@ -146,6 +170,15 @@ class FormWidget extends View {
 
   getFormElement(i) {
     return this.getRootEl().elements[i];
+  }
+
+}
+
+class ImageWidget extends View {
+
+  constructor(src) {
+    super('img');
+    this.setAttribute('src', src);
   }
 
 }

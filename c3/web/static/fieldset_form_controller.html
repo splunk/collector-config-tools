@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <title>Test C3FieldsetFormController</title>
+
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
+
+  <script type="text/javascript" src="js/lib/view.js"></script>
+  <script type="text/javascript" src="js/lib/widgets.js"></script>
+
+  <script type="text/javascript" src="js/io.js"></script>
+
+  <script type="text/javascript" src="js/styleBundle.js"></script>
+  <script type="text/javascript" src="js/mainView.js"></script>
+  <script type="text/javascript" src="js/c3NextLevelLink.js"></script>
+  <script type="text/javascript" src="js/c3FieldView.js"></script>
+  <script type="text/javascript" src="js/c3BoolSelectView.js"></script>
+  <script type="text/javascript" src="js/c3FieldsetMapForm.js"></script>
+  <script type="text/javascript" src="js/c3FieldsetForm.js"></script>
+
+  <script type="text/javascript" src="js/testUtils.js"></script>
+
+  <script>
+    window.onload = function () {
+      const sb = new StyleBundle();
+      const mainView = new MainView(document, sb);
+      const testWrapperView = new TestWrapperView(sb);
+      mainView.appendView(testWrapperView);
+
+      const cmf = new ConfigMetadataFetcher();
+      cmf.fetchCfgSchema('receiver', 'cloudfoundry', cfgSchema => {
+        const fieldsetFormController = new C3FieldsetFormController(cfgSchema, testWrapperView, sb, () => {
+          console.log('onsubmit?');
+        });
+        fieldsetFormController.render();
+      });
+    };
+  </script>
+
+</head>
+<body>
+
+</body>
+</html>

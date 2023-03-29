@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package otto
+package c3
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -25,16 +26,36 @@ func Server(logger *log.Logger, addr string, factories otelcol.Factories) {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("web/static")))
 
+	componentTypes := factoriesToComponentTypes(factories)
+	jsn, err := json.Marshal(componentTypes)
+	if err != nil {
+		logger.Printf("Server: error getting components: %v", err)
+		return
+	}
+
 	mux.Handle("/components", componentHandler{
-		logger:    logger,
-		factories: factories,
+		logger: logger,
+		jsn:    jsn,
 	})
 
 	mux.Handle("/cfg-metadata/", cfgschemaHandler{
-		logger: logger,
+		logger:         logger,
+		componentTypes: componentTypes,
 	})
 
 	mux.Handle("/json-to-yaml", jsonToYAMLHandler{
+		logger: logger,
+	})
+
+	mux.Handle("/yaml-to-json", yamlToJSONHandler{
+		logger: logger,
+	})
+
+	mux.Handle("/stitch", stitchHandler{
+		logger: logger,
+	})
+
+	mux.Handle("/create-pipeline", createPipelineHandler{
 		logger: logger,
 	})
 
@@ -42,8 +63,8 @@ func Server(logger *log.Logger, addr string, factories otelcol.Factories) {
 		Addr:    addr,
 		Handler: mux,
 	}
-	println("c3 started")
-	err := svr.ListenAndServe()
+	println("c3 started", addr)
+	err = svr.ListenAndServe()
 	if err != nil {
 		logger.Fatalf("http serve error: %v", err)
 	}

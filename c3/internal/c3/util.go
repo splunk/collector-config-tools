@@ -12,14 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-class SidebarController {
+package c3
 
-  constructor(sb) {
-    this.rootView = new SidebarView(sb);
-  }
+import (
+	"bytes"
 
-  getRootView() {
-    return this.rootView;
-  }
+	"gopkg.in/yaml.v3"
+)
 
+func toYaml(v any) ([]byte, error) {
+	var b bytes.Buffer
+	enc := yaml.NewEncoder(&b)
+	enc.SetIndent(2)
+	err := enc.Encode(v)
+	return b.Bytes(), err
 }

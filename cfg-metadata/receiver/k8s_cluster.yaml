@@ -38,4 +38,4 @@ fields:
   kind: string
   default: kubernetes
   doc: |
-    Whether OpenShift supprot should be enabled or not.
+    Whether OpenShift support should be enabled or not.

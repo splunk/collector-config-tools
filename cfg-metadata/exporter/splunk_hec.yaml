@@ -2,136 +2,11 @@ type: '*splunkhecexporter.Config'
 doc: |
   Config defines configuration for Splunk exporter.
 fields:
-- name: timeout
-  type: time.Duration
-  kind: int64
-  default: 10s
-  doc: |
-    Timeout is the timeout for every attempt to send data to the backend.
-- name: sending_queue
-  type: exporterhelper.QueueSettings
-  kind: struct
-  doc: |
-    QueueSettings defines configuration for queueing batches before sending to the consumerSender.
-  fields:
-  - name: enabled
-    kind: bool
-    default: true
-    doc: |
-      Enabled indicates whether to not enqueue batches before sending to the consumerSender.
-  - name: num_consumers
-    kind: int
-    default: 10
-    doc: |
-      NumConsumers is the number of consumers from the queue.
-  - name: queue_size
-    kind: int
-    default: 5000
-    doc: |
-      QueueSize is the maximum number of batches allowed in queue at a given time.
-  - name: storage
-    type: '*component.ID'
-    kind: ptr
-    doc: |
-      StorageID if not empty, enables the persistent storage and uses the component specified
-      as a storage extension for the persistent queue
-- name: retry_on_failure
-  type: exporterhelper.RetrySettings
-  kind: struct
-  doc: |
-    RetrySettings defines configuration for retrying batches in case of export failure.
-    The current supported strategy is exponential backoff.
-  fields:
-  - name: enabled
-    kind: bool
-    default: true
-    doc: |
-      Enabled indicates whether to not retry sending batches in case of export failure.
-  - name: initial_interval
-    type: time.Duration
-    kind: int64
-    default: 5s
-    doc: |
-      InitialInterval the time to wait after the first failure before retrying.
-  - name: max_interval
-    type: time.Duration
-    kind: int64
-    default: 30s
-    doc: |
-      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
-      consecutive retries will always be `MaxInterval`.
-  - name: max_elapsed_time
-    type: time.Duration
-    kind: int64
-    default: 5m0s
-    doc: |
-      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
-      Once this value is reached, the data is discarded.
-- name: log_data_enabled
-  kind: bool
-  default: true
-  doc: |
-    LogDataEnabled can be used to disable sending logs by the exporter.
-- name: profiling_data_enabled
-  kind: bool
-  default: true
-  doc: |
-    ProfilingDataEnabled can be used to disable sending profiling data by the exporter.
-- name: token
-  type: configopaque.String
-  kind: string
-  default: ""
-  doc: |
-    HEC Token is the authentication token provided by Splunk: https://docs.splunk.com/Documentation/Splunk/latest/Data/UsetheHTTPEventCollector.
 - name: endpoint
   kind: string
   default: ""
   doc: |
-    URL is the Splunk HEC endpoint where data is going to be sent to.
-- name: source
-  kind: string
-  default: ""
-  doc: |
-    Optional Splunk source: https://docs.splunk.com/Splexicon:Source.
-    Sources identify the incoming data.
-- name: sourcetype
-  kind: string
-  default: ""
-  doc: |
-    Optional Splunk source type: https://docs.splunk.com/Splexicon:Sourcetype.
-- name: index
-  kind: string
-  default: ""
-  doc: |
-    Splunk index, optional name of the Splunk index.
-- name: max_connections
-  kind: uint
-  default: 100
-  doc: |
-    MaxConnections is used to set a limit to the maximum idle HTTP connection the exporter can keep open. Defaults to 100.
-- name: disable_compression
-  kind: bool
-  default: false
-  doc: |
-    Disable GZip compression. Defaults to false.
-- name: max_content_length_logs
-  kind: uint
-  default: 2097152
-  doc: |
-    Maximum log payload size in bytes. Default value is 2097152 bytes (2MiB).
-    Maximum allowed value is 838860800 (~ 800 MB).
-- name: max_content_length_metrics
-  kind: uint
-  default: 2097152
-  doc: |
-    Maximum metric payload size in bytes. Default value is 2097152 bytes (2MiB).
-    Maximum allowed value is 838860800 (~ 800 MB).
-- name: max_content_length_traces
-  kind: uint
-  default: 2097152
-  doc: |
-    Maximum trace payload size in bytes. Default value is 2097152 bytes (2MiB).
-    Maximum allowed value is 838860800 (~ 800 MB).
+    The target URL to send data to (e.g.: http://some.url:9411/v1/traces).
 - name: tls
   type: configtls.TLSClientSetting
   kind: struct
@@ -195,9 +70,183 @@ fields:
       ServerName requested by client for virtual hosting.
       This sets the ServerName in the TLSConfig. Please refer to
       https://godoc.org/crypto/tls#Config for more information. (optional)
-- name: splunk_app_name
+- name: read_buffer_size
+  kind: int
+  doc: |
+    ReadBufferSize for HTTP client. See http.Transport.ReadBufferSize.
+- name: write_buffer_size
+  kind: int
+  doc: |
+    WriteBufferSize for HTTP client. See http.Transport.WriteBufferSize.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 10s
+  doc: |
+    Timeout parameter configures `http.Client.Timeout`.
+- name: headers
+  type: map[string]configopaque.String
+  kind: map
+  doc: |
+    Additional headers attached to each HTTP request sent by the client.
+    Existing header values are overwritten if collision happens.
+    Header values are opaque since they may be sensitive.
+- name: customroundtripper
+  type: func(http.RoundTripper) (http.RoundTripper, error)
+  kind: func
+  doc: |
+    Custom Round Tripper to allow for individual components to intercept HTTP requests
+- name: auth
+  type: '*configauth.Authentication'
+  kind: ptr
+  doc: |
+    Auth configuration for outgoing HTTP calls.
+  fields:
+  - name: authenticator
+    type: component.ID
+    kind: struct
+    doc: |
+      AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
+- name: compression
+  type: configcompression.CompressionType
   kind: string
   default: ""
+  doc: |
+    The compression key for supported compression types within collector.
+- name: max_idle_conns
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxIdleConns is used to set a limit to the maximum idle HTTP connections the client can keep open.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: max_idle_conns_per_host
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxIdleConnsPerHost is used to set a limit to the maximum idle HTTP connections the host can keep open.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: max_conns_per_host
+  type: '*int'
+  kind: ptr
+  doc: |
+    MaxConnsPerHost limits the total number of connections per host, including connections in the dialing,
+    active, and idle states.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: idle_conn_timeout
+  type: '*time.Duration'
+  kind: ptr
+  doc: |
+    IdleConnTimeout is the maximum amount of time a connection will remain open before closing itself.
+    There's an already set value, and we want to override it only if an explicit value provided
+- name: sending_queue
+  type: exporterhelper.QueueSettings
+  kind: struct
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+  - name: num_consumers
+    kind: int
+    default: 10
+  - name: queue_size
+    kind: int
+    default: 1000
+  - name: storage
+    type: '*component.ID'
+    kind: ptr
+- name: retry_on_failure
+  type: exporterhelper.RetrySettings
+  kind: struct
+  fields:
+  - name: enabled
+    kind: bool
+    default: true
+  - name: initial_interval
+    type: time.Duration
+    kind: int64
+    default: 5s
+  - name: randomization_factor
+    kind: float64
+  - name: multiplier
+    kind: float64
+  - name: max_interval
+    type: time.Duration
+    kind: int64
+    default: 30s
+  - name: max_elapsed_time
+    type: time.Duration
+    kind: int64
+    default: 5m0s
+- name: log_data_enabled
+  kind: bool
+  default: true
+  doc: |
+    LogDataEnabled can be used to disable sending logs by the exporter.
+- name: profiling_data_enabled
+  kind: bool
+  default: true
+  doc: |
+    ProfilingDataEnabled can be used to disable sending profiling data by the exporter.
+- name: token
+  type: configopaque.String
+  kind: string
+  default: ""
+  doc: |
+    HEC Token is the authentication token provided by Splunk: https://docs.splunk.com/Documentation/Splunk/latest/Data/UsetheHTTPEventCollector.
+- name: source
+  kind: string
+  default: ""
+  doc: |
+    Optional Splunk source: https://docs.splunk.com/Splexicon:Source.
+    Sources identify the incoming data.
+- name: sourcetype
+  kind: string
+  default: ""
+  doc: |
+    Optional Splunk source type: https://docs.splunk.com/Splexicon:Sourcetype.
+- name: index
+  kind: string
+  default: ""
+  doc: |
+    Splunk index, optional name of the Splunk index.
+- name: max_connections
+  kind: uint
+  default: 0
+  doc: |
+    MaxConnections is used to set a limit to the maximum idle HTTP connection the exporter can keep open. Defaults to 100.
+    Deprecated: use HTTPClientSettings.MaxIdleConns or HTTPClientSettings.MaxIdleConnsPerHost instead.
+- name: disable_compression
+  kind: bool
+  default: false
+  doc: |
+    Disable GZip compression. Defaults to false.
+- name: max_content_length_logs
+  kind: uint
+  default: 2097152
+  doc: |
+    Maximum log payload size in bytes. Default value is 2097152 bytes (2MiB).
+    Maximum allowed value is 838860800 (~ 800 MB).
+- name: max_content_length_metrics
+  kind: uint
+  default: 2097152
+  doc: |
+    Maximum metric payload size in bytes. Default value is 2097152 bytes (2MiB).
+    Maximum allowed value is 838860800 (~ 800 MB).
+- name: max_content_length_traces
+  kind: uint
+  default: 2097152
+  doc: |
+    Maximum trace payload size in bytes. Default value is 2097152 bytes (2MiB).
+    Maximum allowed value is 838860800 (~ 800 MB).
+- name: max_event_size
+  kind: uint
+  default: 5242880
+  doc: |
+    Maximum payload size, raw uncompressed. Default value is 5242880 bytes (5MiB).
+    Maximum allowed value is 838860800 (~ 800 MB).
+- name: splunk_app_name
+  kind: string
+  default: OpenTelemetry Collector Contrib
   doc: |
     App name is used to track telemetry information for Splunk App's using HEC by App name. Defaults to "OpenTelemetry Collector Contrib".
 - name: splunk_app_version
@@ -257,3 +306,47 @@ fields:
   default: false
   doc: |
     HecHealthCheckEnabled can be used to verify Splunk HEC health on exporter's startup
+- name: export_raw
+  kind: bool
+  default: false
+  doc: |
+    ExportRaw to send only the log's body, targeting a Splunk HEC raw endpoint.
+- name: use_multi_metric_format
+  kind: bool
+  default: false
+  doc: |
+    UseMultiMetricFormat combines metric events to save space during ingestion.
+- name: heartbeat
+  type: splunkhecexporter.HecHeartbeat
+  kind: struct
+  doc: |
+    Heartbeat is the configuration to enable heartbeat
+  fields:
+  - name: interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      Interval represents the time interval for the heartbeat interval. If nothing or 0 is set,
+      heartbeat is not enabled.
+      A heartbeat is an event sent to _internal index with metadata for the current collector/host.
+- name: telemetry
+  type: splunkhecexporter.HecTelemetry
+  kind: struct
+  doc: |
+    Telemetry is the configuration for splunk hec exporter telemetry
+  fields:
+  - name: enabled
+    kind: bool
+    default: false
+    doc: |
+      Enabled is the bool to enable telemetry inside splunk hec exporter
+  - name: override_metrics_names
+    type: map[string]string
+    kind: map
+    doc: |
+      OverrideMetricsNames is the map to override metrics for internal metrics in splunk hec exporter
+  - name: extra_attributes
+    type: map[string]string
+    kind: map
+    doc: |
+      ExtraAttributes is the extra attributes for metrics inside splunk hex exporter

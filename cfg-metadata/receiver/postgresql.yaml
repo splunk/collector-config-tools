@@ -1,8 +1,6 @@
 type: '*postgresqlreceiver.Config'
 doc: |
-  ScraperControllerSettings defines common settings for a scraper controller
-  configuration. Scraper controller receivers can embed this struct, instead
-  of receiver.Settings, and extend it with more fields if needed.
+  NetAddr represents a network endpoint address.
 fields:
 - name: collection_interval
   type: time.Duration
@@ -98,205 +96,238 @@ fields:
       This sets the ServerName in the TLSConfig. Please refer to
       https://godoc.org/crypto/tls#Config for more information. (optional)
 - name: metrics
-  type: metadata.MetricsSettings
+  type: metadata.MetricsConfig
   kind: struct
   doc: |
-    MetricsSettings provides settings for postgresqlreceiver metrics.
+    MetricsConfig provides config for postgresqlreceiver metrics.
   fields:
   - name: postgresql.backends
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.bgwriter.buffers.allocated
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.bgwriter.buffers.writes
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.bgwriter.checkpoint.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.bgwriter.duration
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.bgwriter.maxwritten
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.blocks_read
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.commits
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.connection.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.database.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.db_size
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.index.scans
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.index.size
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.operations
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.replication.data_delay
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.rollbacks
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.rows
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.table.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.table.size
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.table.vacuum.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.wal.age
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: postgresql.wal.lag
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+- name: resource_attributes
+  type: metadata.ResourceAttributesConfig
+  kind: struct
+  doc: |
+    ResourceAttributesConfig provides config for postgresqlreceiver resource attributes.
+  fields:
+  - name: postgresql.database.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: postgresql.index.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: postgresql.table.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
     fields:
     - name: enabled
       kind: bool

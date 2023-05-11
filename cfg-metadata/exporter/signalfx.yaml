@@ -5,62 +5,42 @@ fields:
 - name: sending_queue
   type: exporterhelper.QueueSettings
   kind: struct
-  doc: |
-    QueueSettings defines configuration for queueing batches before sending to the consumerSender.
   fields:
   - name: enabled
     kind: bool
     default: true
-    doc: |
-      Enabled indicates whether to not enqueue batches before sending to the consumerSender.
   - name: num_consumers
     kind: int
     default: 10
-    doc: |
-      NumConsumers is the number of consumers from the queue.
   - name: queue_size
     kind: int
-    default: 5000
-    doc: |
-      QueueSize is the maximum number of batches allowed in queue at a given time.
+    default: 1000
   - name: storage
     type: '*component.ID'
     kind: ptr
-    doc: |
-      StorageID if not empty, enables the persistent storage and uses the component specified
-      as a storage extension for the persistent queue
 - name: retry_on_failure
   type: exporterhelper.RetrySettings
   kind: struct
-  doc: |
-    RetrySettings defines configuration for retrying batches in case of export failure.
-    The current supported strategy is exponential backoff.
   fields:
   - name: enabled
     kind: bool
     default: true
-    doc: |
-      Enabled indicates whether to not retry sending batches in case of export failure.
   - name: initial_interval
     type: time.Duration
     kind: int64
     default: 5s
-    doc: |
-      InitialInterval the time to wait after the first failure before retrying.
+  - name: randomization_factor
+    kind: float64
+  - name: multiplier
+    kind: float64
   - name: max_interval
     type: time.Duration
     kind: int64
     default: 30s
-    doc: |
-      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
-      consecutive retries will always be `MaxInterval`.
   - name: max_elapsed_time
     type: time.Duration
     kind: int64
     default: 5m0s
-    doc: |
-      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
-      Once this value is reached, the data is discarded.
 - name: endpoint
   kind: string
   default: ""
@@ -360,6 +340,32 @@ fields:
   default: false
   doc: |
     Whether to log dimension updates being sent to SignalFx.
+- name: dimension_client
+  type: signalfxexporter.DimensionClientConfig
+  kind: struct
+  doc: |
+    Dimension update client configuration used for metadata updates.
+  fields:
+  - name: max_buffered
+    kind: int
+    default: 10000
+  - name: send_delay
+    type: time.Duration
+    kind: int64
+    default: 10s
+  - name: max_idle_conns
+    kind: int
+    default: 20
+  - name: max_idle_conns_per_host
+    kind: int
+    default: 20
+  - name: max_conns_per_host
+    kind: int
+    default: 20
+  - name: idle_conn_timeout
+    type: time.Duration
+    kind: int64
+    default: 30s
 - name: access_token_passthrough
   kind: bool
   default: true
@@ -371,6 +377,7 @@ fields:
   doc: |
     TranslationRules defines a set of rules how to translate metrics to a SignalFx compatible format
     Rules defined in translation/constants.go are used by default.
+    Deprecated: Use metricstransform processor to do metrics transformations.
   fields:
   - name: action
     type: translation.Action
@@ -468,6 +475,9 @@ fields:
     doc: |
       DimensionPairs used by "drop_dimensions" translation rule to specify dimension pairs that
       should be dropped.
+- name: disable_default_translation_rules
+  kind: bool
+  default: false
 - name: delta_translation_ttl
   kind: int64
   default: 3600
@@ -536,6 +546,37 @@ fields:
       A map of dimension key/values to match against. All key/values must
       match a datapoint for it to be matched. The map values can be either
       a single string or a list of strings.
+- name: exclude_properties
+  type: '[]dpfilters.PropertyFilter'
+  kind: slice
+  doc: |
+    ExcludeProperties defines dpfilter.PropertyFilters to prevent inclusion of
+    properties to include with dimension updates to the SignalFx backend.
+  fields:
+  - name: property_name
+    type: '*dpfilters.StringFilter'
+    kind: ptr
+    doc: |
+      PropertyName is the (inverted) literal, regex, or globbed property name/key to not include in dimension updates
+  - name: property_value
+    type: '*dpfilters.StringFilter'
+    kind: ptr
+    doc: |
+      PropertyValue is the (inverted) literal or globbed property value to not include in dimension updates
+  - name: dimension_name
+    type: '*dpfilters.StringFilter'
+    kind: ptr
+    doc: |
+      DimensionName is the (inverted) literal, regex, or globbed dimension name/key to not target for dimension updates.
+      If there are no sub-property filters for its enclosing entry, it will disable dimension updates
+      for this dimension name in total.
+  - name: dimension_value
+    type: '*dpfilters.StringFilter'
+    kind: ptr
+    doc: |
+      PropertyValue is the (inverted) literal, regex, or globbed dimension value to not target with a dimension update
+      If there are no sub-property filters for its enclosing entry, it will disable dimension updates
+      for this dimension value in total.
 - name: correlation
   type: '*correlation.Config'
   kind: ptr

@@ -185,106 +185,106 @@ fields:
   doc: |
     ClientID is the id associated with the consumer that reads from topics in kafka.
 - name: metrics
-  type: metadata.MetricsSettings
+  type: metadata.MetricsConfig
   kind: struct
   doc: |
-    Metrics allows customizing scraped metrics representation.
+    MetricsConfig provides config for kafkametricsreceiver metrics.
   fields:
   - name: kafka.brokers
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.consumer_group.lag
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.consumer_group.lag_sum
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.consumer_group.members
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.consumer_group.offset
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.consumer_group.offset_sum
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.partition.current_offset
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.partition.oldest_offset
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.partition.replicas
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.partition.replicas_in_sync
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: kafka.topic.partitions
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool

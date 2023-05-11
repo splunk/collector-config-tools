@@ -1,13 +1,11 @@
 type: '*mongodbatlasreceiver.Config'
 doc: |
-  ScraperControllerSettings defines common settings for a scraper controller
-  configuration. Scraper controller receivers can embed this struct, instead
-  of receiver.Settings, and extend it with more fields if needed.
+  MetricsBuilderConfig is a configuration for mongoatlasreceiver metrics builder.
 fields:
 - name: collection_interval
   type: time.Duration
   kind: int64
-  default: 1m0s
+  default: 3m0s
 - name: public_key
   kind: string
   default: ""
@@ -18,578 +16,674 @@ fields:
   kind: string
   default: PT1M
 - name: metrics
-  type: metadata.MetricsSettings
+  type: metadata.MetricsConfig
   kind: struct
   doc: |
-    MetricsSettings provides settings for mongoatlasreceiver metrics.
+    MetricsConfig provides config for mongoatlasreceiver metrics.
   fields:
   - name: mongodbatlas.db.counts
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.db.size
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.iops.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.iops.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.latency.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.latency.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.space.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.space.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.usage.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.usage.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.utilization.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.disk.partition.utilization.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.asserts
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.background_flush
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cache.io
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cache.size
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.connections
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cpu.children.normalized.usage.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cpu.children.normalized.usage.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cpu.children.usage.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cpu.children.usage.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cpu.normalized.usage.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cpu.normalized.usage.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cpu.usage.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cpu.usage.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.cursors
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.db.document.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.db.operations.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.db.operations.time
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.db.query_executor.scanned
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.db.query_targeting.scanned_per_returned
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.db.storage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: true
-  - name: mongodbatlas.process.fts.cpu.usage
-    type: metadata.MetricSettings
-    kind: struct
-    doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.global_lock
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.index.btree_miss_ratio
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.index.counters
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.journaling.commits
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.journaling.data_files
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.journaling.written
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.memory.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.network.io
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.network.requests
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.oplog.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.oplog.time
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.page_faults
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.restarts
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.process.tickets
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.cpu.normalized.usage.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.cpu.normalized.usage.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.cpu.usage.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.cpu.usage.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.fts.cpu.normalized.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.fts.cpu.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.fts.disk.used
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.fts.memory.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.memory.usage.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.memory.usage.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.network.io.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.network.io.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.paging.io.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.paging.io.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.paging.usage.average
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodbatlas.system.paging.usage.max
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
+- name: resource_attributes
+  type: metadata.ResourceAttributesConfig
+  kind: struct
+  doc: |
+    ResourceAttributesConfig provides config for mongoatlasreceiver resource attributes.
+  fields:
+  - name: mongodb_atlas.cluster.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mongodb_atlas.db.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mongodb_atlas.disk.partition
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mongodb_atlas.host.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mongodb_atlas.org_name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mongodb_atlas.process.id
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mongodb_atlas.process.port
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mongodb_atlas.process.type_name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mongodb_atlas.project.id
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mongodb_atlas.project.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: mongodb_atlas.user.alias
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
 - name: alerts
   type: mongodbatlasreceiver.AlertConfig
   kind: struct
@@ -653,6 +747,12 @@ fields:
         Path to the TLS cert to use by the server to verify a client certificate. (optional)
         This sets the ClientCAs and ClientAuth to RequireAndVerifyClientCert in the TLSConfig. Please refer to
         https://godoc.org/crypto/tls#Config for more information. (optional)
+    - name: client_ca_file_reload
+      kind: bool
+      default: false
+      doc: |
+        Reload the ClientCAs file when it is modified
+        (optional, default false)
   - name: mode
     kind: string
     default: listen
@@ -684,6 +784,45 @@ fields:
   - name: max_pages
     kind: int64
     default: 10
+- name: events
+  type: '*mongodbatlasreceiver.EventsConfig'
+  kind: ptr
+  doc: |
+    EventsConfig is the configuration options for events collection
+  fields:
+  - name: projects
+    type: '[]*mongodbatlasreceiver.ProjectConfig'
+    kind: slice
+    fields:
+    - name: name
+      kind: string
+      default: ""
+    - name: exclude_clusters
+      type: '[]string'
+      kind: slice
+    - name: include_clusters
+      type: '[]string'
+      kind: slice
+    - name: collect_audit_logs
+      kind: bool
+      default: false
+  - name: organizations
+    type: '[]*mongodbatlasreceiver.OrgConfig'
+    kind: slice
+    fields:
+    - name: id
+      kind: string
+      default: ""
+  - name: poll_interval
+    type: time.Duration
+    kind: int64
+  - name: types
+    type: '[]string'
+    kind: slice
+  - name: page_size
+    kind: int64
+  - name: max_pages
+    kind: int64
 - name: logs
   type: mongodbatlasreceiver.LogConfig
   kind: struct
@@ -710,35 +849,26 @@ fields:
 - name: retry_on_failure
   type: exporterhelper.RetrySettings
   kind: struct
-  doc: |
-    RetrySettings defines configuration for retrying batches in case of export failure.
-    The current supported strategy is exponential backoff.
   fields:
   - name: enabled
     kind: bool
     default: true
-    doc: |
-      Enabled indicates whether to not retry sending batches in case of export failure.
   - name: initial_interval
     type: time.Duration
     kind: int64
     default: 5s
-    doc: |
-      InitialInterval the time to wait after the first failure before retrying.
+  - name: randomization_factor
+    kind: float64
+  - name: multiplier
+    kind: float64
   - name: max_interval
     type: time.Duration
     kind: int64
     default: 30s
-    doc: |
-      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
-      consecutive retries will always be `MaxInterval`.
   - name: max_elapsed_time
     type: time.Duration
     kind: int64
     default: 5m0s
-    doc: |
-      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
-      Once this value is reached, the data is discarded.
 - name: storage
   type: '*component.ID'
   kind: ptr

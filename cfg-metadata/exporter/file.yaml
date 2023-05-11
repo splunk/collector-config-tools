@@ -53,3 +53,9 @@ fields:
   doc: |
     Compression Codec used to export telemetry data
     Supported compression algorithms:`zstd`
+- name: flush_interval
+  type: time.Duration
+  kind: int64
+  doc: |
+    FlushInterval is the duration between flushes.
+    See time.ParseDuration for valid values.

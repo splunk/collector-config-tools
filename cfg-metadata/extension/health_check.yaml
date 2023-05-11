@@ -56,6 +56,12 @@ fields:
       Path to the TLS cert to use by the server to verify a client certificate. (optional)
       This sets the ClientCAs and ClientAuth to RequireAndVerifyClientCert in the TLSConfig. Please refer to
       https://godoc.org/crypto/tls#Config for more information. (optional)
+  - name: client_ca_file_reload
+    kind: bool
+    default: false
+    doc: |
+      Reload the ClientCAs file when it is modified
+      (optional, default false)
 - name: cors
   type: '*confighttp.CORSSettings'
   kind: ptr
@@ -112,6 +118,25 @@ fields:
   doc: |
     Path represents the path the health check service will serve.
     The default path is "/".
+- name: response_body
+  type: '*healthcheckextension.ResponseBodySettings'
+  kind: ptr
+  doc: |
+    ResponseBody represents the body of the response returned by the health check service.
+    This overrides the default response that it would return.
+  fields:
+  - name: healthy
+    kind: string
+    default: ""
+    doc: |
+      Healthy represents the body of the response returned when the collector is healthy.
+      The default value is ""
+  - name: unhealthy
+    kind: string
+    default: ""
+    doc: |
+      Unhealthy represents the body of the response returned when the collector is unhealthy.
+      The default value is ""
 - name: check_collector_pipeline
   type: healthcheckextension.checkCollectorPipelineSettings
   kind: struct

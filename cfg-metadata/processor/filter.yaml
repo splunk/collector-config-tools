@@ -2,6 +2,16 @@ type: '*filterprocessor.Config'
 doc: |
   Config defines configuration for Resource processor.
 fields:
+- name: error_mode
+  type: ottl.ErrorMode
+  kind: string
+  default: propagate
+  doc: |
+    ErrorMode determines how the processor reacts to errors that occur while processing an OTTL condition.
+    Valid values are `ignore` and `propagate`.
+    `ignore` means the processor ignores errors returned by conditions and continues on to the next condition. This is the recommended mode.
+    `propagate` means the processor returns the error up the pipeline.  This will result in the payload being dropped from the collector.
+    The default value is `propagate`.
 - name: metrics
   type: filterprocessor.MetricFilters
   kind: struct

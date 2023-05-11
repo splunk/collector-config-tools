@@ -1,8 +1,6 @@
 type: '*redisreceiver.Config'
 doc: |
-  ScraperControllerSettings defines common settings for a scraper controller
-  configuration. Scraper controller receivers can embed this struct, instead
-  of receiver.Settings, and extend it with more fields if needed.
+  NetAddr represents a network endpoint address.
 fields:
 - name: collection_interval
   type: time.Duration
@@ -393,6 +391,21 @@ fields:
     kind: struct
     doc: |
       MetricSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+- name: resource_attributes
+  type: metadata.ResourceAttributesSettings
+  kind: struct
+  doc: |
+    ResourceAttributesSettings provides settings for redisreceiver metrics.
+  fields:
+  - name: redis.version
+    type: metadata.ResourceAttributeSettings
+    kind: struct
+    doc: |
+      ResourceAttributeSettings provides common settings for a particular metric.
     fields:
     - name: enabled
       kind: bool

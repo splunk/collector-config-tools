@@ -91,6 +91,12 @@ fields:
         Path to the TLS cert to use by the server to verify a client certificate. (optional)
         This sets the ClientCAs and ClientAuth to RequireAndVerifyClientCert in the TLSConfig. Please refer to
         https://godoc.org/crypto/tls#Config for more information. (optional)
+    - name: client_ca_file_reload
+      kind: bool
+      default: false
+      doc: |
+        Reload the ClientCAs file when it is modified
+        (optional, default false)
   - name: add_attributes
     kind: bool
     default: false
@@ -109,6 +115,12 @@ fields:
     - name: line_end_pattern
       kind: string
       default: ""
+  - name: preserve_leading_whitespaces
+    kind: bool
+    default: false
+  - name: preserve_trailing_whitespaces
+    kind: bool
+    default: false
 - name: udp
   type: '*udp.BaseConfig'
   kind: ptr
@@ -136,6 +148,12 @@ fields:
     - name: line_end_pattern
       kind: string
       default: ""
+  - name: preserve_leading_whitespaces
+    kind: bool
+    default: false
+  - name: preserve_trailing_whitespaces
+    kind: bool
+    default: false
 - name: operators
   type: '[]operator.Config'
   kind: slice
@@ -148,3 +166,37 @@ fields:
 - name: storage
   type: '*component.ID'
   kind: ptr
+- name: retry_on_failure
+  type: consumerretry.Config
+  kind: struct
+  doc: |
+    Config defines configuration for retrying batches in case of receiving a retryable error from a downstream
+    consumer. If the retryable error doesn't provide a delay, exponential backoff is applied.
+  fields:
+  - name: enabled
+    kind: bool
+    default: false
+    doc: |
+      Enabled indicates whether to not retry sending logs in case of receiving a retryable error from a downstream
+      consumer. Default is false.
+  - name: initial_interval
+    type: time.Duration
+    kind: int64
+    default: 1s
+    doc: |
+      InitialInterval the time to wait after the first failure before retrying. Default value is 1 second.
+  - name: max_interval
+    type: time.Duration
+    kind: int64
+    default: 30s
+    doc: |
+      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
+      consecutive retries will always be `MaxInterval`. Default value is 30 seconds.
+  - name: max_elapsed_time
+    type: time.Duration
+    kind: int64
+    default: 5m0s
+    doc: |
+      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a logs batch to
+      a downstream consumer. Once this value is reached, the data is discarded. It never stops if MaxElapsedTime == 0.
+      Default value is 5 minutes.

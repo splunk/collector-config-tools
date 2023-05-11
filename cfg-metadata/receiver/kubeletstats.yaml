@@ -1,8 +1,6 @@
 type: '*kubeletstatsreceiver.Config'
 doc: |
-  ScraperControllerSettings defines common settings for a scraper controller
-  configuration. Scraper controller receivers can embed this struct, instead
-  of receiver.Settings, and extend it with more fields if needed.
+  ClientConfig for a kubelet client for talking to a kubelet HTTP endpoint.
 fields:
 - name: collection_interval
   type: time.Duration
@@ -97,385 +95,526 @@ fields:
       token provided to the agent pod), or `kubeConfig` to use credentials
       from `~/.kube/config`.
 - name: metrics
-  type: metadata.MetricsSettings
+  type: metadata.MetricsConfig
   kind: struct
   doc: |
-    Metrics allows customizing scraped metrics representation.
+    MetricsConfig provides config for kubeletstatsreceiver metrics.
   fields:
   - name: container.cpu.time
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.cpu.utilization
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.filesystem.available
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.filesystem.capacity
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.filesystem.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.memory.available
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.memory.major_page_faults
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.memory.page_faults
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.memory.rss
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.memory.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: container.memory.working_set
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.cpu.time
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.cpu.utilization
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.filesystem.available
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.filesystem.capacity
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.filesystem.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.memory.available
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.memory.major_page_faults
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.memory.page_faults
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.memory.rss
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.memory.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.memory.working_set
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.network.errors
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.node.network.io
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.cpu.time
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.cpu.utilization
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.filesystem.available
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.filesystem.capacity
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.filesystem.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.memory.available
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.memory.major_page_faults
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.memory.page_faults
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.memory.rss
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.memory.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.memory.working_set
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.network.errors
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.pod.network.io
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.volume.available
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.volume.capacity
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.volume.inodes
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.volume.inodes.free
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: k8s.volume.inodes.used
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+- name: resource_attributes
+  type: metadata.ResourceAttributesConfig
+  kind: struct
+  doc: |
+    ResourceAttributesConfig provides config for kubeletstatsreceiver resource attributes.
+  fields:
+  - name: aws.volume.id
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: container.id
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: fs.type
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: gce.pd.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: glusterfs.endpoints.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: glusterfs.path
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: k8s.container.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: k8s.namespace.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: k8s.node.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: k8s.persistentvolumeclaim.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: k8s.pod.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: k8s.pod.uid
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: k8s.volume.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: k8s.volume.type
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: partition
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
     fields:
     - name: enabled
       kind: bool

@@ -15,5 +15,35 @@
 window.onload = main;
 
 function main() {
-  new MainController(document, new StyleBundle());
+  const eventBus = new EventBus();
+  const sb = new StyleBundle();
+
+  const mainView = new MainView(document, sb)
+
+  const sidebarController = new SidebarController(sb, eventBus, new ComponentFetcher(), new YamlConverter());
+
+  const receiverSelectorController = new ComponentSelectorController(sb, eventBus, 'receiver');
+  sidebarController.appendView(receiverSelectorController.getRootView());
+
+  const processorSelectorController = new ComponentSelectorController(sb, eventBus, 'processor');
+  sidebarController.appendView(processorSelectorController.getRootView());
+
+  const exporterSelectorController = new ComponentSelectorController(sb, eventBus, 'exporter');
+  sidebarController.appendView(exporterSelectorController.getRootView());
+
+  const createPipelinePanelContoller = new CreatePipelinePanelContoller(sb, eventBus);
+  sidebarController.appendView(createPipelinePanelContoller.getRootView());
+
+  mainView.appendView(sidebarController.getRootView());
+
+  const configPanelController = new ConfigPanelController(
+    sb,
+    eventBus,
+    new ConfigMetadataFetcher(),
+    new Stitcher(),
+    new PipelineCreator()
+  );
+  mainView.appendView(configPanelController.getRootView());
+
+  sidebarController.fetchComponents();
 }

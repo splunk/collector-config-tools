@@ -12,14 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-class YamlPanelController {
+class C3FieldView extends View {
 
-  constructor(sb) {
-    this.yamlView = new YamlPanelView(sb)
+  constructor(sb, labelStr, docStr) {
+    super();
+    sb.styleFieldView(this);
+    this.addClass('C3FieldView');
+
+    this.appendView(new FieldLabelView(sb, labelStr, docStr));
+
+    this.inputWrapperView = new DivWidget('input');
+    this.appendView(this.inputWrapperView);
   }
 
-  getRootView() {
-    return this.yamlView;
+  appendInputWidget(w) {
+    this.inputWrapperView.appendView(w);
   }
 
 }

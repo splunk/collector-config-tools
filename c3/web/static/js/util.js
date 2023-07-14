@@ -12,16 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-class MainController {
-
-  constructor(document, sb) {
-    this.mainView = new MainView(document, sb)
-
-    this.sidebarController = new SidebarController(sb);
-    this.mainView.appendView(this.sidebarController.getRootView());
-
-    this.yamlPanelController = new YamlPanelController(sb);
-    this.mainView.appendView(this.yamlPanelController.getRootView())
-  }
-
+function capitalizeFirstLetter(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
 }

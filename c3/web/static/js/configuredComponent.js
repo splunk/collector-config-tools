@@ -12,16 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-class YamlPanelView extends View {
+class ConfiguredComponentController {
 
-  constructor(sb) {
+  constructor(sb, name, cfg, clickListener) {
+    this.cfg = cfg;
+    this.rootView = new ConfiguredComponentView(sb, name);
+    this.rootView.addEventListener('click', () => {
+      clickListener(name, cfg);
+    });
+  }
+
+  getRootView() {
+    return this.rootView;
+  }
+
+}
+
+class ConfiguredComponentView extends View {
+
+  constructor(sb, name) {
     super();
-    this.addClass('YamlPanelView');
-    this.setPadding('24px');
-    this.ta = new TextareaWidget(sb);
-    this.ta.setHeight('100%');
-    this.ta.setWidth('800px');
-    this.appendView(this.ta);
+    this.addClass('ConfiguredComponentView');
+    this.appendView(new LabelWidget(name));
+    sb.styleConfiguredComponentView(this);
   }
 
 }

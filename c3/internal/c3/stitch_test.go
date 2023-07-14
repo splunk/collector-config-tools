@@ -12,40 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package otto
+package c3
 
 import (
+	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"gopkg.in/yaml.v3"
 )
 
-func TestConvertSubMapsToStringMaps(t *testing.T) {
-	m := map[string]any{
-		"a": map[any]any{
-			"b": 1,
-			"c": map[any]any{
-				"d": 1,
-			},
-		},
-		"e": []any{
-			map[any]any{
-				"f": 1,
+func TestStitch(t *testing.T) {
+	originalCfg := map[string]any{
+		"exporters": map[string]any{
+			"file": map[string]any{
+				"path": "/foo",
 			},
 		},
 	}
-	actual, err := convertAnyMapsToStringMaps(m)
+	originalYaml, err := yaml.Marshal(originalCfg)
 	require.NoError(t, err)
-	assert.EqualValues(t, m, actual)
-	a, ok := m["a"].(map[string]any)
-	assert.True(t, ok)
-	_, ok = a["c"].(map[string]any)
-	assert.True(t, ok)
-	e, ok := m["e"].([]any)
-	assert.True(t, ok)
-	assert.NotNil(t, e)
-	v := e[0]
-	_, ok = v.(map[string]any)
-	assert.True(t, ok)
+	stitchedCfg, err := stitch(
+		string(originalYaml),
+		"receiver",
+		"redis",
+		map[string]any{
+			"collection_interval": "42s",
+		},
+	)
+	require.NoError(t, err)
+	fmt.Printf("cfg: %v\n", stitchedCfg)
+	stitchedYaml, err := yaml.Marshal(stitchedCfg)
+	require.NoError(t, err)
+	println(string(stitchedYaml))
 }

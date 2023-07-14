@@ -12,14 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-class SidebarView extends View {
+package c3
 
-  constructor(sb) {
-    super();
-    this.addClass('SidebarView');
-    this.setBackgoundColor(sb.sidebarBgColor);
-    this.setPadding('24px');
-    this.appendText('sb');
-  }
+import (
+	"testing"
 
+	"github.com/stretchr/testify/assert"
+)
+
+func TestValidateInputs(t *testing.T) {
+	cs := components{
+		Receivers: []component{{
+			Name: "myreceiver",
+		}},
+	}
+	assert.True(t, cs.found("receiver", "myreceiver"))
+	assert.False(t, cs.found("receiver", "foo"))
 }

@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package c3
 
 import (
 	"log"
-
-	"github.com/splunk/collector-config-tools/c3/internal/c3"
-	"github.com/splunk/collector-config-tools/c3/internal/components"
+	"net/http"
 )
 
-func main() {
-	factories, err := components.Components()
+type componentHandler struct {
+	logger *log.Logger
+	jsn    []byte
+}
+
+func (h componentHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
+	_, err := resp.Write(h.jsn)
 	if err != nil {
-		log.Fatalf("failed to load collector components: %v", err)
+		h.logger.Printf("componentHandler: ServeHTTP: error writing response: %v", err)
 	}
-	c3.Server(log.Default(), ":9999", factories)
 }

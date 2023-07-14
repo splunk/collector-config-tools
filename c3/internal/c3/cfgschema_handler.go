@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package otto
+package c3
 
 import (
 	"encoding/json"
@@ -27,7 +27,8 @@ import (
 )
 
 type cfgschemaHandler struct {
-	logger *log.Logger
+	logger         *log.Logger
+	componentTypes components
 }
 
 func (h cfgschemaHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
@@ -36,8 +37,13 @@ func (h cfgschemaHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request)
 	componentType := parts[2]
 	componentName := parts[3]
 
-	// todo fix potential security hole
-	path := filepath.Join("cfg-metadata", componentType, componentName+".yaml")
+	if !h.componentTypes.found(componentType, componentName) {
+		h.logger.Printf("cfgschemaHandler: component not found: %s:%s", componentType, componentName)
+		resp.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	path := filepath.Join("..", "cfg-metadata", componentType, componentName+".yaml")
 	yamlFile, err := os.ReadFile(path)
 	if err != nil {
 		h.logger.Printf("cfgschemaHandler: ServeHTTP: error reading yaml file: %v", err)

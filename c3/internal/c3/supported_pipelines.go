@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package otto
+package c3
 
 import (
-	"encoding/json"
-	"log"
-	"net/http"
 	"reflect"
 	"sort"
 
@@ -27,91 +24,74 @@ import (
 	"go.opentelemetry.io/collector/receiver"
 )
 
-type componentHandler struct {
-	logger    *log.Logger
-	factories otelcol.Factories
+type component struct {
+	Name                  string
+	Metrics, Traces, Logs bool
 }
 
-func (h componentHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
-	jsn, err := factoriesToComponentTypeJSON(h.factories)
-	if err != nil {
-		h.logger.Printf("componentHandler: ServeHTTP: error getting components: %v", err)
-		resp.WriteHeader(http.StatusInternalServerError)
-		return
+type components struct {
+	Receivers, Processors, Exporters []component
+}
+
+func (c components) found(componentType, name string) bool {
+	var typeComponents []component
+	switch componentType {
+	case "receiver":
+		typeComponents = c.Receivers
+	case "processor":
+		typeComponents = c.Processors
+	case "exporter":
+		typeComponents = c.Exporters
 	}
-	_, err = resp.Write(jsn)
-	if err != nil {
-		h.logger.Printf("componentHandler: ServeHTTP: error writing response: %v", err)
+	for _, c := range typeComponents {
+		if c.Name == name {
+			return true
+		}
 	}
+	return false
 }
 
-func factoriesToComponentTypeJSON(factories otelcol.Factories) ([]byte, error) {
-	cmp := factoriesToComponentTypes(factories)
-	return json.Marshal(cmp)
-}
-
-type componentTypes struct {
-	Metrics rpe `json:"metrics"`
-	Logs    rpe `json:"logs"`
-	Traces  rpe `json:"traces"`
-}
-
-type rpe struct {
-	Receivers  []string `json:"receivers"`
-	Processors []string `json:"processors"`
-	Exporters  []string `json:"exporters"`
-}
-
-func factoriesToComponentTypes(factories otelcol.Factories) componentTypes {
-	out := componentTypes{}
+func factoriesToComponentTypes(factories otelcol.Factories) components {
+	out := components{}
 	for name, factory := range factories.Receivers {
 		sp := receiverSupportedPipelines(factory)
-		if sp.metrics {
-			out.Metrics.Receivers = append(out.Metrics.Receivers, string(name))
+		c := component{
+			Name:    string(name),
+			Metrics: sp.metrics,
+			Traces:  sp.traces,
+			Logs:    sp.logs,
 		}
-		if sp.traces {
-			out.Traces.Receivers = append(out.Traces.Receivers, string(name))
-		}
-		if sp.logs {
-			out.Logs.Receivers = append(out.Logs.Receivers, string(name))
-		}
+		out.Receivers = append(out.Receivers, c)
 	}
-	sort.Strings(out.Metrics.Receivers)
-	sort.Strings(out.Traces.Receivers)
-	sort.Strings(out.Logs.Receivers)
-
+	sort.Slice(out.Receivers, func(i, j int) bool {
+		return out.Receivers[i].Name < out.Receivers[j].Name
+	})
 	for name, factory := range factories.Processors {
 		sp := processorSupportedPipelines(factory)
-		if sp.metrics {
-			out.Metrics.Processors = append(out.Metrics.Processors, string(name))
+		c := component{
+			Name:    string(name),
+			Metrics: sp.metrics,
+			Traces:  sp.traces,
+			Logs:    sp.logs,
 		}
-		if sp.traces {
-			out.Traces.Processors = append(out.Traces.Processors, string(name))
-		}
-		if sp.logs {
-			out.Logs.Processors = append(out.Logs.Processors, string(name))
-		}
+		out.Processors = append(out.Processors, c)
 	}
-	sort.Strings(out.Metrics.Processors)
-	sort.Strings(out.Traces.Processors)
-	sort.Strings(out.Logs.Processors)
-
+	sort.Slice(out.Processors, func(i, j int) bool {
+		return out.Processors[i].Name < out.Processors[j].Name
+	})
 	for name, factory := range factories.Exporters {
 		sp := exporterSupportedPipelines(factory)
-		if sp.metrics {
-			out.Metrics.Exporters = append(out.Metrics.Exporters, string(name))
+		c := component{
+			Name:    string(name),
+			Metrics: sp.metrics,
+			Traces:  sp.traces,
+			Logs:    sp.logs,
 		}
-		if sp.traces {
-			out.Traces.Exporters = append(out.Traces.Exporters, string(name))
-		}
-		if sp.logs {
-			out.Logs.Exporters = append(out.Logs.Exporters, string(name))
-		}
+		out.Exporters = append(out.Exporters, c)
 	}
-	sort.Strings(out.Metrics.Exporters)
-	sort.Strings(out.Traces.Exporters)
-	sort.Strings(out.Logs.Exporters)
-
+	sort.Slice(out.Exporters, func(i, j int) bool {
+		return out.Exporters[i].Name < out.Exporters[j].Name
+	})
 	return out
 }
 

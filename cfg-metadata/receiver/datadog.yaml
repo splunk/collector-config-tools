@@ -1,0 +1,78 @@
+type: '*datadogreceiver.Config'
+fields:
+- name: endpoint
+  kind: string
+  default: localhost:8126
+- name: tls
+  type: '*configtls.TLSServerSetting'
+  kind: ptr
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+  - name: ca_pem
+    type: configopaque.String
+    kind: string
+    default: ""
+  - name: cert_file
+    kind: string
+    default: ""
+  - name: cert_pem
+    type: configopaque.String
+    kind: string
+    default: ""
+  - name: key_file
+    kind: string
+    default: ""
+  - name: key_pem
+    type: configopaque.String
+    kind: string
+    default: ""
+  - name: min_version
+    kind: string
+    default: ""
+  - name: max_version
+    kind: string
+    default: ""
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+  - name: client_ca_file
+    kind: string
+    default: ""
+  - name: client_ca_file_reload
+    kind: bool
+    default: false
+- name: cors
+  type: '*confighttp.CORSSettings'
+  kind: ptr
+  fields:
+  - name: allowed_origins
+    type: '[]string'
+    kind: slice
+  - name: allowed_headers
+    type: '[]string'
+    kind: slice
+  - name: max_age
+    kind: int
+- name: auth
+  type: '*configauth.Authentication'
+  kind: ptr
+  fields:
+  - name: authenticator
+    type: component.ID
+    kind: struct
+- name: max_request_body_size
+  kind: int64
+- name: include_metadata
+  kind: bool
+  default: false
+- name: response_headers
+  type: map[string]configopaque.String
+  kind: map
+- name: read_timeout
+  type: time.Duration
+  kind: int64
+  default: 1m0s
+  doc: |
+    ReadTimeout of the http server

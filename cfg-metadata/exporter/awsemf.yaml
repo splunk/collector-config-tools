@@ -70,6 +70,14 @@ fields:
   doc: |
     Namespace is a container for CloudWatch metrics.
     Metrics in different namespaces are isolated from each other.
+- name: retain_initial_value_of_delta_metric
+  kind: bool
+  default: false
+  doc: |
+    RetainInitialValueOfDeltaMetric is the flag to signal that the initial value of a metric is a valid datapoint.
+    The default behavior is that the first value occurrence of a metric is set as the baseline for the calculation of
+    the delta to the next occurrence. With this flag set to true the exporter will instead use this first value as the
+    initial delta value. This is especially useful when handling low frequency metrics.
 - name: dimension_rollup_option
   kind: string
   default: ZeroAndSingleDimensionRollup
@@ -83,6 +91,13 @@ fields:
   doc: |
     LogRetention is the option to set the log retention policy for the CloudWatch Log Group. Defaults to Never Expire if not specified or set to 0
     Possible values are 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 2192, 2557, 2922, 3288, or 3653
+- name: tags
+  type: map[string]*string
+  kind: map
+  doc: |
+    Tags is the option to set tags for the CloudWatch Log Group.  If specified, please add at most 50 tags.  Input is a string to string map like so: { 'key': 'value' }
+    Keys must be between 1-128 characters and follow the regex pattern: ^([\p{L}\p{Z}\p{N}_.:/=+\-@]+)$
+    Values must be between 1-256 characters and follow the regex pattern: ^([\p{L}\p{Z}\p{N}_.:/=+\-@]*)$
 - name: parse_json_encoded_attr_values
   type: '[]string'
   kind: slice
@@ -172,7 +187,7 @@ fields:
   type: resourcetotelemetry.Settings
   kind: struct
   doc: |
-    ResourceToTelemetrySettings is the option for converting resource attrihutes to telemetry attributes.
+    ResourceToTelemetrySettings is an option for converting resource attrihutes to telemetry attributes.
     "Enabled" - A boolean field to enable/disable this option. Default is `false`.
     If enabled, all the resource attributes will be converted to metric labels by default.
   fields:
@@ -181,3 +196,16 @@ fields:
     default: false
     doc: |
       Enabled indicates whether to convert resource attributes to telemetry attributes. Default is `false`.
+- name: detailed_metrics
+  kind: bool
+  default: false
+  doc: |
+    DetailedMetrics is an option for retaining detailed datapoint values in exported metrics (e.g instead of exporting a quantile as a statistical value,
+    preserve the quantile's population)
+- name: version
+  kind: string
+  default: "1"
+  doc: |
+    Version is an option for sending metrics to CloudWatchLogs with Embedded Metric Format in selected version  (with "_aws")
+    https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format_Specification.html#CloudWatch_Embedded_Metric_Format_Specification_structure
+    Otherwise, sending metrics as Embedded Metric Format version 0 (without "_aws")

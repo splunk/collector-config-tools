@@ -6,189 +6,232 @@ fields:
   type: time.Duration
   kind: int64
   default: 10s
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
 - name: metrics
-  type: metadata.MetricsSettings
+  type: metadata.MetricsConfig
   kind: struct
   doc: |
-    MetricsSettings provides settings for sqlserverreceiver metrics.
+    MetricsConfig provides config for sqlserver metrics.
   fields:
   - name: sqlserver.batch.request.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.batch.sql_compilation.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.batch.sql_recompilation.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.lock.wait.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.lock.wait_time.avg
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.page.buffer_cache.hit_ratio
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.page.checkpoint.flush.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.page.lazy_write.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.page.life_expectancy
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.page.operation.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.page.split.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.transaction.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.transaction.write.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.transaction_log.flush.data.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.transaction_log.flush.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.transaction_log.flush.wait.rate
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.transaction_log.growth.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.transaction_log.shrink.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.transaction_log.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: sqlserver.user.connection.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
+- name: resource_attributes
+  type: metadata.ResourceAttributesConfig
+  kind: struct
+  doc: |
+    ResourceAttributesConfig provides config for sqlserver resource attributes.
+  fields:
+  - name: sqlserver.computer.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: sqlserver.database.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: sqlserver.instance.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+- name: instance_name
+  kind: string
+  default: ""
+- name: computer_name
+  kind: string
+  default: ""

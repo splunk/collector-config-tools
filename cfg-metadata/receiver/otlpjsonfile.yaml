@@ -8,6 +8,16 @@ fields:
 - name: exclude
   type: '[]string'
   kind: slice
+- name: ordering_criteria
+  type: fileconsumer.OrderingCriteria
+  kind: struct
+  fields:
+  - name: regex
+    kind: string
+    default: ""
+  - name: sort_by
+    type: '[]fileconsumer.SortRuleImpl'
+    kind: slice
 - name: include_file_name
   kind: bool
   default: true
@@ -38,6 +48,8 @@ fields:
 - name: max_concurrent_files
   kind: int
   default: 1024
+- name: max_batches
+  kind: int
 - name: delete_after_read
   kind: bool
   default: false
@@ -60,6 +72,28 @@ fields:
   - name: line_end_pattern
     kind: string
     default: ""
+- name: preserve_leading_whitespaces
+  kind: bool
+  default: false
+- name: preserve_trailing_whitespaces
+  kind: bool
+  default: false
+- name: header
+  type: '*fileconsumer.HeaderConfig'
+  kind: ptr
+  fields:
+  - name: pattern
+    kind: string
+    default: ""
+  - name: metadata_operators
+    type: '[]operator.Config'
+    kind: slice
+    doc: |
+      Config is the configuration of an operator
+    fields:
+    - name: builder
+      type: operator.Builder
+      kind: interface
 - name: storage
   type: '*component.ID'
   kind: ptr

@@ -7,6 +7,13 @@ fields:
   default: ""
   doc: |
     DSN to report transaction to Sentry. If the DSN is not set, no trace will be sent to Sentry.
+- name: environment
+  kind: string
+  default: ""
+  doc: |
+    The deployment environment name, such as production or staging.
+    Environments are case sensitive. The environment name can't contain newlines, spaces or forward slashes,
+    can't be the string "None", or exceed 64 characters.
 - name: insecure_skip_verify
   kind: bool
   default: false

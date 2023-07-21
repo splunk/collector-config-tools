@@ -6,6 +6,10 @@ fields:
   type: time.Duration
   kind: int64
   default: 1m0s
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
 - name: root_path
   kind: string
   default: ""

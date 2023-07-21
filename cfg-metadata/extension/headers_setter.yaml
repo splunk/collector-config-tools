@@ -4,6 +4,10 @@ fields:
   type: '[]headerssetterextension.HeaderConfig'
   kind: slice
   fields:
+  - name: action
+    type: headerssetterextension.actionValue
+    kind: string
+    default: ""
   - name: key
     type: '*string'
     kind: ptr

@@ -1,0 +1,161 @@
+type: '*purefbreceiver.Config'
+doc: |
+  Config relating to Array Metric Scraper.
+fields:
+- name: endpoint
+  kind: string
+  default: ""
+- name: tls
+  type: configtls.TLSClientSetting
+  kind: struct
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+  - name: ca_pem
+    type: configopaque.String
+    kind: string
+    default: ""
+  - name: cert_file
+    kind: string
+    default: ""
+  - name: cert_pem
+    type: configopaque.String
+    kind: string
+    default: ""
+  - name: key_file
+    kind: string
+    default: ""
+  - name: key_pem
+    type: configopaque.String
+    kind: string
+    default: ""
+  - name: min_version
+    kind: string
+    default: ""
+  - name: max_version
+    kind: string
+    default: ""
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+  - name: insecure
+    kind: bool
+    default: false
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+  - name: server_name_override
+    kind: string
+    default: ""
+- name: read_buffer_size
+  kind: int
+- name: write_buffer_size
+  kind: int
+- name: timeout
+  type: time.Duration
+  kind: int64
+- name: headers
+  type: map[string]configopaque.String
+  kind: map
+- name: customroundtripper
+  type: func(http.RoundTripper) (http.RoundTripper, error)
+  kind: func
+- name: auth
+  type: '*configauth.Authentication'
+  kind: ptr
+  fields:
+  - name: authenticator
+    type: component.ID
+    kind: struct
+- name: compression
+  type: configcompression.CompressionType
+  kind: string
+  default: ""
+- name: max_idle_conns
+  type: '*int'
+  kind: ptr
+- name: max_idle_conns_per_host
+  type: '*int'
+  kind: ptr
+- name: max_conns_per_host
+  type: '*int'
+  kind: ptr
+- name: idle_conn_timeout
+  type: '*time.Duration'
+  kind: ptr
+- name: settings
+  type: '*purefbreceiver.Settings'
+  kind: ptr
+  doc: |
+    Settings contains settings for the individual scrapers
+  fields:
+  - name: reload_intervals
+    type: '*purefbreceiver.ReloadIntervals'
+    kind: ptr
+    fields:
+    - name: array
+      type: time.Duration
+      kind: int64
+      default: 15s
+    - name: clients
+      type: time.Duration
+      kind: int64
+      default: 5m0s
+    - name: usage
+      type: time.Duration
+      kind: int64
+      default: 5m0s
+- name: arrays
+  type: '[]internal.ScraperConfig'
+  kind: slice
+  doc: |
+    Arrays represents the list of arrays to query
+  fields:
+  - name: address
+    kind: string
+    default: ""
+  - name: auth
+    type: configauth.Authentication
+    kind: struct
+    fields:
+    - name: authenticator
+      type: component.ID
+      kind: struct
+- name: clients
+  type: '[]internal.ScraperConfig'
+  kind: slice
+  doc: |
+    Clients represents the list of clients metrics
+  fields:
+  - name: address
+    kind: string
+    default: ""
+  - name: auth
+    type: configauth.Authentication
+    kind: struct
+    fields:
+    - name: authenticator
+      type: component.ID
+      kind: struct
+- name: usage
+  type: '[]internal.ScraperConfig'
+  kind: slice
+  doc: |
+    Usage represents the list of usage to query
+  fields:
+  - name: address
+    kind: string
+    default: ""
+  - name: auth
+    type: configauth.Authentication
+    kind: struct
+    fields:
+    - name: authenticator
+      type: component.ID
+      kind: struct
+- name: env
+  kind: string
+  default: ""
+  doc: |
+    Env represents the respective environment value valid to scrape

@@ -1,0 +1,31 @@
+type: '*cassandraexporter.Config'
+fields:
+- name: dsn
+  kind: string
+  default: 127.0.0.1
+- name: keyspace
+  kind: string
+  default: otel
+- name: trace_table
+  kind: string
+  default: otel_spans
+- name: logs_table
+  kind: string
+  default: otel_logs
+- name: replication
+  type: cassandraexporter.Replication
+  kind: struct
+  fields:
+  - name: class
+    kind: string
+    default: SimpleStrategy
+  - name: replication_factor
+    kind: int
+    default: 1
+- name: compression
+  type: cassandraexporter.Compression
+  kind: struct
+  fields:
+  - name: algorithm
+    kind: string
+    default: LZ4Compressor

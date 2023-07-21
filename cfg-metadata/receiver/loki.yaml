@@ -1,0 +1,190 @@
+type: '*lokireceiver.Config'
+doc: |
+  Config defines configuration for the lokireceiver receiver.
+fields:
+- name: protocols
+  type: lokireceiver.Protocols
+  kind: struct
+  doc: |
+    Protocols is the configuration for the supported protocols, currently gRPC and HTTP (Proto and JSON).
+  fields:
+  - name: grpc
+    type: '*configgrpc.GRPCServerSettings'
+    kind: ptr
+    fields:
+    - name: endpoint
+      kind: string
+      default: 0.0.0.0:3600
+    - name: transport
+      kind: string
+      default: tcp
+    - name: tls
+      type: '*configtls.TLSServerSetting'
+      kind: ptr
+      fields:
+      - name: ca_file
+        kind: string
+        default: ""
+      - name: ca_pem
+        type: configopaque.String
+        kind: string
+        default: ""
+      - name: cert_file
+        kind: string
+        default: ""
+      - name: cert_pem
+        type: configopaque.String
+        kind: string
+        default: ""
+      - name: key_file
+        kind: string
+        default: ""
+      - name: key_pem
+        type: configopaque.String
+        kind: string
+        default: ""
+      - name: min_version
+        kind: string
+        default: ""
+      - name: max_version
+        kind: string
+        default: ""
+      - name: reload_interval
+        type: time.Duration
+        kind: int64
+      - name: client_ca_file
+        kind: string
+        default: ""
+      - name: client_ca_file_reload
+        kind: bool
+        default: false
+    - name: max_recv_msg_size_mib
+      kind: uint64
+      default: 0
+    - name: max_concurrent_streams
+      kind: uint32
+      default: 0
+    - name: read_buffer_size
+      kind: int
+    - name: write_buffer_size
+      kind: int
+    - name: keepalive
+      type: '*configgrpc.KeepaliveServerConfig'
+      kind: ptr
+      fields:
+      - name: server_parameters
+        type: '*configgrpc.KeepaliveServerParameters'
+        kind: ptr
+        fields:
+        - name: max_connection_idle
+          type: time.Duration
+          kind: int64
+        - name: max_connection_age
+          type: time.Duration
+          kind: int64
+        - name: max_connection_age_grace
+          type: time.Duration
+          kind: int64
+        - name: time
+          type: time.Duration
+          kind: int64
+        - name: timeout
+          type: time.Duration
+          kind: int64
+      - name: enforcement_policy
+        type: '*configgrpc.KeepaliveEnforcementPolicy'
+        kind: ptr
+        fields:
+        - name: min_time
+          type: time.Duration
+          kind: int64
+        - name: permit_without_stream
+          kind: bool
+          default: false
+    - name: auth
+      type: '*configauth.Authentication'
+      kind: ptr
+      fields:
+      - name: authenticator
+        type: component.ID
+        kind: struct
+    - name: include_metadata
+      kind: bool
+      default: false
+  - name: http
+    type: '*confighttp.HTTPServerSettings'
+    kind: ptr
+    fields:
+    - name: endpoint
+      kind: string
+      default: 0.0.0.0:3500
+    - name: tls
+      type: '*configtls.TLSServerSetting'
+      kind: ptr
+      fields:
+      - name: ca_file
+        kind: string
+        default: ""
+      - name: ca_pem
+        type: configopaque.String
+        kind: string
+        default: ""
+      - name: cert_file
+        kind: string
+        default: ""
+      - name: cert_pem
+        type: configopaque.String
+        kind: string
+        default: ""
+      - name: key_file
+        kind: string
+        default: ""
+      - name: key_pem
+        type: configopaque.String
+        kind: string
+        default: ""
+      - name: min_version
+        kind: string
+        default: ""
+      - name: max_version
+        kind: string
+        default: ""
+      - name: reload_interval
+        type: time.Duration
+        kind: int64
+      - name: client_ca_file
+        kind: string
+        default: ""
+      - name: client_ca_file_reload
+        kind: bool
+        default: false
+    - name: cors
+      type: '*confighttp.CORSSettings'
+      kind: ptr
+      fields:
+      - name: allowed_origins
+        type: '[]string'
+        kind: slice
+      - name: allowed_headers
+        type: '[]string'
+        kind: slice
+      - name: max_age
+        kind: int
+    - name: auth
+      type: '*configauth.Authentication'
+      kind: ptr
+      fields:
+      - name: authenticator
+        type: component.ID
+        kind: struct
+    - name: max_request_body_size
+      kind: int64
+    - name: include_metadata
+      kind: bool
+      default: false
+    - name: response_headers
+      type: map[string]configopaque.String
+      kind: map
+- name: use_incoming_timestamp
+  kind: bool
+  default: false

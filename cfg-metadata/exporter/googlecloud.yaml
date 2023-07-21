@@ -2,21 +2,6 @@ type: '*googlecloudexporter.Config'
 doc: |
   Config defines configuration for Google Cloud exporter.
 fields:
-- name: impersonate
-  type: collector.ImpersonateConfig
-  kind: struct
-  doc: |
-    ImpersonateConfig defines configuration for service account impersonation
-  fields:
-  - name: target_principal
-    kind: string
-    default: ""
-  - name: subject
-    kind: string
-    default: ""
-  - name: delegates
-    type: '[]string'
-    kind: slice
 - name: project
   kind: string
   default: ""
@@ -27,6 +12,21 @@ fields:
 - name: user_agent
   kind: string
   default: opentelemetry-collector-contrib {{version}}
+- name: impersonate
+  type: collector.ImpersonateConfig
+  kind: struct
+  doc: |
+    ImpersonateConfig defines configuration for service account impersonation.
+  fields:
+  - name: target_principal
+    kind: string
+    default: ""
+  - name: subject
+    kind: string
+    default: ""
+  - name: delegates
+    type: '[]string'
+    kind: slice
 - name: trace
   type: collector.TraceConfig
   kind: struct
@@ -56,10 +56,19 @@ fields:
       GetClientOptions returns additional options to be passed
       to the underlying Google Cloud API client.
       Must be set programmatically (no support via declarative config).
+      If GetClientOptions returns any options, the exporter will not add the
+      default credentials, as those could conflict with options provided via
+      GetClientOptions.
       Optional.
   - name: endpoint
     kind: string
     default: ""
+  - name: compression
+    kind: string
+    default: ""
+    doc: |
+      Compression specifies the compression format for Metrics and Logging gRPC requests.
+      Supported values: gzip.
   - name: use_insecure
     kind: bool
     default: false
@@ -104,10 +113,19 @@ fields:
       GetClientOptions returns additional options to be passed
       to the underlying Google Cloud API client.
       Must be set programmatically (no support via declarative config).
+      If GetClientOptions returns any options, the exporter will not add the
+      default credentials, as those could conflict with options provided via
+      GetClientOptions.
       Optional.
   - name: endpoint
     kind: string
     default: ""
+  - name: compression
+    kind: string
+    default: ""
+    doc: |
+      Compression specifies the compression format for Metrics and Logging gRPC requests.
+      Supported values: gzip.
   - name: use_insecure
     kind: bool
     default: false
@@ -117,18 +135,17 @@ fields:
     kind: int
     doc: |
       GRPCPoolSize sets the size of the connection pool in the GCP client
+  - name: service_resource_labels
+    kind: bool
+    default: true
+    doc: |
+      ServiceResourceLabels, if true, causes the exporter to copy OTel's
+      service.name, service.namespace, and service.instance.id resource attributes into the Cloud Logging LogEntry labels.
+      Disabling this option does not prevent resource_filters from adding those labels. Default is true.
 - name: metric
   type: collector.MetricConfig
   kind: struct
   fields:
-  - name: getmetricname
-    type: func(string, pmetric.Metric) (string, error)
-    kind: func
-    doc: |
-      GetMetricName is not settable in config files, but can be used by other
-      exporters which extend the functionality of this exporter. It allows
-      customizing the naming of metrics. baseName already includes type
-      suffixes for summary metrics, but does not (yet) include the domain prefix
   - name: mapmonitoredresource
     type: func(pcommon.Resource) *monitoredres.MonitoredResource
     kind: func
@@ -137,6 +154,36 @@ fields:
       can be used by other exporters to extend the functionality of this
       exporter. It allows overriding the function used to map otel resource to
       monitored resource.
+  - name: extrametrics
+    type: func(pmetric.Metrics) pmetric.ResourceMetricsSlice
+    kind: func
+    doc: |
+      ExtraMetrics is an extension point for exporters to add to the set
+      of ResourceMetrics during a call to PushMetrics.
+  - name: getmetricname
+    type: func(string, pmetric.Metric) (string, error)
+    kind: func
+    doc: |
+      GetMetricName is not settable in config files, but can be used by other
+      exporters which extend the functionality of this exporter. It allows
+      customizing the naming of metrics. baseName already includes type
+      suffixes for summary metrics, but does not (yet) include the domain prefix
+  - name: experimental_wal_config
+    type: '*collector.WALConfig'
+    kind: ptr
+    doc: |
+      WALConfig holds configuration settings for the write ahead log.
+    fields:
+    - name: directory
+      kind: string
+      default: ""
+      doc: |
+        Directory is the location to store WAL files.
+    - name: max_backoff
+      type: time.Duration
+      kind: int64
+      doc: |
+        MaxBackoff sets the length of time to exponentially re-try failed exports.
   - name: prefix
     kind: string
     default: workload.googleapis.com
@@ -172,10 +219,19 @@ fields:
       GetClientOptions returns additional options to be passed
       to the underlying Google Cloud API client.
       Must be set programmatically (no support via declarative config).
+      If GetClientOptions returns any options, the exporter will not add the
+      default credentials, as those could conflict with options provided via
+      GetClientOptions.
       Optional.
   - name: endpoint
     kind: string
     default: ""
+  - name: compression
+    kind: string
+    default: ""
+    doc: |
+      Compression specifies the compression format for Metrics and Logging gRPC requests.
+      Supported values: gzip.
   - name: use_insecure
     kind: bool
     default: false
@@ -230,68 +286,49 @@ fields:
       EnableSumOfSquaredDeviation enables calculation of an estimated sum of squared
       deviation.  It isn't correct, so we don't send it by default, and don't expose
       it to users. For some uses, it is expected, however.
+- name: destination_project_quota
+  kind: bool
+  default: false
 - name: timeout
   type: time.Duration
   kind: int64
   default: 12s
-  doc: |
-    Timeout is the timeout for every attempt to send data to the backend.
 - name: sending_queue
   type: exporterhelper.QueueSettings
   kind: struct
-  doc: |
-    QueueSettings defines configuration for queueing batches before sending to the consumerSender.
   fields:
   - name: enabled
     kind: bool
     default: true
-    doc: |
-      Enabled indicates whether to not enqueue batches before sending to the consumerSender.
   - name: num_consumers
     kind: int
     default: 10
-    doc: |
-      NumConsumers is the number of consumers from the queue.
   - name: queue_size
     kind: int
-    default: 5000
-    doc: |
-      QueueSize is the maximum number of batches allowed in queue at a given time.
+    default: 1000
   - name: storage
     type: '*component.ID'
     kind: ptr
-    doc: |
-      StorageID if not empty, enables the persistent storage and uses the component specified
-      as a storage extension for the persistent queue
 - name: retry_on_failure
   type: exporterhelper.RetrySettings
   kind: struct
-  doc: |
-    RetrySettings defines configuration for retrying batches in case of export failure.
-    The current supported strategy is exponential backoff.
   fields:
   - name: enabled
     kind: bool
-    default: true
-    doc: |
-      Enabled indicates whether to not retry sending batches in case of export failure.
+    default: false
   - name: initial_interval
     type: time.Duration
     kind: int64
     default: 5s
-    doc: |
-      InitialInterval the time to wait after the first failure before retrying.
+  - name: randomization_factor
+    kind: float64
+  - name: multiplier
+    kind: float64
   - name: max_interval
     type: time.Duration
     kind: int64
     default: 30s
-    doc: |
-      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
-      consecutive retries will always be `MaxInterval`.
   - name: max_elapsed_time
     type: time.Duration
     kind: int64
     default: 5m0s
-    doc: |
-      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
-      Once this value is reached, the data is discarded.

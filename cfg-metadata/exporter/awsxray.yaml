@@ -68,3 +68,41 @@ fields:
 - name: aws_log_groups
   type: '[]string'
   kind: slice
+- name: telemetry
+  type: telemetry.Config
+  kind: struct
+  doc: |
+    TelemetryConfig contains the options for telemetry collection.
+  fields:
+  - name: enabled
+    kind: bool
+    default: false
+    doc: |
+      Enabled determines whether any telemetry should be recorded.
+  - name: include_metadata
+    kind: bool
+    default: false
+    doc: |
+      IncludeMetadata determines whether metadata (instance ID, hostname, resourceARN)
+      should be included in the telemetry.
+  - name: contributors
+    type: '[]component.ID'
+    kind: slice
+    doc: |
+      Contributors can be used to explicitly define which X-Ray components are contributing to the telemetry.
+      If omitted, only X-Ray components with the same component.ID as the setup component will have access.
+  - name: hostname
+    kind: string
+    default: ""
+    doc: |
+      Hostname can be used to explicitly define the hostname associated with the telemetry.
+  - name: instance_id
+    kind: string
+    default: ""
+    doc: |
+      InstanceID can be used to explicitly define the instance ID associated with the telemetry.
+  - name: resource_arn
+    kind: string
+    default: ""
+    doc: |
+      ResourceARN can be used to explicitly define the resource ARN associated with the telemetry.

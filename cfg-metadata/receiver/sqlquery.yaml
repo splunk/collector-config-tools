@@ -4,6 +4,10 @@ fields:
   type: time.Duration
   kind: int64
   default: 10s
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
 - name: driver
   kind: string
   default: ""
@@ -54,3 +58,25 @@ fields:
     - name: static_attributes
       type: map[string]string
       kind: map
+    - name: start_ts_column
+      kind: string
+      default: ""
+    - name: ts_column
+      kind: string
+      default: ""
+  - name: logs
+    type: '[]sqlqueryreceiver.LogsCfg'
+    kind: slice
+    fields:
+    - name: body_column
+      kind: string
+      default: ""
+  - name: tracking_column
+    kind: string
+    default: ""
+  - name: tracking_start_value
+    kind: string
+    default: ""
+- name: storage
+  type: '*component.ID'
+  kind: ptr

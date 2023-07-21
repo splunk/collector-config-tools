@@ -37,8 +37,6 @@ fields:
     type: time.Duration
     kind: int64
     default: 5s
-    doc: |
-      Timeout is the timeout for every attempt to send data to the backend.
   - name: headers
     type: map[string]string
     kind: map

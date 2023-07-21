@@ -5,35 +5,26 @@ fields:
 - name: retry_on_failure
   type: exporterhelper.RetrySettings
   kind: struct
-  doc: |
-    RetrySettings defines configuration for retrying batches in case of export failure.
-    The current supported strategy is exponential backoff.
   fields:
   - name: enabled
     kind: bool
     default: true
-    doc: |
-      Enabled indicates whether to not retry sending batches in case of export failure.
   - name: initial_interval
     type: time.Duration
     kind: int64
     default: 5s
-    doc: |
-      InitialInterval the time to wait after the first failure before retrying.
+  - name: randomization_factor
+    kind: float64
+  - name: multiplier
+    kind: float64
   - name: max_interval
     type: time.Duration
     kind: int64
     default: 30s
-    doc: |
-      MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
-      consecutive retries will always be `MaxInterval`.
   - name: max_elapsed_time
     type: time.Duration
     kind: int64
     default: 5m0s
-    doc: |
-      MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
-      Once this value is reached, the data is discarded.
 - name: log_group_name
   kind: string
   default: ""
@@ -59,6 +50,13 @@ fields:
   doc: |
     LogRetention is the option to set the log retention policy for the CloudWatch Log Group. Defaults to Never Expire if not specified or set to 0
     Possible values are 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 2192, 2557, 2922, 3288, or 3653
+- name: tags
+  type: map[string]*string
+  kind: map
+  doc: |
+    Tags is the option to set tags for the CloudWatch Log Group.  If specified, please add add at least 1 and at most 50 tags.  Input is a string to string map like so: { 'key': 'value' }
+    Keys must be between 1-128 characters and follow the regex pattern: ^([\p{L}\p{Z}\p{N}_.:/=+\-@]+)$
+    Values must be between 1-256 characters and follow the regex pattern: ^([\p{L}\p{Z}\p{N}_.:/=+\-@]*)$
 - name: sending_queue
   type: awscloudwatchlogsexporter.QueueSettings
   kind: struct
@@ -68,7 +66,7 @@ fields:
   fields:
   - name: queue_size
     kind: int
-    default: 5000
+    default: 1000
     doc: |
       QueueSize set the length of the sending queue
 - name: num_workers
@@ -121,3 +119,9 @@ fields:
   default: ""
   doc: |
     IAM role to upload segments to a different account.
+- name: raw_log
+  kind: bool
+  default: false
+  doc: |
+    Export raw log string instead of log wrapper
+    Required for emf logs

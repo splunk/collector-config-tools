@@ -19,7 +19,7 @@ fields:
     MetricFilters filters by Metric properties.
   fields:
   - name: include
-    type: '*filtermetric.MatchProperties'
+    type: '*filterconfig.MetricMatchProperties'
     kind: ptr
     doc: |
       Include match properties describe metrics that should be included in the Collector Service pipeline,
@@ -27,7 +27,7 @@ fields:
       If both Include and Exclude are specified, Include filtering occurs first.
     fields:
     - name: match_type
-      type: filtermetric.MatchType
+      type: filterconfig.MetricMatchType
       kind: string
       default: ""
       doc: |
@@ -36,7 +36,7 @@ fields:
       type: '*regexp.Config'
       kind: ptr
       doc: |
-        RegexpConfig specifies options for the Regexp match type
+        RegexpConfig specifies options for the MetricRegexp match type
       fields:
       - name: cacheenabled
         kind: bool
@@ -80,7 +80,7 @@ fields:
           Values specifies the value to match against.
           If it is not set, any value will match.
   - name: exclude
-    type: '*filtermetric.MatchProperties'
+    type: '*filterconfig.MetricMatchProperties'
     kind: ptr
     doc: |
       Exclude match properties describe metrics that should be excluded from the Collector Service pipeline,
@@ -88,7 +88,7 @@ fields:
       If both Include and Exclude are specified, Include filtering occurs first.
     fields:
     - name: match_type
-      type: filtermetric.MatchType
+      type: filterconfig.MetricMatchType
       kind: string
       default: ""
       doc: |
@@ -97,7 +97,7 @@ fields:
       type: '*regexp.Config'
       kind: ptr
       doc: |
-        RegexpConfig specifies options for the Regexp match type
+        RegexpConfig specifies options for the MetricRegexp match type
       fields:
       - name: cacheenabled
         kind: bool

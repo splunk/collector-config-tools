@@ -1,13 +1,13 @@
 type: '*googlecloudspannerreceiver.Config'
-doc: |
-  ScraperControllerSettings defines common settings for a scraper controller
-  configuration. Scraper controller receivers can embed this struct, instead
-  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration
   kind: int64
   default: 1m0s
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
 - name: top_metrics_query_max_rows
   kind: int
   default: 100
@@ -37,5 +37,8 @@ fields:
       type: '[]string'
       kind: slice
 - name: hide_topn_lockstats_rowrangestartkey
+  kind: bool
+  default: false
+- name: truncate_text
   kind: bool
   default: false

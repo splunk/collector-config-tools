@@ -1,6 +1,4 @@
 type: '*googlecloudpubsubreceiver.Config'
-doc: |
-  TimeoutSettings for timeout. The timeout applies to individual attempts to send data to the backend.
 fields:
 - name: project
   kind: string
@@ -25,8 +23,6 @@ fields:
 - name: timeout
   type: time.Duration
   kind: int64
-  doc: |
-    Timeout is the timeout for every attempt to send data to the backend.
 - name: subscription
   kind: string
   default: ""

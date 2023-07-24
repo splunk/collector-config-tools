@@ -12,7 +12,7 @@ fields:
   kind: int
   default: 1
   doc: |
-    NumWorkers is a number of workers processing event queue. Should be equal to physical processors number.
+    NumWorkers is a number of workers processing event queue.
     Default: 1.
 - name: wait_duration
   type: time.Duration

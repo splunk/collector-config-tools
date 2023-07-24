@@ -1,379 +1,364 @@
 type: '*mongodbreceiver.Config'
 doc: |
-  ScraperControllerSettings defines common settings for a scraper controller
-  configuration. Scraper controller receivers can embed this struct, instead
-  of receiver.Settings, and extend it with more fields if needed.
+  MetricsBuilderConfig is a configuration for mongodb metrics builder.
 fields:
 - name: collection_interval
   type: time.Duration
   kind: int64
   default: 1m0s
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
 - name: tls
   type: configtls.TLSClientSetting
   kind: struct
-  doc: |
-    TLSClientSetting contains TLS configurations that are specific to client
-    connections in addition to the common configurations. This should be used by
-    components configuring TLS client connections.
   fields:
   - name: ca_file
     kind: string
     default: ""
-    doc: |
-      Path to the CA cert. For a client this verifies the server certificate.
-      For a server this verifies client certificates. If empty uses system root CA.
-      (optional)
+  - name: ca_pem
+    type: configopaque.String
+    kind: string
+    default: ""
   - name: cert_file
     kind: string
     default: ""
-    doc: |
-      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: cert_pem
+    type: configopaque.String
+    kind: string
+    default: ""
   - name: key_file
     kind: string
     default: ""
-    doc: |
-      Path to the TLS key to use for TLS required connections. (optional)
+  - name: key_pem
+    type: configopaque.String
+    kind: string
+    default: ""
   - name: min_version
     kind: string
     default: ""
-    doc: |
-      MinVersion sets the minimum TLS version that is acceptable.
-      If not set, TLS 1.2 will be used. (optional)
   - name: max_version
     kind: string
     default: ""
-    doc: |
-      MaxVersion sets the maximum TLS version that is acceptable.
-      If not set, refer to crypto/tls for defaults. (optional)
   - name: reload_interval
     type: time.Duration
     kind: int64
-    doc: |
-      ReloadInterval specifies the duration after which the certificate will be reloaded
-      If not set, it will never be reloaded (optional)
   - name: insecure
     kind: bool
     default: false
-    doc: |
-      In gRPC when set to true, this is used to disable the client transport security.
-      See https://godoc.org/google.golang.org/grpc#WithInsecure.
-      In HTTP, this disables verifying the server's certificate chain and host name
-      (InsecureSkipVerify in the tls Config). Please refer to
-      https://godoc.org/crypto/tls#Config for more information.
-      (optional, default false)
   - name: insecure_skip_verify
     kind: bool
     default: false
-    doc: |
-      InsecureSkipVerify will enable TLS but not verify the certificate.
   - name: server_name_override
     kind: string
     default: ""
-    doc: |
-      ServerName requested by client for virtual hosting.
-      This sets the ServerName in the TLSConfig. Please refer to
-      https://godoc.org/crypto/tls#Config for more information. (optional)
 - name: metrics
-  type: metadata.MetricsSettings
+  type: metadata.MetricsConfig
   kind: struct
   doc: |
-    Metrics defines which metrics to enable for the scraper
+    MetricsConfig provides config for mongodb metrics.
   fields:
   - name: mongodb.cache.operations
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.collection.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.connection.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.cursor.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.cursor.timeout.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.data.size
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.database.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.document.operation.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.extent.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.global_lock.time
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.health
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: false
   - name: mongodb.index.access.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.index.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.index.size
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.lock.acquire.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: false
   - name: mongodb.lock.acquire.time
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: false
   - name: mongodb.lock.acquire.wait_count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: false
   - name: mongodb.lock.deadlock.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: false
   - name: mongodb.memory.usage
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.network.io.receive
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.network.io.transmit
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.network.request.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.object.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.operation.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.operation.latency.time
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: false
   - name: mongodb.operation.repl.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: false
   - name: mongodb.operation.time
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.session.count
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.storage.size
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: true
   - name: mongodb.uptime
-    type: metadata.MetricSettings
+    type: metadata.MetricConfig
     kind: struct
     doc: |
-      MetricSettings provides common settings for a particular metric.
+      MetricConfig provides common config for a particular metric.
     fields:
     - name: enabled
       kind: bool
       default: false
+- name: resource_attributes
+  type: metadata.ResourceAttributesConfig
+  kind: struct
+  doc: |
+    ResourceAttributesConfig provides config for mongodb resource attributes.
+  fields:
+  - name: database
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
 - name: hosts
   type: '[]confignet.NetAddr'
   kind: slice
-  doc: |
-    NetAddr represents a network endpoint address.
   fields:
   - name: endpoint
     kind: string
     default: ""
-    doc: |
-      Endpoint configures the address for this network connection.
-      For TCP and UDP networks, the address has the form "host:port". The host must be a literal IP address,
-      or a host name that can be resolved to IP addresses. The port must be a literal port number or a service name.
-      If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
-      "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
   - name: transport
     kind: string
     default: ""
-    doc: |
-      Transport to use. Known protocols are "tcp", "tcp4" (IPv4-only), "tcp6" (IPv6-only), "udp", "udp4" (IPv4-only),
-      "udp6" (IPv6-only), "ip", "ip4" (IPv4-only), "ip6" (IPv6-only), "unix", "unixgram" and "unixpacket".
 - name: username
   kind: string
   default: ""
 - name: password
+  type: configopaque.String
   kind: string
   default: ""
 - name: replica_set

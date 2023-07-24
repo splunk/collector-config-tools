@@ -10,3 +10,9 @@ fields:
 - name: send_batch_max_size
   kind: uint32
   default: 0
+- name: metadata_keys
+  type: '[]string'
+  kind: slice
+- name: metadata_cardinality_limit
+  kind: uint32
+  default: 1000

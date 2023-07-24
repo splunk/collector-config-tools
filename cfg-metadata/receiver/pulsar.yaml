@@ -50,11 +50,11 @@ fields:
     - name: key_file
       kind: string
       default: ""
-  - name: Token
+  - name: token
     type: '*pulsarreceiver.Token'
     kind: ptr
     fields:
-    - name: Token
+    - name: token
       kind: string
       default: ""
   - name: athenz

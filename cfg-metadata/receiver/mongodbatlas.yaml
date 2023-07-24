@@ -1,15 +1,20 @@
 type: '*mongodbatlasreceiver.Config'
 doc: |
-  MetricsBuilderConfig is a configuration for mongoatlasreceiver metrics builder.
+  MetricsBuilderConfig is a configuration for mongodbatlas metrics builder.
 fields:
 - name: collection_interval
   type: time.Duration
   kind: int64
   default: 3m0s
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
 - name: public_key
   kind: string
   default: ""
 - name: private_key
+  type: configopaque.String
   kind: string
   default: ""
 - name: granularity
@@ -19,7 +24,7 @@ fields:
   type: metadata.MetricsConfig
   kind: struct
   doc: |
-    MetricsConfig provides config for mongoatlasreceiver metrics.
+    MetricsConfig provides config for mongodbatlas metrics.
   fields:
   - name: mongodbatlas.db.counts
     type: metadata.MetricConfig
@@ -583,7 +588,7 @@ fields:
   type: metadata.ResourceAttributesConfig
   kind: struct
   doc: |
-    ResourceAttributesConfig provides config for mongoatlasreceiver resource attributes.
+    ResourceAttributesConfig provides config for mongodbatlas resource attributes.
   fields:
   - name: mongodb_atlas.cluster.name
     type: metadata.ResourceAttributeConfig
@@ -695,64 +700,49 @@ fields:
     kind: string
     default: ""
   - name: secret
+    type: configopaque.String
     kind: string
     default: ""
   - name: tls
     type: '*configtls.TLSServerSetting'
     kind: ptr
-    doc: |
-      TLSServerSetting contains TLS configurations that are specific to server
-      connections in addition to the common configurations. This should be used by
-      components configuring TLS server connections.
     fields:
     - name: ca_file
       kind: string
       default: ""
-      doc: |
-        Path to the CA cert. For a client this verifies the server certificate.
-        For a server this verifies client certificates. If empty uses system root CA.
-        (optional)
+    - name: ca_pem
+      type: configopaque.String
+      kind: string
+      default: ""
     - name: cert_file
       kind: string
       default: ""
-      doc: |
-        Path to the TLS cert to use for TLS required connections. (optional)
+    - name: cert_pem
+      type: configopaque.String
+      kind: string
+      default: ""
     - name: key_file
       kind: string
       default: ""
-      doc: |
-        Path to the TLS key to use for TLS required connections. (optional)
+    - name: key_pem
+      type: configopaque.String
+      kind: string
+      default: ""
     - name: min_version
       kind: string
       default: ""
-      doc: |
-        MinVersion sets the minimum TLS version that is acceptable.
-        If not set, TLS 1.2 will be used. (optional)
     - name: max_version
       kind: string
       default: ""
-      doc: |
-        MaxVersion sets the maximum TLS version that is acceptable.
-        If not set, refer to crypto/tls for defaults. (optional)
     - name: reload_interval
       type: time.Duration
       kind: int64
-      doc: |
-        ReloadInterval specifies the duration after which the certificate will be reloaded
-        If not set, it will never be reloaded (optional)
     - name: client_ca_file
       kind: string
       default: ""
-      doc: |
-        Path to the TLS cert to use by the server to verify a client certificate. (optional)
-        This sets the ClientCAs and ClientAuth to RequireAndVerifyClientCert in the TLSConfig. Please refer to
-        https://godoc.org/crypto/tls#Config for more information. (optional)
     - name: client_ca_file_reload
       kind: bool
       default: false
-      doc: |
-        Reload the ClientCAs file when it is modified
-        (optional, default false)
   - name: mode
     kind: string
     default: listen
@@ -771,9 +761,6 @@ fields:
     - name: include_clusters
       type: '[]string'
       kind: slice
-    - name: collect_audit_logs
-      kind: bool
-      default: false
   - name: poll_interval
     type: time.Duration
     kind: int64
@@ -803,9 +790,6 @@ fields:
     - name: include_clusters
       type: '[]string'
       kind: slice
-    - name: collect_audit_logs
-      kind: bool
-      default: false
   - name: organizations
     type: '[]*mongodbatlasreceiver.OrgConfig'
     kind: slice
@@ -831,7 +815,7 @@ fields:
     kind: bool
     default: false
   - name: projects
-    type: '[]*mongodbatlasreceiver.ProjectConfig'
+    type: '[]*mongodbatlasreceiver.LogsProjectConfig'
     kind: slice
     fields:
     - name: name
@@ -846,6 +830,26 @@ fields:
     - name: collect_audit_logs
       kind: bool
       default: false
+    - name: collect_host_logs
+      type: '*bool'
+      kind: ptr
+    - name: access_logs
+      type: '*mongodbatlasreceiver.AccessLogsConfig'
+      kind: ptr
+      fields:
+      - name: enabled
+        type: '*bool'
+        kind: ptr
+      - name: poll_interval
+        type: time.Duration
+        kind: int64
+      - name: page_size
+        kind: int64
+      - name: max_pages
+        kind: int64
+      - name: auth_result
+        type: '*bool'
+        kind: ptr
 - name: retry_on_failure
   type: exporterhelper.RetrySettings
   kind: struct

@@ -41,3 +41,20 @@ fields:
     default: 2s
     doc: |
       TTL is the time to live for items in the store.
+- name: cache_loop
+  type: time.Duration
+  kind: int64
+  default: 1m0s
+  doc: |
+    CacheLoop is the time to cleans the cache periodically.
+- name: store_expiration_loop
+  type: time.Duration
+  kind: int64
+  default: 2s
+  doc: |
+    CacheLoop is the time to expire old entries from the store periodically.
+- name: virtual_node_peer_attributes
+  type: '[]string'
+  kind: slice
+  doc: |
+    VirtualNodePeerAttributes the list of attributes need to match, the higher the front, the higher the priority.

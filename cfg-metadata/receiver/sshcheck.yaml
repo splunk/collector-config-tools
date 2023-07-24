@@ -1,0 +1,120 @@
+type: '*sshcheckreceiver.Config'
+doc: |
+  MetricsBuilderConfig is a configuration for sshcheck metrics builder.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
+- name: endpoint
+  kind: string
+  default: ""
+  doc: |
+    Endpoint is always required
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 10s
+- name: username
+  kind: string
+  default: ""
+  doc: |
+    authentication requires a Username and either a Password or KeyFile
+- name: password
+  kind: string
+  default: ""
+- name: key_file
+  kind: string
+  default: ""
+- name: known_hosts
+  kind: string
+  default: ""
+  doc: |
+    file path to the known_hosts
+- name: ignore_host_key
+  kind: bool
+  default: false
+  doc: |
+    IgnoreHostKey provides an insecure path to quickstarts and testing
+- name: check_sftp
+  kind: bool
+  default: false
+- name: metrics
+  type: metadata.MetricsConfig
+  kind: struct
+  doc: |
+    MetricsConfig provides config for sshcheck metrics.
+  fields:
+  - name: sshcheck.duration
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: sshcheck.error
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: sshcheck.sftp_duration
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: sshcheck.sftp_error
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: sshcheck.sftp_status
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: sshcheck.status
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+- name: resource_attributes
+  type: metadata.ResourceAttributesConfig
+  kind: struct
+  doc: |
+    ResourceAttributesConfig provides config for sshcheck resource attributes.
+  fields:
+  - name: ssh.endpoint
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false

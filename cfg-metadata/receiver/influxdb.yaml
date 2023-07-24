@@ -5,103 +5,70 @@ fields:
 - name: endpoint
   kind: string
   default: 0.0.0.0:8086
-  doc: |
-    Endpoint configures the listening address for the server.
 - name: tls
   type: '*configtls.TLSServerSetting'
   kind: ptr
-  doc: |
-    TLSSetting struct exposes TLS client configuration.
   fields:
   - name: ca_file
     kind: string
     default: ""
-    doc: |
-      Path to the CA cert. For a client this verifies the server certificate.
-      For a server this verifies client certificates. If empty uses system root CA.
-      (optional)
+  - name: ca_pem
+    type: configopaque.String
+    kind: string
+    default: ""
   - name: cert_file
     kind: string
     default: ""
-    doc: |
-      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: cert_pem
+    type: configopaque.String
+    kind: string
+    default: ""
   - name: key_file
     kind: string
     default: ""
-    doc: |
-      Path to the TLS key to use for TLS required connections. (optional)
+  - name: key_pem
+    type: configopaque.String
+    kind: string
+    default: ""
   - name: min_version
     kind: string
     default: ""
-    doc: |
-      MinVersion sets the minimum TLS version that is acceptable.
-      If not set, TLS 1.2 will be used. (optional)
   - name: max_version
     kind: string
     default: ""
-    doc: |
-      MaxVersion sets the maximum TLS version that is acceptable.
-      If not set, refer to crypto/tls for defaults. (optional)
   - name: reload_interval
     type: time.Duration
     kind: int64
-    doc: |
-      ReloadInterval specifies the duration after which the certificate will be reloaded
-      If not set, it will never be reloaded (optional)
   - name: client_ca_file
     kind: string
     default: ""
-    doc: |
-      Path to the TLS cert to use by the server to verify a client certificate. (optional)
-      This sets the ClientCAs and ClientAuth to RequireAndVerifyClientCert in the TLSConfig. Please refer to
-      https://godoc.org/crypto/tls#Config for more information. (optional)
+  - name: client_ca_file_reload
+    kind: bool
+    default: false
 - name: cors
   type: '*confighttp.CORSSettings'
   kind: ptr
-  doc: |
-    CORS configures the server for HTTP cross-origin resource sharing (CORS).
   fields:
   - name: allowed_origins
     type: '[]string'
     kind: slice
-    doc: |
-      AllowedOrigins sets the allowed values of the Origin header for
-      HTTP/JSON requests to an OTLP receiver. An origin may contain a
-      wildcard (*) to replace 0 or more characters (e.g.,
-      "http://*.domain.com", or "*" to allow any origin).
   - name: allowed_headers
     type: '[]string'
     kind: slice
-    doc: |
-      AllowedHeaders sets what headers will be allowed in CORS requests.
-      The Accept, Accept-Language, Content-Type, and Content-Language
-      headers are implicitly allowed. If no headers are listed,
-      X-Requested-With will also be accepted by default. Include "*" to
-      allow any request header.
   - name: max_age
     kind: int
-    doc: |
-      MaxAge sets the value of the Access-Control-Max-Age response header.
-      Set it to the number of seconds that browsers should cache a CORS
-      preflight response for.
 - name: auth
   type: '*configauth.Authentication'
   kind: ptr
-  doc: |
-    Auth for this receiver
   fields:
   - name: authenticator
     type: component.ID
     kind: struct
-    doc: |
-      AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
 - name: max_request_body_size
   kind: int64
-  doc: |
-    MaxRequestBodySize sets the maximum request body size in bytes
 - name: include_metadata
   kind: bool
   default: false
-  doc: |
-    IncludeMetadata propagates the client metadata from the incoming requests to the downstream consumers
-    Experimental: *NOTE* this option is subject to change or removal in the future.
+- name: response_headers
+  type: map[string]configopaque.String
+  kind: map

@@ -195,68 +195,46 @@ fields:
   - name: tls
     type: '*configtls.TLSClientSetting'
     kind: ptr
-    doc: |
-      TLSClientSetting contains TLS configurations that are specific to client
-      connections in addition to the common configurations. This should be used by
-      components configuring TLS client connections.
     fields:
     - name: ca_file
       kind: string
       default: ""
-      doc: |
-        Path to the CA cert. For a client this verifies the server certificate.
-        For a server this verifies client certificates. If empty uses system root CA.
-        (optional)
+    - name: ca_pem
+      type: configopaque.String
+      kind: string
+      default: ""
     - name: cert_file
       kind: string
       default: ""
-      doc: |
-        Path to the TLS cert to use for TLS required connections. (optional)
+    - name: cert_pem
+      type: configopaque.String
+      kind: string
+      default: ""
     - name: key_file
       kind: string
       default: ""
-      doc: |
-        Path to the TLS key to use for TLS required connections. (optional)
+    - name: key_pem
+      type: configopaque.String
+      kind: string
+      default: ""
     - name: min_version
       kind: string
       default: ""
-      doc: |
-        MinVersion sets the minimum TLS version that is acceptable.
-        If not set, TLS 1.2 will be used. (optional)
     - name: max_version
       kind: string
       default: ""
-      doc: |
-        MaxVersion sets the maximum TLS version that is acceptable.
-        If not set, refer to crypto/tls for defaults. (optional)
     - name: reload_interval
       type: time.Duration
       kind: int64
-      doc: |
-        ReloadInterval specifies the duration after which the certificate will be reloaded
-        If not set, it will never be reloaded (optional)
     - name: insecure
       kind: bool
       default: false
-      doc: |
-        In gRPC when set to true, this is used to disable the client transport security.
-        See https://godoc.org/google.golang.org/grpc#WithInsecure.
-        In HTTP, this disables verifying the server's certificate chain and host name
-        (InsecureSkipVerify in the tls Config). Please refer to
-        https://godoc.org/crypto/tls#Config for more information.
-        (optional, default false)
     - name: insecure_skip_verify
       kind: bool
       default: false
-      doc: |
-        InsecureSkipVerify will enable TLS but not verify the certificate.
     - name: server_name_override
       kind: string
       default: ""
-      doc: |
-        ServerName requested by client for virtual hosting.
-        This sets the ServerName in the TLSConfig. Please refer to
-        https://godoc.org/crypto/tls#Config for more information. (optional)
   - name: kerberos
     type: '*kafkaexporter.KerberosConfig'
     kind: ptr

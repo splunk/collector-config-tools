@@ -1,0 +1,64 @@
+type: '*azuremonitorreceiver.Config'
+doc: |
+  Config defines the configuration for the various elements of the receiver agent.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10s
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
+- name: resource_attributes
+  type: metadata.ResourceAttributesSettings
+  kind: struct
+  doc: |
+    ResourceAttributesSettings provides settings for azuremonitorreceiver metrics.
+  fields:
+  - name: azuremonitor.subscription_id
+    type: metadata.ResourceAttributeSettings
+    kind: struct
+    doc: |
+      ResourceAttributeSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: azuremonitor.tenant_id
+    type: metadata.ResourceAttributeSettings
+    kind: struct
+    doc: |
+      ResourceAttributeSettings provides common settings for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+- name: subscription_id
+  kind: string
+  default: ""
+- name: tenant_id
+  kind: string
+  default: ""
+- name: client_id
+  kind: string
+  default: ""
+- name: client_secret
+  kind: string
+  default: ""
+- name: resource_groups
+  type: '[]string'
+  kind: slice
+- name: services
+  type: '[]string'
+  kind: slice
+- name: cache_resources
+  kind: float64
+- name: cache_resources_definitions
+  kind: float64
+- name: maximum_number_of_metrics_in_a_call
+  kind: int
+  default: 20
+- name: append_tags_as_attributes
+  kind: bool
+  default: false

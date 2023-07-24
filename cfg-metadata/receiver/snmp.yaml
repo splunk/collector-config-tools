@@ -6,6 +6,9 @@ fields:
   type: time.Duration
   kind: int64
   default: 10s
+- name: initial_delay
+  type: time.Duration
+  kind: int64
 - name: endpoint
   kind: string
   default: udp://localhost:161

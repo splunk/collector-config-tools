@@ -23,6 +23,16 @@ fields:
 - name: exclude
   type: '[]string'
   kind: slice
+- name: ordering_criteria
+  type: fileconsumer.OrderingCriteria
+  kind: struct
+  fields:
+  - name: regex
+    kind: string
+    default: ""
+  - name: sort_by
+    type: '[]fileconsumer.SortRuleImpl'
+    kind: slice
 - name: include_file_name
   kind: bool
   default: true

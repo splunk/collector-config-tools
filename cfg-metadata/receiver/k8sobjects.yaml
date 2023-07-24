@@ -37,3 +37,6 @@ fields:
   - name: interval
     type: time.Duration
     kind: int64
+  - name: resource_version
+    kind: string
+    default: ""

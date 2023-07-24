@@ -29,7 +29,13 @@ fields:
   kind: bool
   default: false
   doc: |
-    Disable GZip compression.
+    Disable compression. If set to true then Compression field is ignored.
+- name: compression
+  kind: string
+  default: ""
+  doc: |
+    Compression method to use (gzip or zstd). Ignored if DisableCompression=true.
+    If unspecified defaults to gzip.
 - name: log_detailed_response
   kind: bool
   default: false

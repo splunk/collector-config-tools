@@ -32,4 +32,4 @@ jobs:
       - name: Create pull request
         run: gh pr create -B main -H metadata-update-${{ steps.date.outputs.date }} --title 'Merge metadata-update-${{ steps.date.outputs.date }} into main' --body 'Automatic sync PR to update reference files from contrib'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}

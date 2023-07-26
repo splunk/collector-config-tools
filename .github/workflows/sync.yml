@@ -22,10 +22,13 @@ jobs:
           go-version: '1.20'
       - name: Checkout new branch
         run: git checkout -b metadata-update-${{ steps.date.outputs.date }}
-      - name: Download files from contrib
+      - name: Download settings from contrib
         run: |
           cd cfgschema
           go run .
+      - name: Download metrics from contrib
+        run: |
+          ./import_metric_metadata.sh
       - name: Create pull request
         run: gh pr create -B main -H metadata-update-${{ steps.date.outputs.date }} --title 'Merge metadata-update-${{ steps.date.outputs.date }} into main' --body 'Automatic sync PR to update reference files from contrib'
         env:

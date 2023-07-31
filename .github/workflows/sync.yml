@@ -29,6 +29,10 @@ jobs:
       - name: Download metrics from contrib
         run: |
           ./import_metric_metadata.sh
+      - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          default_author: github_actor
+          message: 'Metada update ${{ steps.date.outputs.date }}'
       - name: Create pull request
         run: gh pr create -B main -H metadata-update-${{ steps.date.outputs.date }} --title 'Merge metadata-update-${{ steps.date.outputs.date }} into main' --body 'Automatic sync PR to update reference files from contrib'
         env:

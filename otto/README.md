@@ -1,3 +1,5 @@
+# NOTE: This tool was a proof of concept and is here for historical/informational purposes only. It has been superseded by the [c3](../c3) tool in this repo. 
+
 # Collector Config Tool
 
 ## Overview

@@ -1,9 +1,8 @@
-type: text_encoding
+type: opamp
 
 status:
   class: extension
   stability:
     development: [extension]
-  distributions: []
   codeowners:
-    active: [MovieStoreGuy, atoulme]
+    active: [portertech, evan-bradley, tigrannajaryan]

@@ -20,7 +20,7 @@ fields:
   kind: int64
   default: 1s
   doc: |
-    Defines how long this receiver waits before starting..
+    Defines how long this receiver waits before starting.
 - name: collection_interval
   type: time.Duration
   kind: int64

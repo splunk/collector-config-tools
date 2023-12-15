@@ -15,6 +15,12 @@ fields:
   default: ""
   doc: |
     The target system for the metric gatherer whose built in groovy script to run.
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
+  doc: |
+    Defines how long this receiver waits before starting.
 - name: collection_interval
   type: time.Duration
   kind: int64

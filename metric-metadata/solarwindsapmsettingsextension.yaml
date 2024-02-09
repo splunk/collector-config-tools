@@ -1,4 +1,4 @@
-type: jaeger_encoding
+type: solarwindsapmsettings
 
 status:
   class: extension
@@ -6,7 +6,4 @@ status:
     development: [extension]
   distributions: []
   codeowners:
-    active: [MovieStoreGuy, atoulme]
-
-tests:
-  config:
+    active: [jerrytfleung, cheempz]

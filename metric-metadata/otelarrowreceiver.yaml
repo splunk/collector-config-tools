@@ -1,9 +1,9 @@
 type: otelarrow
 
 status:
-  class: exporter
+  class: receiver
   stability:
     development: [traces, metrics, logs]
-  distributions: []
+  distributions: [contrib]
   codeowners:
     active: [jmacd, moh-osman3]

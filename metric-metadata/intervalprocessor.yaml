@@ -1,12 +1,12 @@
-type: awscloudwatchmetrics
+type: interval
 
 status:
-  class: receiver
+  class: processor
   stability:
     development: [metrics]
   distributions: []
+  warnings: [Statefulness]
   codeowners:
-    active: [jpkrohling]
-
+    active: [RichieSams]
 tests:
   config:

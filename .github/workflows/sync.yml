@@ -2,7 +2,9 @@ name: Sync metadata from contrib
 
 on:
  workflow_dispatch:
- 
+ schedule:
+    - cron: "30 1 1,15 * *"
+
 permissions:
   contents: write
   pull-requests: write

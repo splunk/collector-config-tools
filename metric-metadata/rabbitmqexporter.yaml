@@ -1,5 +1,5 @@
-type: otelarrow
-scope_name: otelcol/otelarrow
+type: rabbitmq
+scope_name: otelcol/rabbitmq
 
 status:
   class: exporter
@@ -7,9 +7,9 @@ status:
     development: [traces, metrics, logs]
   distributions: []
   codeowners:
-    active: [jmacd, moh-osman3]
+    active: [swar8080]
 
-# TODO: Update the exporter to pass the tests
 tests:
   skip_lifecycle: true
-  skip_shutdown: true
+  skip_shutdown: false
+  expect_consumer_error: true

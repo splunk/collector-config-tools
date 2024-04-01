@@ -1,4 +1,5 @@
 type: datadog
+scope_name: otelcol/datadog
 
 status:
   class: connector
@@ -10,5 +11,3 @@ status:
     emeritus: [gbbr]
 
 tests:
-  skip_lifecycle: true
-  skip_shutdown: true

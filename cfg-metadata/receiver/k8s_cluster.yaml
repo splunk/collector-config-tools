@@ -21,13 +21,13 @@ fields:
   type: '[]string'
   kind: slice
   doc: |
-    Node condition types to report. See all condition types, see
+    Node condition types to report. For all condition types, see
     here: https://kubernetes.io/docs/concepts/architecture/nodes/#condition.
 - name: allocatable_types_to_report
   type: '[]string'
   kind: slice
   doc: |
-    Allocate resource types to report. See all resource types, see
+    Allocate resource types to report. For all resource types, see
     here: https://kubernetes.io/docs/concepts/architecture/nodes/#capacity
 - name: metadata_exporters
   type: '[]string'

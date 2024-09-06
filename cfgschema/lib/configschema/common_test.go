@@ -25,16 +25,16 @@ const DefaultModule = "github.com/open-telemetry/opentelemetry-collector-contrib
 
 // testStruct comment
 type testStruct struct {
-	PersonPtr    *testPerson                `mapstructure:"person_ptr"`
-	TLS          configtls.TLSClientSetting `mapstructure:"tls"`
-	One          string                     `mapstructure:"one"`
-	Squashed     testPerson                 `mapstructure:",squash"`
-	PersonStruct testPerson                 `mapstructure:"person_struct"`
-	Ignored      string                     `mapstructure:"-"`
-	Persons      []testPerson               `mapstructure:"persons"`
-	PersonPtrs   []*testPerson              `mapstructure:"person_ptrs"`
-	Two          int                        `mapstructure:"two"`
-	Three        uint                       `mapstructure:"three"`
+	PersonPtr    *testPerson            `mapstructure:"person_ptr"`
+	TLS          configtls.ClientConfig `mapstructure:"tls"`
+	One          string                 `mapstructure:"one"`
+	Squashed     testPerson             `mapstructure:",squash"`
+	PersonStruct testPerson             `mapstructure:"person_struct"`
+	Ignored      string                 `mapstructure:"-"`
+	Persons      []testPerson           `mapstructure:"persons"`
+	PersonPtrs   []*testPerson          `mapstructure:"person_ptrs"`
+	Two          int                    `mapstructure:"two"`
+	Three        uint                   `mapstructure:"three"`
 	// comment on an embedded field
 	time.Duration `mapstructure:"duration"`
 	Four          bool `mapstructure:"four"`

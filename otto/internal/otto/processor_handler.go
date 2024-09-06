@@ -42,7 +42,7 @@ func (h processorSocketHandler) doHandle(ws *websocket.Conn) error {
 		return err
 	}
 	processorConfig := h.processorFactory.CreateDefaultConfig()
-	err = unmarshalProcessorConfig(processorConfig, conf)
+	conf.Unmarshal(processorConfig, confmap.WithIgnoreUnused())
 	if err != nil {
 		return err
 	}
@@ -97,11 +97,4 @@ func (h processorSocketHandler) attachTracesProcessor(
 	h.pipeline.connectTracesProcessorWrapper(wrapper)
 	wrapper.waitForStopMessage()
 	h.pipeline.disconnectTracesProcessorWrapper()
-}
-
-func unmarshalProcessorConfig(processorConfig component.Config, conf *confmap.Conf) error {
-	if unmarshallable, ok := processorConfig.(confmap.Unmarshaler); ok {
-		return unmarshallable.Unmarshal(conf)
-	}
-	return component.UnmarshalConfig(conf, processorConfig)
 }

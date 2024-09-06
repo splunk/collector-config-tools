@@ -62,7 +62,7 @@ func Server(logger *log.Logger, addr string, factories otelcol.Factories) {
 func registerReceiverHandlers(logger *log.Logger, factories otelcol.Factories, handlers map[string]wsHandler, ppln *pipeline) {
 	for componentName, factory := range factories.Receivers {
 		const componentType = "receiver"
-		path := "/ws/" + componentType + "/" + string(componentName)
+		path := "/ws/" + componentType + "/" + componentName.String()
 		handlers[path] = receiverSocketHandler{
 			logger:          logger,
 			pipeline:        ppln,
@@ -74,7 +74,7 @@ func registerReceiverHandlers(logger *log.Logger, factories otelcol.Factories, h
 func registerProcessorHandlers(logger *log.Logger, factories otelcol.Factories, handlers map[string]wsHandler, ppln *pipeline) {
 	for componentName, factory := range factories.Processors {
 		const componentType = "processor"
-		path := "/ws/" + componentType + "/" + string(componentName)
+		path := "/ws/" + componentType + "/" + componentName.String()
 		handlers[path] = processorSocketHandler{
 			logger:           logger,
 			pipeline:         ppln,
@@ -86,7 +86,7 @@ func registerProcessorHandlers(logger *log.Logger, factories otelcol.Factories, 
 func registerExporterHandlers(logger *log.Logger, factories otelcol.Factories, handlers map[string]wsHandler, ppln *pipeline) {
 	for componentName, factory := range factories.Exporters {
 		const componentType = "exporter"
-		path := "/ws/" + componentType + "/" + string(componentName)
+		path := "/ws/" + componentType + "/" + componentName.String()
 		handlers[path] = exporterSocketHandler{
 			logger:          logger,
 			pipeline:        ppln,

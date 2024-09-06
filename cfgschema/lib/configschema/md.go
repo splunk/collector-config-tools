@@ -61,7 +61,7 @@ func writeMarkdown(tableTmpl *template.Template, ci cfgInfo, writeFile writeFile
 	if err != nil {
 		return fmt.Errorf("failed to read fields for type: %s: %w", ci.Type, err)
 	}
-	mdBytes := renderHeader(string(ci.Type), ci.Group, f.Doc)
+	mdBytes := renderHeader(ci.Type.String(), ci.Group, f.Doc)
 	f.Name = typeToName(f.Type)
 	tableBytes, err := renderTable(tableTmpl, f)
 	if err != nil {

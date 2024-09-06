@@ -36,7 +36,7 @@ func newMetricsReceiverWrapper(logger *log.Logger, ws *websocket.Conn, cfg compo
 	repeater := newMetricsRepeater(logger, ws)
 	rcvr, err := factory.CreateMetricsReceiver(
 		context.Background(),
-		receiver.CreateSettings{
+		receiver.Settings{
 			TelemetrySettings: componenttest.NewNopTelemetrySettings(),
 		},
 		cfg,
@@ -65,7 +65,7 @@ func newLogsReceiverWrapper(logger *log.Logger, ws *websocket.Conn, cfg componen
 	repeater := newLogsRepeater(logger, ws)
 	rcvr, err := factory.CreateLogsReceiver(
 		context.Background(),
-		receiver.CreateSettings{
+		receiver.Settings{
 			TelemetrySettings: componenttest.NewNopTelemetrySettings(),
 		},
 		cfg,
@@ -94,7 +94,7 @@ func newTracesReceiverWrapper(logger *log.Logger, ws *websocket.Conn, cfg compon
 	repeater := newTracesRepeater(logger, ws)
 	rcvr, err := factory.CreateTracesReceiver(
 		context.Background(),
-		receiver.CreateSettings{
+		receiver.Settings{
 			TelemetrySettings: componenttest.NewNopTelemetrySettings(),
 		},
 		cfg,
@@ -123,7 +123,7 @@ func newMetricsProcessorWrapper(logger *log.Logger, ws *websocket.Conn, cfg comp
 	repeater := newMetricsRepeater(logger, ws)
 	proc, err := factory.CreateMetricsProcessor(
 		context.Background(),
-		processor.CreateSettings{
+		processor.Settings{
 			TelemetrySettings: componenttest.NewNopTelemetrySettings(),
 		},
 		cfg,
@@ -152,7 +152,7 @@ func newLogsProcessorWrapper(logger *log.Logger, ws *websocket.Conn, cfg compone
 	repeater := newLogsRepeater(logger, ws)
 	proc, err := factory.CreateLogsProcessor(
 		context.Background(),
-		processor.CreateSettings{
+		processor.Settings{
 			TelemetrySettings: componenttest.NewNopTelemetrySettings(),
 		},
 		cfg,
@@ -181,7 +181,7 @@ func newTracesProcessorWrapper(logger *log.Logger, ws *websocket.Conn, cfg compo
 	repeater := newTracesRepeater(logger, ws)
 	proc, err := factory.CreateTracesProcessor(
 		context.Background(),
-		processor.CreateSettings{
+		processor.Settings{
 			TelemetrySettings: componenttest.NewNopTelemetrySettings(),
 		},
 		cfg,
@@ -210,7 +210,7 @@ func newMetricsExporterWrapper(logger *log.Logger, ws *websocket.Conn, cfg compo
 	repeater := newMetricsRepeater(logger, ws)
 	ex, err := factory.CreateMetricsExporter(
 		context.Background(),
-		exporter.CreateSettings{
+		exporter.Settings{
 			TelemetrySettings: componenttest.NewNopTelemetrySettings(),
 		},
 		cfg,
@@ -233,7 +233,7 @@ type logsExporterWrapper struct {
 func newLogsExporterWrapper(logger *log.Logger, ws *websocket.Conn, cfg component.Config, factory exporter.Factory) (logsExporterWrapper, error) {
 	ex, err := factory.CreateLogsExporter(
 		context.Background(),
-		exporter.CreateSettings{
+		exporter.Settings{
 			TelemetrySettings: componenttest.NewNopTelemetrySettings(),
 		},
 		cfg,
@@ -256,7 +256,7 @@ type tracesExporterWrapper struct {
 func newTracesExporterWrapper(logger *log.Logger, ws *websocket.Conn, cfg component.Config, factory exporter.Factory) (tracesExporterWrapper, error) {
 	ex, err := factory.CreateTracesExporter(
 		context.Background(),
-		exporter.CreateSettings{
+		exporter.Settings{
 			TelemetrySettings: componenttest.NewNopTelemetrySettings(),
 		},
 		cfg,

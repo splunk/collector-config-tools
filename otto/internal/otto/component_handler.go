@@ -67,13 +67,13 @@ func factoriesToComponentTypes(factories otelcol.Factories) componentTypes {
 	for name, factory := range factories.Receivers {
 		sp := receiverSupportedPipelines(factory)
 		if sp.metrics {
-			out.Metrics.Receivers = append(out.Metrics.Receivers, string(name))
+			out.Metrics.Receivers = append(out.Metrics.Receivers, name.String())
 		}
 		if sp.traces {
-			out.Traces.Receivers = append(out.Traces.Receivers, string(name))
+			out.Traces.Receivers = append(out.Traces.Receivers, name.String())
 		}
 		if sp.logs {
-			out.Logs.Receivers = append(out.Logs.Receivers, string(name))
+			out.Logs.Receivers = append(out.Logs.Receivers, name.String())
 		}
 	}
 	sort.Strings(out.Metrics.Receivers)
@@ -83,13 +83,13 @@ func factoriesToComponentTypes(factories otelcol.Factories) componentTypes {
 	for name, factory := range factories.Processors {
 		sp := processorSupportedPipelines(factory)
 		if sp.metrics {
-			out.Metrics.Processors = append(out.Metrics.Processors, string(name))
+			out.Metrics.Processors = append(out.Metrics.Processors, name.String())
 		}
 		if sp.traces {
-			out.Traces.Processors = append(out.Traces.Processors, string(name))
+			out.Traces.Processors = append(out.Traces.Processors, name.String())
 		}
 		if sp.logs {
-			out.Logs.Processors = append(out.Logs.Processors, string(name))
+			out.Logs.Processors = append(out.Logs.Processors, name.String())
 		}
 	}
 	sort.Strings(out.Metrics.Processors)
@@ -99,13 +99,13 @@ func factoriesToComponentTypes(factories otelcol.Factories) componentTypes {
 	for name, factory := range factories.Exporters {
 		sp := exporterSupportedPipelines(factory)
 		if sp.metrics {
-			out.Metrics.Exporters = append(out.Metrics.Exporters, string(name))
+			out.Metrics.Exporters = append(out.Metrics.Exporters, name.String())
 		}
 		if sp.traces {
-			out.Traces.Exporters = append(out.Traces.Exporters, string(name))
+			out.Traces.Exporters = append(out.Traces.Exporters, name.String())
 		}
 		if sp.logs {
-			out.Logs.Exporters = append(out.Logs.Exporters, string(name))
+			out.Logs.Exporters = append(out.Logs.Exporters, name.String())
 		}
 	}
 	sort.Strings(out.Metrics.Exporters)

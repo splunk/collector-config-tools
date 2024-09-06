@@ -44,7 +44,7 @@ func (h receiverSocketHandler) doHandle(ws *websocket.Conn) error {
 		return err
 	}
 	receiverConfig := h.receiverFactory.CreateDefaultConfig()
-	err = unmarshalReceiverConfig(receiverConfig, conf)
+	conf.Unmarshal(receiverConfig, confmap.WithIgnoreUnused())
 	if err != nil {
 		return err
 	}
@@ -129,11 +129,4 @@ func (h receiverSocketHandler) startTracesReceiver(
 		return
 	}
 	h.pipeline.disconnectTracesReceiverWrapper()
-}
-
-func unmarshalReceiverConfig(receiverConfig component.Config, conf *confmap.Conf) error {
-	if unmarshallable, ok := receiverConfig.(confmap.Unmarshaler); ok {
-		return unmarshallable.Unmarshal(conf)
-	}
-	return component.UnmarshalConfig(conf, receiverConfig)
 }

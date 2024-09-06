@@ -44,7 +44,8 @@ func (h exporterSocketHandler) doHandle(ws *websocket.Conn) error {
 		return err
 	}
 	exporterConfig := h.exporterFactory.CreateDefaultConfig()
-	err = unmarshalExporterConfig(exporterConfig, conf)
+	conf.Unmarshal(exporterConfig, confmap.WithIgnoreUnused())
+	//err = unmarshalExporterConfig(exporterConfig, conf)
 	if err != nil {
 		return err
 	}
@@ -129,11 +130,4 @@ func (h exporterSocketHandler) connectTracesExporter(
 		return
 	}
 	h.pipeline.disconnectTracesExporterWrapper()
-}
-
-func unmarshalExporterConfig(exporterConfig component.Config, conf *confmap.Conf) error {
-	if unmarshallable, ok := exporterConfig.(confmap.Unmarshaler); ok {
-		return unmarshallable.Unmarshal(conf)
-	}
-	return component.UnmarshalConfig(conf, exporterConfig)
 }

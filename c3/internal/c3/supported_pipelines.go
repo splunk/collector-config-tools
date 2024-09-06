@@ -56,7 +56,7 @@ func factoriesToComponentTypes(factories otelcol.Factories) components {
 	for name, factory := range factories.Receivers {
 		sp := receiverSupportedPipelines(factory)
 		c := component{
-			Name:    string(name),
+			Name:    name.String(),
 			Metrics: sp.metrics,
 			Traces:  sp.traces,
 			Logs:    sp.logs,
@@ -69,7 +69,7 @@ func factoriesToComponentTypes(factories otelcol.Factories) components {
 	for name, factory := range factories.Processors {
 		sp := processorSupportedPipelines(factory)
 		c := component{
-			Name:    string(name),
+			Name:    name.String(),
 			Metrics: sp.metrics,
 			Traces:  sp.traces,
 			Logs:    sp.logs,
@@ -82,7 +82,7 @@ func factoriesToComponentTypes(factories otelcol.Factories) components {
 	for name, factory := range factories.Exporters {
 		sp := exporterSupportedPipelines(factory)
 		c := component{
-			Name:    string(name),
+			Name:    name.String(),
 			Metrics: sp.metrics,
 			Traces:  sp.traces,
 			Logs:    sp.logs,

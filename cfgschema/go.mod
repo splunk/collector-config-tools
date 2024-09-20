@@ -1,6 +1,6 @@
 module github.com/splunk/collector-config-tools/cfgschema
 
-go 1.22.6
+go 1.23
 
 require (
 	cloud.google.com/go/auth v0.9.1 // indirect

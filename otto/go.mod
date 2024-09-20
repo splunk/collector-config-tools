@@ -1,6 +1,6 @@
 module github.com/splunk/collector-config-tools/otto
 
-go 1.22.6
+go 1.23
 
 require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.108.0

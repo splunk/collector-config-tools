@@ -9,49 +9,103 @@ fields:
   - name: endpoint
     kind: string
     default: https://localhost
+  - name: proxy_url
+    kind: string
+    default: ""
   - name: tls
-    type: configtls.TLSClientSetting
+    type: configtls.ClientConfig
     kind: struct
+    doc: |
+      ClientConfig contains TLS configurations that are specific to client
+      connections in addition to the common configurations. This should be used by
+      components configuring TLS client connections.
     fields:
     - name: ca_file
       kind: string
       default: ""
+      doc: |
+        Path to the CA cert. For a client this verifies the server certificate.
+        For a server this verifies client certificates. If empty uses system root CA.
+        (optional)
     - name: ca_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded cert. (optional)
+    - name: include_system_ca_certs_pool
+      kind: bool
+      default: false
+      doc: |
+        If true, load system CA certificates pool in addition to the certificates
+        configured in this struct.
     - name: cert_file
       kind: string
       default: ""
+      doc: |
+        Path to the TLS cert to use for TLS required connections. (optional)
     - name: cert_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded TLS cert to use for TLS required connections. (optional)
     - name: key_file
       kind: string
       default: ""
+      doc: |
+        Path to the TLS key to use for TLS required connections. (optional)
     - name: key_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded TLS key to use for TLS required connections. (optional)
     - name: min_version
       kind: string
       default: ""
+      doc: |
+        MinVersion sets the minimum TLS version that is acceptable.
+        If not set, TLS 1.2 will be used. (optional)
     - name: max_version
       kind: string
       default: ""
+      doc: |
+        MaxVersion sets the maximum TLS version that is acceptable.
+        If not set, refer to crypto/tls for defaults. (optional)
+    - name: cipher_suites
+      type: '[]string'
+      kind: slice
+      doc: |
+        CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+        If left blank, a safe default list is used.
+        See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
     - name: reload_interval
       type: time.Duration
       kind: int64
+      doc: |
+        ReloadInterval specifies the duration after which the certificate will be reloaded
+        If not set, it will never be reloaded (optional)
     - name: insecure
       kind: bool
       default: false
+      doc: |
+        In gRPC and HTTP when set to true, this is used to disable the client transport security.
+        See https://godoc.org/google.golang.org/grpc#WithInsecure for gRPC.
+        Please refer to https://godoc.org/crypto/tls#Config for more information.
+        (optional, default false)
     - name: insecure_skip_verify
       kind: bool
       default: false
+      doc: |
+        InsecureSkipVerify will enable TLS but not verify the certificate.
     - name: server_name_override
       kind: string
       default: ""
+      doc: |
+        ServerName requested by client for virtual hosting.
+        This sets the ServerName in the TLSConfig. Please refer to
+        https://godoc.org/crypto/tls#Config for more information. (optional)
   - name: read_buffer_size
     kind: int
   - name: write_buffer_size
@@ -62,9 +116,6 @@ fields:
   - name: headers
     type: map[string]configopaque.String
     kind: map
-  - name: customroundtripper
-    type: func(http.RoundTripper) (http.RoundTripper, error)
-    kind: func
   - name: auth
     type: '*configauth.Authentication'
     kind: ptr
@@ -72,8 +123,13 @@ fields:
     - name: authenticator
       type: component.ID
       kind: struct
+      doc: |
+        ID represents the identity for a component. It combines two values:
+        * type - the Type of the component.
+        * name - the name of that component.
+        The component ID (combination type + name) is unique for a given component.Kind.
   - name: compression
-    type: configcompression.CompressionType
+    type: configcompression.Type
     kind: string
     default: ""
   - name: max_idle_conns
@@ -88,6 +144,22 @@ fields:
   - name: idle_conn_timeout
     type: '*time.Duration'
     kind: ptr
+  - name: disable_keep_alives
+    kind: bool
+    default: false
+  - name: http2_read_idle_timeout
+    type: time.Duration
+    kind: int64
+  - name: http2_ping_timeout
+    type: time.Duration
+    kind: int64
+  - name: cookies
+    type: '*confighttp.CookiesConfig'
+    kind: ptr
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: shard_id
     kind: string
     default: opentelemetry
@@ -95,7 +167,7 @@ fields:
   type: cloudfoundryreceiver.UAAConfig
   kind: struct
   doc: |
-    LimitedHTTPClientSettings is a subset of HTTPClientSettings, implemented as a separate type due to the library this
+    LimitedClientConfig is a subset of ClientConfig, implemented as a separate type due to the library this
     configuration is used with not taking a preconfigured http.Client as input, but only taking these specific options
   fields:
   - name: endpoint
@@ -105,7 +177,7 @@ fields:
     type: cloudfoundryreceiver.LimitedTLSClientSetting
     kind: struct
     doc: |
-      LimitedTLSClientSetting is a subset of TLSClientSetting, see LimitedHTTPClientSettings for more details
+      LimitedTLSClientSetting is a subset of TLSClientSetting, see LimitedClientConfig for more details
     fields:
     - name: insecure_skip_verify
       kind: bool
@@ -114,5 +186,6 @@ fields:
     kind: string
     default: admin
   - name: password
+    type: configopaque.String
     kind: string
     default: ""

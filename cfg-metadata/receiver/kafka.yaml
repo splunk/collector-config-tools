@@ -7,16 +7,36 @@ fields:
   kind: slice
   doc: |
     The list of kafka brokers (default localhost:9092)
+- name: resolve_canonical_bootstrap_servers_only
+  kind: bool
+  default: false
+  doc: |
+    ResolveCanonicalBootstrapServersOnly makes Sarama do a DNS lookup for
+    each of the provided brokers. It will then do a PTR lookup for each
+    returned IP, and that set of names becomes the broker list. This can be
+    required in SASL environments.
 - name: protocol_version
   kind: string
   default: ""
   doc: |
     Kafka protocol version
+- name: session_timeout
+  type: time.Duration
+  kind: int64
+  default: 10s
+  doc: |
+    Session interval for the Kafka consumer
+- name: heartbeat_interval
+  type: time.Duration
+  kind: int64
+  default: 3s
+  doc: |
+    Heartbeat interval for the Kafka consumer
 - name: topic
   kind: string
-  default: otlp_spans
+  default: ""
   doc: |
-    The name of the kafka topic to consume from (default "otlp_spans")
+    The name of the kafka topic to consume from (default "otlp_spans" for traces, "otlp_metrics" for metrics, "otlp_logs" for logs)
 - name: encoding
   kind: string
   default: otlp_proto
@@ -75,13 +95,13 @@ fields:
         How long to wait for leader election to occur before retrying
         (default 250ms). Similar to the JVM's `retry.backoff.ms`.
 - name: auth
-  type: kafkaexporter.Authentication
+  type: kafka.Authentication
   kind: struct
   doc: |
     Authentication defines authentication.
   fields:
   - name: plain_text
-    type: '*kafkaexporter.PlainTextConfig'
+    type: '*kafka.PlainTextConfig'
     kind: ptr
     doc: |
       PlainTextConfig defines plaintext authentication.
@@ -93,7 +113,7 @@ fields:
       kind: string
       default: ""
   - name: sasl
-    type: '*kafkaexporter.SASLConfig'
+    type: '*kafka.SASLConfig'
     kind: ptr
     doc: |
       SASLConfig defines the configuration for the SASL authentication.
@@ -113,8 +133,12 @@ fields:
       default: ""
       doc: |
         SASL Mechanism to be used, possible values are: (PLAIN, AWS_MSK_IAM, SCRAM-SHA-256 or SCRAM-SHA-512).
+    - name: version
+      kind: int
+      doc: |
+        SASL Protocol Version to be used, possible values are: (0, 1). Defaults to 0.
     - name: aws_msk
-      type: kafkaexporter.AWSMSKConfig
+      type: kafka.AWSMSKConfig
       kind: struct
       doc: |
         AWSMSKConfig defines the additional SASL authentication
@@ -131,53 +155,104 @@ fields:
         doc: |
           BrokerAddr is the client is connecting to in order to perform the auth required
   - name: tls
-    type: '*configtls.TLSClientSetting'
+    type: '*configtls.ClientConfig'
     kind: ptr
+    doc: |
+      ClientConfig contains TLS configurations that are specific to client
+      connections in addition to the common configurations. This should be used by
+      components configuring TLS client connections.
     fields:
     - name: ca_file
       kind: string
       default: ""
+      doc: |
+        Path to the CA cert. For a client this verifies the server certificate.
+        For a server this verifies client certificates. If empty uses system root CA.
+        (optional)
     - name: ca_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded cert. (optional)
+    - name: include_system_ca_certs_pool
+      kind: bool
+      default: false
+      doc: |
+        If true, load system CA certificates pool in addition to the certificates
+        configured in this struct.
     - name: cert_file
       kind: string
       default: ""
+      doc: |
+        Path to the TLS cert to use for TLS required connections. (optional)
     - name: cert_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded TLS cert to use for TLS required connections. (optional)
     - name: key_file
       kind: string
       default: ""
+      doc: |
+        Path to the TLS key to use for TLS required connections. (optional)
     - name: key_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded TLS key to use for TLS required connections. (optional)
     - name: min_version
       kind: string
       default: ""
+      doc: |
+        MinVersion sets the minimum TLS version that is acceptable.
+        If not set, TLS 1.2 will be used. (optional)
     - name: max_version
       kind: string
       default: ""
+      doc: |
+        MaxVersion sets the maximum TLS version that is acceptable.
+        If not set, refer to crypto/tls for defaults. (optional)
+    - name: cipher_suites
+      type: '[]string'
+      kind: slice
+      doc: |
+        CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+        If left blank, a safe default list is used.
+        See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
     - name: reload_interval
       type: time.Duration
       kind: int64
+      doc: |
+        ReloadInterval specifies the duration after which the certificate will be reloaded
+        If not set, it will never be reloaded (optional)
     - name: insecure
       kind: bool
       default: false
+      doc: |
+        In gRPC and HTTP when set to true, this is used to disable the client transport security.
+        See https://godoc.org/google.golang.org/grpc#WithInsecure for gRPC.
+        Please refer to https://godoc.org/crypto/tls#Config for more information.
+        (optional, default false)
     - name: insecure_skip_verify
       kind: bool
       default: false
+      doc: |
+        InsecureSkipVerify will enable TLS but not verify the certificate.
     - name: server_name_override
       kind: string
       default: ""
+      doc: |
+        ServerName requested by client for virtual hosting.
+        This sets the ServerName in the TLSConfig. Please refer to
+        https://godoc.org/crypto/tls#Config for more information. (optional)
   - name: kerberos
-    type: '*kafkaexporter.KerberosConfig'
+    type: '*kafka.KerberosConfig'
     kind: ptr
     doc: |
-      KerberosConfig defines kereros configuration.
+      KerberosConfig defines kerberos configuration.
     fields:
     - name: service_name
       kind: string
@@ -200,6 +275,9 @@ fields:
     - name: keytab_file
       kind: string
       default: ""
+    - name: disable_fast_negotiation
+      kind: bool
+      default: false
 - name: autocommit
   type: kafkareceiver.AutoCommit
   kind: struct
@@ -238,3 +316,15 @@ fields:
       After is set to false.
       Note: this can block the entire partition in case a message processing returns
       a permanent error.
+- name: header_extraction
+  type: kafkareceiver.HeaderExtraction
+  kind: struct
+  doc: |
+    Extract headers from kafka records
+  fields:
+  - name: extract_headers
+    kind: bool
+    default: false
+  - name: headers
+    type: '[]string'
+    kind: slice

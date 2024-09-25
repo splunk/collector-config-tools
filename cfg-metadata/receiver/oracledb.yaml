@@ -1,6 +1,8 @@
 type: '*oracledbreceiver.Config'
 doc: |
-  MetricsBuilderConfig is a configuration for oracledb metrics builder.
+  ControllerConfig defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: datasource
   kind: string
@@ -21,10 +23,22 @@ fields:
   type: time.Duration
   kind: int64
   default: 10s
+  doc: |
+    CollectionInterval sets how frequently the scraper
+    should be called and used as the context timeout
+    to ensure that scrapers don't exceed the interval.
 - name: initial_delay
   type: time.Duration
   kind: int64
   default: 1s
+  doc: |
+    InitialDelay sets the initial start delay for the scraper,
+    any non positive value is assumed to be immediately.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  doc: |
+    Timeout is an optional value used to set scraper's context deadline.
 - name: metrics
   type: metadata.MetricsConfig
   kind: struct
@@ -289,3 +303,30 @@ fields:
     - name: enabled
       kind: bool
       default: true
+    - name: metrics_include
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsInclude defines a list of filters for attribute values.
+        If the list is not empty, only metrics with matching resource attribute values will be emitted.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
+    - name: metrics_exclude
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsExclude defines a list of filters for attribute values.
+        If the list is not empty, metrics with matching resource attribute values will not be emitted.
+        MetricsInclude has higher priority than MetricsExclude.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""

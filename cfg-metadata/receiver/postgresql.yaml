@@ -1,73 +1,166 @@
 type: '*postgresqlreceiver.Config'
 doc: |
-  MetricsBuilderConfig is a configuration for postgresql metrics builder.
+  ControllerConfig defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration
   kind: int64
   default: 10s
+  doc: |
+    CollectionInterval sets how frequently the scraper
+    should be called and used as the context timeout
+    to ensure that scrapers don't exceed the interval.
 - name: initial_delay
   type: time.Duration
   kind: int64
   default: 1s
+  doc: |
+    InitialDelay sets the initial start delay for the scraper,
+    any non positive value is assumed to be immediately.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  doc: |
+    Timeout is an optional value used to set scraper's context deadline.
 - name: username
   kind: string
   default: ""
 - name: password
+  type: configopaque.String
   kind: string
   default: ""
 - name: databases
+  type: '[]string'
+  kind: slice
+- name: exclude_databases
   type: '[]string'
   kind: slice
 - name: endpoint
   kind: string
   default: localhost:5432
 - name: transport
+  type: confignet.TransportType
   kind: string
   default: tcp
-- name: tls
-  type: configtls.TLSClientSetting
+- name: dialer
+  type: confignet.DialerConfig
   kind: struct
+  fields:
+  - name: timeout
+    type: time.Duration
+    kind: int64
+- name: tls
+  type: configtls.ClientConfig
+  kind: struct
+  doc: |
+    ClientConfig contains TLS configurations that are specific to client
+    connections in addition to the common configurations. This should be used by
+    components configuring TLS client connections.
   fields:
   - name: ca_file
     kind: string
     default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
   - name: ca_pem
     type: configopaque.String
     kind: string
     default: ""
+    doc: |
+      In memory PEM encoded cert. (optional)
+  - name: include_system_ca_certs_pool
+    kind: bool
+    default: false
+    doc: |
+      If true, load system CA certificates pool in addition to the certificates
+      configured in this struct.
   - name: cert_file
     kind: string
     default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
   - name: cert_pem
     type: configopaque.String
     kind: string
     default: ""
+    doc: |
+      In memory PEM encoded TLS cert to use for TLS required connections. (optional)
   - name: key_file
     kind: string
     default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
   - name: key_pem
     type: configopaque.String
     kind: string
     default: ""
+    doc: |
+      In memory PEM encoded TLS key to use for TLS required connections. (optional)
   - name: min_version
     kind: string
     default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
   - name: max_version
     kind: string
     default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: cipher_suites
+    type: '[]string'
+    kind: slice
+    doc: |
+      CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+      If left blank, a safe default list is used.
+      See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
   - name: reload_interval
     type: time.Duration
     kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
   - name: insecure
     kind: bool
     default: false
+    doc: |
+      In gRPC and HTTP when set to true, this is used to disable the client transport security.
+      See https://godoc.org/google.golang.org/grpc#WithInsecure for gRPC.
+      Please refer to https://godoc.org/crypto/tls#Config for more information.
+      (optional, default false)
   - name: insecure_skip_verify
     kind: bool
     default: true
+    doc: |
+      InsecureSkipVerify will enable TLS but not verify the certificate.
   - name: server_name_override
     kind: string
     default: ""
+    doc: |
+      ServerName requested by client for virtual hosting.
+      This sets the ServerName in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
+- name: connection_pool
+  type: postgresqlreceiver.ConnectionPool
+  kind: struct
+  fields:
+  - name: max_idle_time
+    type: '*time.Duration'
+    kind: ptr
+  - name: max_lifetime
+    type: '*time.Duration'
+    kind: ptr
+  - name: max_idle
+    type: '*int'
+    kind: ptr
+  - name: max_open
+    type: '*int'
+    kind: ptr
 - name: metrics
   type: metadata.MetricsConfig
   kind: struct
@@ -164,6 +257,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: postgresql.database.locks
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: postgresql.db_size
     type: metadata.MetricConfig
     kind: struct
@@ -173,6 +275,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: postgresql.deadlocks
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: postgresql.index.scans
     type: metadata.MetricConfig
     kind: struct
@@ -227,6 +338,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: postgresql.sequential_scans
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: postgresql.table.count
     type: metadata.MetricConfig
     kind: struct
@@ -254,6 +374,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: postgresql.temp_files
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: postgresql.wal.age
     type: metadata.MetricConfig
     kind: struct
@@ -263,6 +392,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: postgresql.wal.delay
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: postgresql.wal.lag
     type: metadata.MetricConfig
     kind: struct
@@ -287,6 +425,33 @@ fields:
     - name: enabled
       kind: bool
       default: true
+    - name: metrics_include
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsInclude defines a list of filters for attribute values.
+        If the list is not empty, only metrics with matching resource attribute values will be emitted.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
+    - name: metrics_exclude
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsExclude defines a list of filters for attribute values.
+        If the list is not empty, metrics with matching resource attribute values will not be emitted.
+        MetricsInclude has higher priority than MetricsExclude.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
   - name: postgresql.index.name
     type: metadata.ResourceAttributeConfig
     kind: struct
@@ -296,6 +461,69 @@ fields:
     - name: enabled
       kind: bool
       default: true
+    - name: metrics_include
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsInclude defines a list of filters for attribute values.
+        If the list is not empty, only metrics with matching resource attribute values will be emitted.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
+    - name: metrics_exclude
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsExclude defines a list of filters for attribute values.
+        If the list is not empty, metrics with matching resource attribute values will not be emitted.
+        MetricsInclude has higher priority than MetricsExclude.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
+  - name: postgresql.schema.name
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+    - name: metrics_include
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsInclude defines a list of filters for attribute values.
+        If the list is not empty, only metrics with matching resource attribute values will be emitted.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
+    - name: metrics_exclude
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsExclude defines a list of filters for attribute values.
+        If the list is not empty, metrics with matching resource attribute values will not be emitted.
+        MetricsInclude has higher priority than MetricsExclude.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
   - name: postgresql.table.name
     type: metadata.ResourceAttributeConfig
     kind: struct
@@ -305,3 +533,30 @@ fields:
     - name: enabled
       kind: bool
       default: true
+    - name: metrics_include
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsInclude defines a list of filters for attribute values.
+        If the list is not empty, only metrics with matching resource attribute values will be emitted.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
+    - name: metrics_exclude
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsExclude defines a list of filters for attribute values.
+        If the list is not empty, metrics with matching resource attribute values will not be emitted.
+        MetricsInclude has higher priority than MetricsExclude.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""

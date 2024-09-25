@@ -6,15 +6,40 @@ fields:
   type: time.Duration
   kind: int64
   default: 1m0s
+  doc: |
+    CollectionInterval sets how frequently the scraper
+    should be called and used as the context timeout
+    to ensure that scrapers don't exceed the interval.
 - name: initial_delay
   type: time.Duration
   kind: int64
   default: 1s
+  doc: |
+    InitialDelay sets the initial start delay for the scraper,
+    any non positive value is assumed to be immediately.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  doc: |
+    Timeout is an optional value used to set scraper's context deadline.
+- name: cluster_alias
+  kind: string
+  default: ""
+  doc: |
+    Alias name of the kafka cluster
 - name: brokers
   type: '[]string'
   kind: slice
   doc: |
     The list of kafka brokers (default localhost:9092)
+- name: resolve_canonical_bootstrap_servers_only
+  kind: bool
+  default: false
+  doc: |
+    ResolveCanonicalBootstrapServersOnly makes Sarama do a DNS lookup for
+    each of the provided brokers. It will then do a PTR lookup for each
+    returned IP, and that set of names becomes the broker list. This can be
+    required in SASL environments.
 - name: protocol_version
   kind: string
   default: ""
@@ -31,13 +56,13 @@ fields:
   doc: |
     GroupMatch consumer groups to collect on
 - name: auth
-  type: kafkaexporter.Authentication
+  type: kafka.Authentication
   kind: struct
   doc: |
     Authentication data
   fields:
   - name: plain_text
-    type: '*kafkaexporter.PlainTextConfig'
+    type: '*kafka.PlainTextConfig'
     kind: ptr
     doc: |
       PlainTextConfig defines plaintext authentication.
@@ -49,7 +74,7 @@ fields:
       kind: string
       default: ""
   - name: sasl
-    type: '*kafkaexporter.SASLConfig'
+    type: '*kafka.SASLConfig'
     kind: ptr
     doc: |
       SASLConfig defines the configuration for the SASL authentication.
@@ -69,8 +94,12 @@ fields:
       default: ""
       doc: |
         SASL Mechanism to be used, possible values are: (PLAIN, AWS_MSK_IAM, SCRAM-SHA-256 or SCRAM-SHA-512).
+    - name: version
+      kind: int
+      doc: |
+        SASL Protocol Version to be used, possible values are: (0, 1). Defaults to 0.
     - name: aws_msk
-      type: kafkaexporter.AWSMSKConfig
+      type: kafka.AWSMSKConfig
       kind: struct
       doc: |
         AWSMSKConfig defines the additional SASL authentication
@@ -87,53 +116,104 @@ fields:
         doc: |
           BrokerAddr is the client is connecting to in order to perform the auth required
   - name: tls
-    type: '*configtls.TLSClientSetting'
+    type: '*configtls.ClientConfig'
     kind: ptr
+    doc: |
+      ClientConfig contains TLS configurations that are specific to client
+      connections in addition to the common configurations. This should be used by
+      components configuring TLS client connections.
     fields:
     - name: ca_file
       kind: string
       default: ""
+      doc: |
+        Path to the CA cert. For a client this verifies the server certificate.
+        For a server this verifies client certificates. If empty uses system root CA.
+        (optional)
     - name: ca_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded cert. (optional)
+    - name: include_system_ca_certs_pool
+      kind: bool
+      default: false
+      doc: |
+        If true, load system CA certificates pool in addition to the certificates
+        configured in this struct.
     - name: cert_file
       kind: string
       default: ""
+      doc: |
+        Path to the TLS cert to use for TLS required connections. (optional)
     - name: cert_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded TLS cert to use for TLS required connections. (optional)
     - name: key_file
       kind: string
       default: ""
+      doc: |
+        Path to the TLS key to use for TLS required connections. (optional)
     - name: key_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded TLS key to use for TLS required connections. (optional)
     - name: min_version
       kind: string
       default: ""
+      doc: |
+        MinVersion sets the minimum TLS version that is acceptable.
+        If not set, TLS 1.2 will be used. (optional)
     - name: max_version
       kind: string
       default: ""
+      doc: |
+        MaxVersion sets the maximum TLS version that is acceptable.
+        If not set, refer to crypto/tls for defaults. (optional)
+    - name: cipher_suites
+      type: '[]string'
+      kind: slice
+      doc: |
+        CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+        If left blank, a safe default list is used.
+        See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
     - name: reload_interval
       type: time.Duration
       kind: int64
+      doc: |
+        ReloadInterval specifies the duration after which the certificate will be reloaded
+        If not set, it will never be reloaded (optional)
     - name: insecure
       kind: bool
       default: false
+      doc: |
+        In gRPC and HTTP when set to true, this is used to disable the client transport security.
+        See https://godoc.org/google.golang.org/grpc#WithInsecure for gRPC.
+        Please refer to https://godoc.org/crypto/tls#Config for more information.
+        (optional, default false)
     - name: insecure_skip_verify
       kind: bool
       default: false
+      doc: |
+        InsecureSkipVerify will enable TLS but not verify the certificate.
     - name: server_name_override
       kind: string
       default: ""
+      doc: |
+        ServerName requested by client for virtual hosting.
+        This sets the ServerName in the TLSConfig. Please refer to
+        https://godoc.org/crypto/tls#Config for more information. (optional)
   - name: kerberos
-    type: '*kafkaexporter.KerberosConfig'
+    type: '*kafka.KerberosConfig'
     kind: ptr
     doc: |
-      KerberosConfig defines kereros configuration.
+      KerberosConfig defines kerberos configuration.
     fields:
     - name: service_name
       kind: string
@@ -156,6 +236,9 @@ fields:
     - name: keytab_file
       kind: string
       default: ""
+    - name: disable_fast_negotiation
+      kind: bool
+      default: false
 - name: scrapers
   type: '[]string'
   kind: slice
@@ -172,6 +255,15 @@ fields:
   doc: |
     MetricsConfig provides config for kafkametrics metrics.
   fields:
+  - name: kafka.broker.log_retention_period
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: kafka.brokers
     type: metadata.MetricConfig
     kind: struct
@@ -262,6 +354,33 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: kafka.topic.log_retention_period
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: kafka.topic.log_retention_size
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: kafka.topic.min_insync_replicas
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: kafka.topic.partitions
     type: metadata.MetricConfig
     kind: struct
@@ -271,3 +390,54 @@ fields:
     - name: enabled
       kind: bool
       default: true
+  - name: kafka.topic.replication_factor
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+- name: resource_attributes
+  type: metadata.ResourceAttributesConfig
+  kind: struct
+  doc: |
+    ResourceAttributesConfig provides config for kafkametrics resource attributes.
+  fields:
+  - name: kafka.cluster.alias
+    type: metadata.ResourceAttributeConfig
+    kind: struct
+    doc: |
+      ResourceAttributeConfig provides common config for a particular resource attribute.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+    - name: metrics_include
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsInclude defines a list of filters for attribute values.
+        If the list is not empty, only metrics with matching resource attribute values will be emitted.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
+    - name: metrics_exclude
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsExclude defines a list of filters for attribute values.
+        If the list is not empty, metrics with matching resource attribute values will not be emitted.
+        MetricsInclude has higher priority than MetricsExclude.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""

@@ -1,15 +1,29 @@
 type: '*mysqlreceiver.Config'
 doc: |
-  MetricsBuilderConfig is a configuration for mysql metrics builder.
+  ControllerConfig defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration
   kind: int64
   default: 10s
+  doc: |
+    CollectionInterval sets how frequently the scraper
+    should be called and used as the context timeout
+    to ensure that scrapers don't exceed the interval.
 - name: initial_delay
   type: time.Duration
   kind: int64
   default: 1s
+  doc: |
+    InitialDelay sets the initial start delay for the scraper,
+    any non positive value is assumed to be immediately.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  doc: |
+    Timeout is an optional value used to set scraper's context deadline.
 - name: username
   kind: string
   default: root
@@ -27,8 +41,110 @@ fields:
   kind: string
   default: localhost:3306
 - name: transport
+  type: confignet.TransportType
   kind: string
   default: tcp
+- name: dialer
+  type: confignet.DialerConfig
+  kind: struct
+  fields:
+  - name: timeout
+    type: time.Duration
+    kind: int64
+- name: tls
+  type: configtls.ClientConfig
+  kind: struct
+  doc: |
+    ClientConfig contains TLS configurations that are specific to client
+    connections in addition to the common configurations. This should be used by
+    components configuring TLS client connections.
+  fields:
+  - name: ca_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
+  - name: ca_pem
+    type: configopaque.String
+    kind: string
+    default: ""
+    doc: |
+      In memory PEM encoded cert. (optional)
+  - name: include_system_ca_certs_pool
+    kind: bool
+    default: false
+    doc: |
+      If true, load system CA certificates pool in addition to the certificates
+      configured in this struct.
+  - name: cert_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
+  - name: cert_pem
+    type: configopaque.String
+    kind: string
+    default: ""
+    doc: |
+      In memory PEM encoded TLS cert to use for TLS required connections. (optional)
+  - name: key_file
+    kind: string
+    default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
+  - name: key_pem
+    type: configopaque.String
+    kind: string
+    default: ""
+    doc: |
+      In memory PEM encoded TLS key to use for TLS required connections. (optional)
+  - name: min_version
+    kind: string
+    default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
+  - name: max_version
+    kind: string
+    default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: cipher_suites
+    type: '[]string'
+    kind: slice
+    doc: |
+      CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+      If left blank, a safe default list is used.
+      See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
+  - name: reload_interval
+    type: time.Duration
+    kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
+  - name: insecure
+    kind: bool
+    default: false
+    doc: |
+      In gRPC and HTTP when set to true, this is used to disable the client transport security.
+      See https://godoc.org/google.golang.org/grpc#WithInsecure for gRPC.
+      Please refer to https://godoc.org/crypto/tls#Config for more information.
+      (optional, default false)
+  - name: insecure_skip_verify
+    kind: bool
+    default: false
+    doc: |
+      InsecureSkipVerify will enable TLS but not verify the certificate.
+  - name: server_name_override
+    kind: string
+    default: ""
+    doc: |
+      ServerName requested by client for virtual hosting.
+      This sets the ServerName in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
 - name: metrics
   type: metadata.MetricsConfig
   kind: struct
@@ -162,15 +278,6 @@ fields:
       kind: bool
       default: true
   - name: mysql.joins
-    type: metadata.MetricConfig
-    kind: struct
-    doc: |
-      MetricConfig provides common config for a particular metric.
-    fields:
-    - name: enabled
-      kind: bool
-      default: false
-  - name: mysql.locked_connects
     type: metadata.MetricConfig
     kind: struct
     doc: |
@@ -341,6 +448,15 @@ fields:
     - name: enabled
       kind: bool
       default: false
+  - name: mysql.table.average_row_length
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
   - name: mysql.table.io.wait.count
     type: metadata.MetricConfig
     kind: struct
@@ -387,6 +503,24 @@ fields:
       kind: bool
       default: false
   - name: mysql.table.lock_wait.write.time
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.table.rows
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: mysql.table.size
     type: metadata.MetricConfig
     kind: struct
     doc: |
@@ -446,6 +580,33 @@ fields:
     - name: enabled
       kind: bool
       default: true
+    - name: metrics_include
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsInclude defines a list of filters for attribute values.
+        If the list is not empty, only metrics with matching resource attribute values will be emitted.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
+    - name: metrics_exclude
+      type: '[]filter.Config'
+      kind: slice
+      doc: |
+        Experimental: MetricsExclude defines a list of filters for attribute values.
+        If the list is not empty, metrics with matching resource attribute values will not be emitted.
+        MetricsInclude has higher priority than MetricsExclude.
+      fields:
+      - name: strict
+        kind: string
+        default: ""
+      - name: regexp
+        kind: string
+        default: ""
 - name: statement_events
   type: mysqlreceiver.StatementEventsConfig
   kind: struct

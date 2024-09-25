@@ -5,6 +5,13 @@ fields:
 - name: endpoint
   kind: string
   default: localhost:2003
+- name: dialer
+  type: confignet.DialerConfig
+  kind: struct
+  fields:
+  - name: timeout
+    type: time.Duration
+    kind: int64
 - name: tcp_idle_timeout
   type: time.Duration
   kind: int64

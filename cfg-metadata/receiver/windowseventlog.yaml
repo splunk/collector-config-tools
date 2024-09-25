@@ -2,6 +2,58 @@ type: '*windowseventlogreceiver.WindowsLogConfig'
 doc: |
   WindowsLogConfig defines configuration for the windowseventlog receiver
 fields:
+- name: attributes
+  type: map[string]helper.ExprStringConfig
+  kind: map
+- name: resource
+  type: map[string]helper.ExprStringConfig
+  kind: map
+- name: id
+  kind: string
+  default: windows_eventlog_input
+- name: type
+  kind: string
+  default: windows_eventlog_input
+- name: output
+  type: '[]string'
+  kind: slice
+- name: channel
+  kind: string
+  default: ""
+- name: max_reads
+  kind: int
+  default: 100
+- name: start_at
+  kind: string
+  default: end
+- name: poll_interval
+  type: time.Duration
+  kind: int64
+  default: 1s
+- name: raw
+  kind: bool
+  default: false
+- name: exclude_providers
+  type: '[]string'
+  kind: slice
+- name: remote
+  type: windows.RemoteConfig
+  kind: struct
+  doc: |
+    RemoteConfig is the configuration for a remote server.
+  fields:
+  - name: server
+    kind: string
+    default: ""
+  - name: username
+    kind: string
+    default: ""
+  - name: password
+    kind: string
+    default: ""
+  - name: domain
+    kind: string
+    default: ""
 - name: operators
   type: '[]operator.Config'
   kind: slice
@@ -14,6 +66,11 @@ fields:
 - name: storage
   type: '*component.ID'
   kind: ptr
+  doc: |
+    ID represents the identity for a component. It combines two values:
+    * type - the Type of the component.
+    * name - the name of that component.
+    The component ID (combination type + name) is unique for a given component.Kind.
 - name: retry_on_failure
   type: consumerretry.Config
   kind: struct
@@ -30,17 +87,20 @@ fields:
   - name: initial_interval
     type: time.Duration
     kind: int64
+    default: 1s
     doc: |
       InitialInterval the time to wait after the first failure before retrying. Default value is 1 second.
   - name: max_interval
     type: time.Duration
     kind: int64
+    default: 30s
     doc: |
       MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
       consecutive retries will always be `MaxInterval`. Default value is 30 seconds.
   - name: max_elapsed_time
     type: time.Duration
     kind: int64
+    default: 5m0s
     doc: |
       MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a logs batch to
       a downstream consumer. Once this value is reached, the data is discarded. It never stops if MaxElapsedTime == 0.

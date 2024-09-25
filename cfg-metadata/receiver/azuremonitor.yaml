@@ -6,10 +6,22 @@ fields:
   type: time.Duration
   kind: int64
   default: 10s
+  doc: |
+    CollectionInterval sets how frequently the scraper
+    should be called and used as the context timeout
+    to ensure that scrapers don't exceed the interval.
 - name: initial_delay
   type: time.Duration
   kind: int64
   default: 1s
+  doc: |
+    InitialDelay sets the initial start delay for the scraper,
+    any non positive value is assumed to be immediately.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  doc: |
+    Timeout is an optional value used to set scraper's context deadline.
 - name: resource_attributes
   type: metadata.ResourceAttributesSettings
   kind: struct
@@ -34,9 +46,15 @@ fields:
     - name: enabled
       kind: bool
       default: true
+- name: cloud
+  kind: string
+  default: AzureCloud
 - name: subscription_id
   kind: string
   default: ""
+- name: auth
+  kind: string
+  default: service_principal
 - name: tenant_id
   kind: string
   default: ""
@@ -44,6 +62,9 @@ fields:
   kind: string
   default: ""
 - name: client_secret
+  kind: string
+  default: ""
+- name: federated_token_file
   kind: string
   default: ""
 - name: resource_groups
@@ -59,6 +80,9 @@ fields:
 - name: maximum_number_of_metrics_in_a_call
   kind: int
   default: 20
+- name: maximum_number_of_records_per_resource
+  kind: int32
+  default: 10
 - name: append_tags_as_attributes
   kind: bool
   default: false

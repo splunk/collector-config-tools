@@ -37,6 +37,9 @@ fields:
     type: time.Duration
     kind: int64
     default: 5s
+    doc: |
+      Timeout is the timeout for every attempt to send data to the backend.
+      A zero timeout means no timeout.
   - name: headers
     type: map[string]string
     kind: map
@@ -48,6 +51,7 @@ fields:
   doc: |
     The JMX username
 - name: password
+  type: configopaque.String
   kind: string
   default: ""
   doc: |
@@ -58,6 +62,7 @@ fields:
   doc: |
     The keystore path for SSL
 - name: keystore_password
+  type: configopaque.String
   kind: string
   default: ""
   doc: |
@@ -73,6 +78,7 @@ fields:
   doc: |
     The truststore path for SSL
 - name: truststore_password
+  type: configopaque.String
   kind: string
   default: ""
   doc: |

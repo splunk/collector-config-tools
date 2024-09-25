@@ -50,24 +50,40 @@ fields:
   type: time.Duration
   kind: int64
   default: 5s
+  doc: |
+    Timeout is the timeout for every attempt to send data to the backend.
+    A zero timeout means no timeout.
 - name: sending_queue
   type: exporterhelper.QueueSettings
   kind: struct
+  doc: |
+    QueueSettings defines configuration for queueing batches before sending to the consumerSender.
   fields:
   - name: enabled
     kind: bool
     default: true
+    doc: |
+      Enabled indicates whether to not enqueue batches before sending to the consumerSender.
   - name: num_consumers
     kind: int
     default: 10
+    doc: |
+      NumConsumers is the number of consumers from the queue. Defaults to 10.
+      If batching is enabled, a combined batch cannot contain more requests than the number of consumers.
+      So it's recommended to set higher number of consumers if batching is enabled.
   - name: queue_size
     kind: int
     default: 1000
+    doc: |
+      QueueSize is the maximum number of batches allowed in queue at a given time.
   - name: storage
     type: '*component.ID'
     kind: ptr
+    doc: |
+      StorageID if not empty, enables the persistent storage and uses the component specified
+      as a storage extension for the persistent queue
 - name: retry_on_failure
-  type: exporterhelper.RetrySettings
+  type: configretry.BackOffConfig
   kind: struct
   fields:
   - name: enabled

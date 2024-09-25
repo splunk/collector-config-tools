@@ -6,6 +6,13 @@ fields:
 - name: endpoint
   kind: string
   default: localhost:1777
+- name: dialer
+  type: confignet.DialerConfig
+  kind: struct
+  fields:
+  - name: timeout
+    type: time.Duration
+    kind: int64
 - name: block_profile_fraction
   kind: int
   doc: |

@@ -6,10 +6,22 @@ fields:
   type: time.Duration
   kind: int64
   default: 1m0s
+  doc: |
+    CollectionInterval sets how frequently the scraper
+    should be called and used as the context timeout
+    to ensure that scrapers don't exceed the interval.
 - name: initial_delay
   type: time.Duration
   kind: int64
   default: 1s
+  doc: |
+    InitialDelay sets the initial start delay for the scraper,
+    any non positive value is assumed to be immediately.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  doc: |
+    Timeout is an optional value used to set scraper's context deadline.
 - name: metrics
   type: map[string]windowsperfcountersreceiver.MetricConfig
   kind: map
@@ -40,3 +52,6 @@ fields:
     - name: attributes
       type: map[string]string
       kind: map
+    - name: recreate_query
+      kind: bool
+      default: false

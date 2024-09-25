@@ -6,13 +6,24 @@ fields:
   kind: string
   default: localhost:8125
 - name: transport
+  type: confignet.TransportType
   kind: string
   default: udp
+- name: dialer
+  type: confignet.DialerConfig
+  kind: struct
+  fields:
+  - name: timeout
+    type: time.Duration
+    kind: int64
 - name: aggregation_interval
   type: time.Duration
   kind: int64
   default: 1m0s
 - name: enable_metric_type
+  kind: bool
+  default: false
+- name: enable_simple_tags
   kind: bool
   default: false
 - name: is_monotonic_counter
@@ -36,3 +47,10 @@ fields:
     fields:
     - name: max_size
       kind: int32
+  - name: summary
+    type: protocol.SummaryConfig
+    kind: struct
+    fields:
+    - name: percentiles
+      type: '[]float64'
+      kind: slice

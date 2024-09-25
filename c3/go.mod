@@ -1,6 +1,8 @@
 module github.com/splunk/collector-config-tools/c3
 
-go 1.23
+go 1.22
+
+toolchain go1.22.6
 
 require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awss3exporter v0.108.0

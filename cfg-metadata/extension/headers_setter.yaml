@@ -5,7 +5,7 @@ fields:
   kind: slice
   fields:
   - name: action
-    type: headerssetterextension.actionValue
+    type: headerssetterextension.ActionValue
     kind: string
     default: ""
   - name: key

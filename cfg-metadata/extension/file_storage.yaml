@@ -58,3 +58,15 @@ fields:
     default: 5s
     doc: |
       CheckInterval specifies frequency of compaction check
+  - name: cleanup_on_start
+    kind: bool
+    default: false
+    doc: |
+      CleanupOnStart specifies removal of temporary files is performed on start.
+      It will remove all the files in the compaction directory starting with tempdb,
+      temp files will be left if a previous run of the process is killed while compacting.
+- name: fsync
+  kind: bool
+  default: false
+  doc: |
+    FSync specifies that fsync should be called after each database write

@@ -26,9 +26,14 @@ fields:
 - name: enable_octet_counting
   kind: bool
   default: false
+- name: allow_skip_pri_header
+  kind: bool
+  default: false
 - name: non_transparent_framing_trailer
   type: '*string'
   kind: ptr
+- name: max_octets
+  kind: int
 - name: tcp
   type: '*tcp.BaseConfig'
   kind: ptr
@@ -42,56 +47,106 @@ fields:
     kind: string
     default: ""
   - name: tls
-    type: '*configtls.TLSServerSetting'
+    type: '*configtls.ServerConfig'
     kind: ptr
+    doc: |
+      ServerConfig contains TLS configurations that are specific to server
+      connections in addition to the common configurations. This should be used by
+      components configuring TLS server connections.
     fields:
     - name: ca_file
       kind: string
       default: ""
+      doc: |
+        Path to the CA cert. For a client this verifies the server certificate.
+        For a server this verifies client certificates. If empty uses system root CA.
+        (optional)
     - name: ca_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded cert. (optional)
+    - name: include_system_ca_certs_pool
+      kind: bool
+      default: false
+      doc: |
+        If true, load system CA certificates pool in addition to the certificates
+        configured in this struct.
     - name: cert_file
       kind: string
       default: ""
+      doc: |
+        Path to the TLS cert to use for TLS required connections. (optional)
     - name: cert_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded TLS cert to use for TLS required connections. (optional)
     - name: key_file
       kind: string
       default: ""
+      doc: |
+        Path to the TLS key to use for TLS required connections. (optional)
     - name: key_pem
       type: configopaque.String
       kind: string
       default: ""
+      doc: |
+        In memory PEM encoded TLS key to use for TLS required connections. (optional)
     - name: min_version
       kind: string
       default: ""
+      doc: |
+        MinVersion sets the minimum TLS version that is acceptable.
+        If not set, TLS 1.2 will be used. (optional)
     - name: max_version
       kind: string
       default: ""
+      doc: |
+        MaxVersion sets the maximum TLS version that is acceptable.
+        If not set, refer to crypto/tls for defaults. (optional)
+    - name: cipher_suites
+      type: '[]string'
+      kind: slice
+      doc: |
+        CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+        If left blank, a safe default list is used.
+        See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
     - name: reload_interval
       type: time.Duration
       kind: int64
+      doc: |
+        ReloadInterval specifies the duration after which the certificate will be reloaded
+        If not set, it will never be reloaded (optional)
     - name: client_ca_file
       kind: string
       default: ""
+      doc: |
+        Path to the TLS cert to use by the server to verify a client certificate. (optional)
+        This sets the ClientCAs and ClientAuth to RequireAndVerifyClientCert in the TLSConfig. Please refer to
+        https://godoc.org/crypto/tls#Config for more information. (optional)
     - name: client_ca_file_reload
       kind: bool
       default: false
+      doc: |
+        Reload the ClientCAs file when it is modified
+        (optional, default false)
   - name: add_attributes
+    kind: bool
+    default: false
+  - name: one_log_per_packet
     kind: bool
     default: false
   - name: encoding
     kind: string
     default: ""
   - name: multiline
-    type: helper.MultilineConfig
+    type: split.Config
     kind: struct
     doc: |
-      MultilineConfig is the configuration of a multiline helper
+      Config is the configuration for a split func
     fields:
     - name: line_start_pattern
       kind: string
@@ -99,14 +154,17 @@ fields:
     - name: line_end_pattern
       kind: string
       default: ""
+    - name: omit_pattern
+      kind: bool
+      default: false
   - name: preserve_leading_whitespaces
     kind: bool
     default: false
   - name: preserve_trailing_whitespaces
     kind: bool
     default: false
-  - name: multilinebuilder
-    type: tcp.MultiLineBuilderFunc
+  - name: splitfuncbuilder
+    type: tcp.SplitFuncBuilder
     kind: func
 - name: udp
   type: '*udp.BaseConfig'
@@ -117,6 +175,9 @@ fields:
   - name: listen_address
     kind: string
     default: ""
+  - name: one_log_per_packet
+    kind: bool
+    default: false
   - name: add_attributes
     kind: bool
     default: false
@@ -124,10 +185,10 @@ fields:
     kind: string
     default: ""
   - name: multiline
-    type: helper.MultilineConfig
+    type: split.Config
     kind: struct
     doc: |
-      MultilineConfig is the configuration of a multiline helper
+      Config is the configuration for a split func
     fields:
     - name: line_start_pattern
       kind: string
@@ -135,12 +196,25 @@ fields:
     - name: line_end_pattern
       kind: string
       default: ""
+    - name: omit_pattern
+      kind: bool
+      default: false
   - name: preserve_leading_whitespaces
     kind: bool
     default: false
   - name: preserve_trailing_whitespaces
     kind: bool
     default: false
+  - name: async
+    type: '*udp.AsyncConfig'
+    kind: ptr
+    fields:
+    - name: readers
+      kind: int
+    - name: processors
+      kind: int
+    - name: max_queue_length
+      kind: int
 - name: operators
   type: '[]operator.Config'
   kind: slice
@@ -153,6 +227,11 @@ fields:
 - name: storage
   type: '*component.ID'
   kind: ptr
+  doc: |
+    ID represents the identity for a component. It combines two values:
+    * type - the Type of the component.
+    * name - the name of that component.
+    The component ID (combination type + name) is unique for a given component.Kind.
 - name: retry_on_failure
   type: consumerretry.Config
   kind: struct

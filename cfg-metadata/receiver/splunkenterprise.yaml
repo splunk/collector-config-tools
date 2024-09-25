@@ -1,0 +1,771 @@
+type: '*splunkenterprisereceiver.Config'
+doc: |
+  ControllerConfig defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of receiver.Settings, and extend it with more fields if needed.
+fields:
+- name: collection_interval
+  type: time.Duration
+  kind: int64
+  default: 10m0s
+  doc: |
+    CollectionInterval sets how frequently the scraper
+    should be called and used as the context timeout
+    to ensure that scrapers don't exceed the interval.
+- name: initial_delay
+  type: time.Duration
+  kind: int64
+  default: 1s
+  doc: |
+    InitialDelay sets the initial start delay for the scraper,
+    any non positive value is assumed to be immediately.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  default: 1m0s
+  doc: |
+    Timeout is an optional value used to set scraper's context deadline.
+- name: metrics
+  type: metadata.MetricsConfig
+  kind: struct
+  doc: |
+    MetricsConfig provides config for splunkenterprise metrics.
+  fields:
+  - name: splunk.aggregation.queue.ratio
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.buckets.searchable.status
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.data.indexes.extended.bucket.count
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.data.indexes.extended.bucket.event.count
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.data.indexes.extended.bucket.hot.count
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.data.indexes.extended.bucket.warm.count
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.data.indexes.extended.event.count
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.data.indexes.extended.raw.size
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.data.indexes.extended.total.size
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.indexer.avg.rate
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.indexer.cpu.time
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.indexer.queue.ratio
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.indexer.raw.write.time
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.indexer.throughput
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.indexes.avg.size
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.indexes.avg.usage
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.indexes.bucket.count
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.indexes.median.data.age
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.indexes.size
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.io.avg.iops
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.license.index.usage
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.parse.queue.ratio
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.pipeline.set.count
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.scheduler.avg.execution.latency
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.scheduler.avg.run.time
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.scheduler.completion.ratio
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+  - name: splunk.server.introspection.queues.current
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.server.introspection.queues.current.bytes
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+  - name: splunk.typing.queue.ratio
+    type: metadata.MetricConfig
+    kind: struct
+    doc: |
+      MetricConfig provides common config for a particular metric.
+    fields:
+    - name: enabled
+      kind: bool
+      default: true
+- name: indexer
+  type: confighttp.ClientConfig
+  kind: struct
+  fields:
+  - name: endpoint
+    kind: string
+    default: ""
+  - name: proxy_url
+    kind: string
+    default: ""
+  - name: tls
+    type: configtls.ClientConfig
+    kind: struct
+    doc: |
+      ClientConfig contains TLS configurations that are specific to client
+      connections in addition to the common configurations. This should be used by
+      components configuring TLS client connections.
+    fields:
+    - name: ca_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the CA cert. For a client this verifies the server certificate.
+        For a server this verifies client certificates. If empty uses system root CA.
+        (optional)
+    - name: ca_pem
+      type: configopaque.String
+      kind: string
+      default: ""
+      doc: |
+        In memory PEM encoded cert. (optional)
+    - name: include_system_ca_certs_pool
+      kind: bool
+      default: false
+      doc: |
+        If true, load system CA certificates pool in addition to the certificates
+        configured in this struct.
+    - name: cert_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the TLS cert to use for TLS required connections. (optional)
+    - name: cert_pem
+      type: configopaque.String
+      kind: string
+      default: ""
+      doc: |
+        In memory PEM encoded TLS cert to use for TLS required connections. (optional)
+    - name: key_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the TLS key to use for TLS required connections. (optional)
+    - name: key_pem
+      type: configopaque.String
+      kind: string
+      default: ""
+      doc: |
+        In memory PEM encoded TLS key to use for TLS required connections. (optional)
+    - name: min_version
+      kind: string
+      default: ""
+      doc: |
+        MinVersion sets the minimum TLS version that is acceptable.
+        If not set, TLS 1.2 will be used. (optional)
+    - name: max_version
+      kind: string
+      default: ""
+      doc: |
+        MaxVersion sets the maximum TLS version that is acceptable.
+        If not set, refer to crypto/tls for defaults. (optional)
+    - name: cipher_suites
+      type: '[]string'
+      kind: slice
+      doc: |
+        CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+        If left blank, a safe default list is used.
+        See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
+    - name: reload_interval
+      type: time.Duration
+      kind: int64
+      doc: |
+        ReloadInterval specifies the duration after which the certificate will be reloaded
+        If not set, it will never be reloaded (optional)
+    - name: insecure
+      kind: bool
+      default: false
+      doc: |
+        In gRPC and HTTP when set to true, this is used to disable the client transport security.
+        See https://godoc.org/google.golang.org/grpc#WithInsecure for gRPC.
+        Please refer to https://godoc.org/crypto/tls#Config for more information.
+        (optional, default false)
+    - name: insecure_skip_verify
+      kind: bool
+      default: false
+      doc: |
+        InsecureSkipVerify will enable TLS but not verify the certificate.
+    - name: server_name_override
+      kind: string
+      default: ""
+      doc: |
+        ServerName requested by client for virtual hosting.
+        This sets the ServerName in the TLSConfig. Please refer to
+        https://godoc.org/crypto/tls#Config for more information. (optional)
+  - name: read_buffer_size
+    kind: int
+  - name: write_buffer_size
+    kind: int
+  - name: timeout
+    type: time.Duration
+    kind: int64
+    default: 1m0s
+  - name: headers
+    type: map[string]configopaque.String
+    kind: map
+  - name: auth
+    type: '*configauth.Authentication'
+    kind: ptr
+    fields:
+    - name: authenticator
+      type: component.ID
+      kind: struct
+      doc: |
+        ID represents the identity for a component. It combines two values:
+        * type - the Type of the component.
+        * name - the name of that component.
+        The component ID (combination type + name) is unique for a given component.Kind.
+  - name: compression
+    type: configcompression.Type
+    kind: string
+    default: ""
+  - name: max_idle_conns
+    type: '*int'
+    kind: ptr
+  - name: max_idle_conns_per_host
+    type: '*int'
+    kind: ptr
+  - name: max_conns_per_host
+    type: '*int'
+    kind: ptr
+  - name: idle_conn_timeout
+    type: '*time.Duration'
+    kind: ptr
+  - name: disable_keep_alives
+    kind: bool
+    default: false
+  - name: http2_read_idle_timeout
+    type: time.Duration
+    kind: int64
+  - name: http2_ping_timeout
+    type: time.Duration
+    kind: int64
+  - name: cookies
+    type: '*confighttp.CookiesConfig'
+    kind: ptr
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+- name: search_head
+  type: confighttp.ClientConfig
+  kind: struct
+  fields:
+  - name: endpoint
+    kind: string
+    default: ""
+  - name: proxy_url
+    kind: string
+    default: ""
+  - name: tls
+    type: configtls.ClientConfig
+    kind: struct
+    doc: |
+      ClientConfig contains TLS configurations that are specific to client
+      connections in addition to the common configurations. This should be used by
+      components configuring TLS client connections.
+    fields:
+    - name: ca_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the CA cert. For a client this verifies the server certificate.
+        For a server this verifies client certificates. If empty uses system root CA.
+        (optional)
+    - name: ca_pem
+      type: configopaque.String
+      kind: string
+      default: ""
+      doc: |
+        In memory PEM encoded cert. (optional)
+    - name: include_system_ca_certs_pool
+      kind: bool
+      default: false
+      doc: |
+        If true, load system CA certificates pool in addition to the certificates
+        configured in this struct.
+    - name: cert_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the TLS cert to use for TLS required connections. (optional)
+    - name: cert_pem
+      type: configopaque.String
+      kind: string
+      default: ""
+      doc: |
+        In memory PEM encoded TLS cert to use for TLS required connections. (optional)
+    - name: key_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the TLS key to use for TLS required connections. (optional)
+    - name: key_pem
+      type: configopaque.String
+      kind: string
+      default: ""
+      doc: |
+        In memory PEM encoded TLS key to use for TLS required connections. (optional)
+    - name: min_version
+      kind: string
+      default: ""
+      doc: |
+        MinVersion sets the minimum TLS version that is acceptable.
+        If not set, TLS 1.2 will be used. (optional)
+    - name: max_version
+      kind: string
+      default: ""
+      doc: |
+        MaxVersion sets the maximum TLS version that is acceptable.
+        If not set, refer to crypto/tls for defaults. (optional)
+    - name: cipher_suites
+      type: '[]string'
+      kind: slice
+      doc: |
+        CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+        If left blank, a safe default list is used.
+        See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
+    - name: reload_interval
+      type: time.Duration
+      kind: int64
+      doc: |
+        ReloadInterval specifies the duration after which the certificate will be reloaded
+        If not set, it will never be reloaded (optional)
+    - name: insecure
+      kind: bool
+      default: false
+      doc: |
+        In gRPC and HTTP when set to true, this is used to disable the client transport security.
+        See https://godoc.org/google.golang.org/grpc#WithInsecure for gRPC.
+        Please refer to https://godoc.org/crypto/tls#Config for more information.
+        (optional, default false)
+    - name: insecure_skip_verify
+      kind: bool
+      default: false
+      doc: |
+        InsecureSkipVerify will enable TLS but not verify the certificate.
+    - name: server_name_override
+      kind: string
+      default: ""
+      doc: |
+        ServerName requested by client for virtual hosting.
+        This sets the ServerName in the TLSConfig. Please refer to
+        https://godoc.org/crypto/tls#Config for more information. (optional)
+  - name: read_buffer_size
+    kind: int
+  - name: write_buffer_size
+    kind: int
+  - name: timeout
+    type: time.Duration
+    kind: int64
+    default: 1m0s
+  - name: headers
+    type: map[string]configopaque.String
+    kind: map
+  - name: auth
+    type: '*configauth.Authentication'
+    kind: ptr
+    fields:
+    - name: authenticator
+      type: component.ID
+      kind: struct
+      doc: |
+        ID represents the identity for a component. It combines two values:
+        * type - the Type of the component.
+        * name - the name of that component.
+        The component ID (combination type + name) is unique for a given component.Kind.
+  - name: compression
+    type: configcompression.Type
+    kind: string
+    default: ""
+  - name: max_idle_conns
+    type: '*int'
+    kind: ptr
+  - name: max_idle_conns_per_host
+    type: '*int'
+    kind: ptr
+  - name: max_conns_per_host
+    type: '*int'
+    kind: ptr
+  - name: idle_conn_timeout
+    type: '*time.Duration'
+    kind: ptr
+  - name: disable_keep_alives
+    kind: bool
+    default: false
+  - name: http2_read_idle_timeout
+    type: time.Duration
+    kind: int64
+  - name: http2_ping_timeout
+    type: time.Duration
+    kind: int64
+  - name: cookies
+    type: '*confighttp.CookiesConfig'
+    kind: ptr
+    fields:
+    - name: enabled
+      kind: bool
+      default: false
+- name: cluster_master
+  type: confighttp.ClientConfig
+  kind: struct
+  fields:
+  - name: endpoint
+    kind: string
+    default: ""
+  - name: proxy_url
+    kind: string
+    default: ""
+  - name: tls
+    type: configtls.ClientConfig
+    kind: struct
+    doc: |
+      ClientConfig contains TLS configurations that are specific to client
+      connections in addition to the common configurations. This should be used by
+      components configuring TLS client connections.
+    fields:
+    - name: ca_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the CA cert. For a client this verifies the server certificate.
+        For a server this verifies client certificates. If empty uses system root CA.
+        (optional)
+    - name: ca_pem
+      type: configopaque.String
+      kind: string
+      default: ""
+      doc: |
+        In memory PEM encoded cert. (optional)
+    - name: include_system_ca_certs_pool
+      kind: bool
+      default: false
+      doc: |
+        If true, load system CA certificates pool in addition to the certificates
+        configured in this struct.
+    - name: cert_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the TLS cert to use for TLS required connections. (optional)
+    - name: cert_pem
+      type: configopaque.String
+      kind: string
+      default: ""
+      doc: |
+        In memory PEM encoded TLS cert to use for TLS required connections. (optional)
+    - name: key_file
+      kind: string
+      default: ""
+      doc: |
+        Path to the TLS key to use for TLS required connections. (optional)
+    - name: key_pem
+      type: configopaque.String
+      kind: string
+      default: ""
+      doc: |
+        In memory PEM encoded TLS key to use for TLS required connections. (optional)
+    - name: min_version
+      kind: string
+      default: ""
+      doc: |
+        MinVersion sets the minimum TLS version that is acceptable.
+        If not set, TLS 1.2 will be used. (optional)
+    - name: max_version
+      kind: string
+      default: ""
+      doc: |
+        MaxVersion sets the maximum TLS version that is acceptable.
+        If not set, refer to crypto/tls for defaults. (optional)
+    - name: cipher_suites
+      type: '[]string'
+      kind: slice
+      doc: |
+        CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+        If left blank, a safe default list is used.
+        See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
+    - name: reload_interval
+      type: time.Duration
+      kind: int64
+      doc: |
+        ReloadInterval specifies the duration after which the certificate will be reloaded
+        If not set, it will never be reloaded (optional)
+    - name: insecure
+      kind: bool
+      default: false
+      doc: |
+        In gRPC and HTTP when set to true, this is used to disable the client transport security.
+        See https://godoc.org/google.golang.org/grpc#WithInsecure for gRPC.
+        Please refer to https://godoc.org/crypto/tls#Config for more information.
+        (optional, default false)
+    - name: insecure_skip_verify
+      kind: bool
+      default: false
+      doc: |
+        InsecureSkipVerify will enable TLS but not verify the certificate.
+    - name: server_name_override
+      kind: string
+      default: ""
+      doc: |
+        ServerName requested by client for virtual hosting.
+        This sets the ServerName in the TLSConfig. Please refer to
+        https://godoc.org/crypto/tls#Config for more information. (optional)
+  - name: read_buffer_size
+    kind: int
+  - name: write_buffer_size
+    kind: int
+  - name: timeout
+    type: time.Duration
+    kind: int64
+    default: 1m0s
+  - name: headers
+    type: map[string]configopaque.String
+    kind: map
+  - name: auth
+    type: '*configauth.Authentication'
+    kind: ptr
+    fields:
+    - name: authenticator
+      type: component.ID
+      kind: struct
+      doc: |
+        ID represents the identity for a component. It combines two values:
+        * type - the Type of the component.
+        * name - the name of that component.
+        The component ID (combination type + name) is unique for a given component.Kind.
+  - name: compression
+    type: configcompression.Type
+    kind: string
+    default: ""
+  - name: max_idle_conns
+    type: '*int'
+    kind: ptr
+  - name: max_idle_conns_per_host
+    type: '*int'
+    kind: ptr
+  - name: max_conns_per_host
+    type: '*int'
+    kind: ptr
+  - name: idle_conn_timeout
+    type: '*time.Duration'
+    kind: ptr
+  - name: disable_keep_alives
+    kind: bool
+    default: false
+  - name: http2_read_idle_timeout
+    type: time.Duration
+    kind: int64
+  - name: http2_ping_timeout
+    type: time.Duration
+    kind: int64
+  - name: cookies
+    type: '*confighttp.CookiesConfig'
+    kind: ptr
+    fields:
+    - name: enabled
+      kind: bool
+      default: false

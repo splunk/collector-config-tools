@@ -1,0 +1,38 @@
+type: '*redactionprocessor.Config'
+fields:
+- name: allow_all_keys
+  kind: bool
+  default: false
+  doc: |
+    AllowAllKeys is a flag to allow all span attribute keys. Setting this
+    to true disables the AllowedKeys list. The list of BlockedValues is
+    applied regardless. If you just want to block values, set this to true.
+- name: allowed_keys
+  type: '[]string'
+  kind: slice
+  doc: |
+    AllowedKeys is a list of allowed span attribute keys. Span attributes
+    not on the list are removed. The list fails closed if it's empty. To
+    allow all keys, you should explicitly set AllowAllKeys
+- name: ignored_keys
+  type: '[]string'
+  kind: slice
+  doc: |
+    IgnoredKeys is a list of span attribute keys that are not redacted.
+    Span attributes in this list are allowed to pass through the filter
+    without being changed or removed.
+- name: blocked_values
+  type: '[]string'
+  kind: slice
+  doc: |
+    BlockedValues is a list of regular expressions for blocking values of
+    allowed span attributes. Values that match are masked
+- name: summary
+  kind: string
+  default: ""
+  doc: |
+    Summary controls the verbosity level of the diagnostic attributes that
+    the processor adds to the spans when it redacts or masks other
+    attributes. In some contexts a list of redacted attributes leaks
+    information, while it is valuable when integrating and testing a new
+    configuration. Possible values are `debug`, `info`, and `silent`.

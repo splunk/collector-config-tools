@@ -1,0 +1,54 @@
+type: '*awss3exporter.Config'
+doc: |
+  Config contains the main configuration options for the s3 exporter
+fields:
+- name: s3uploader
+  type: awss3exporter.S3UploaderConfig
+  kind: struct
+  doc: |
+    S3UploaderConfig contains aws s3 uploader related config to controls things
+    like bucket, prefix, batching, connections, retries, etc.
+  fields:
+  - name: region
+    kind: string
+    default: us-east-1
+  - name: s3_bucket
+    kind: string
+    default: ""
+  - name: s3_prefix
+    kind: string
+    default: ""
+  - name: s3_partition
+    kind: string
+    default: minute
+  - name: file_prefix
+    kind: string
+    default: ""
+  - name: endpoint
+    kind: string
+    default: ""
+  - name: role_arn
+    kind: string
+    default: ""
+  - name: s3_force_path_style
+    kind: bool
+    default: false
+  - name: disable_ssl
+    kind: bool
+    default: false
+  - name: compression
+    type: configcompression.Type
+    kind: string
+    default: ""
+- name: marshaler
+  type: awss3exporter.MarshalerType
+  kind: string
+  default: otlp_json
+- name: encoding
+  type: '*component.ID'
+  kind: ptr
+  doc: |
+    Encoding to apply. If present, overrides the marshaler configuration option.
+- name: encoding_file_extension
+  kind: string
+  default: ""

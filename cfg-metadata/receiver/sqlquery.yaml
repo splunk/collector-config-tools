@@ -1,13 +1,29 @@
 type: '*sqlqueryreceiver.Config'
+doc: |
+  ControllerConfig defines common settings for a scraper controller
+  configuration. Scraper controller receivers can embed this struct, instead
+  of receiver.Settings, and extend it with more fields if needed.
 fields:
 - name: collection_interval
   type: time.Duration
   kind: int64
   default: 10s
+  doc: |
+    CollectionInterval sets how frequently the scraper
+    should be called and used as the context timeout
+    to ensure that scrapers don't exceed the interval.
 - name: initial_delay
   type: time.Duration
   kind: int64
   default: 1s
+  doc: |
+    InitialDelay sets the initial start delay for the scraper,
+    any non positive value is assumed to be immediately.
+- name: timeout
+  type: time.Duration
+  kind: int64
+  doc: |
+    Timeout is an optional value used to set scraper's context deadline.
 - name: driver
   kind: string
   default: ""
@@ -15,14 +31,14 @@ fields:
   kind: string
   default: ""
 - name: queries
-  type: '[]sqlqueryreceiver.Query'
+  type: '[]sqlquery.Query'
   kind: slice
   fields:
   - name: sql
     kind: string
     default: ""
   - name: metrics
-    type: '[]sqlqueryreceiver.MetricCfg'
+    type: '[]sqlquery.MetricCfg'
     kind: slice
     fields:
     - name: metric_name
@@ -38,15 +54,15 @@ fields:
       kind: bool
       default: false
     - name: value_type
-      type: sqlqueryreceiver.MetricValueType
+      type: sqlquery.MetricValueType
       kind: string
       default: ""
     - name: data_type
-      type: sqlqueryreceiver.MetricType
+      type: sqlquery.MetricType
       kind: string
       default: ""
     - name: aggregation
-      type: sqlqueryreceiver.MetricAggregation
+      type: sqlquery.MetricAggregation
       kind: string
       default: ""
     - name: unit
@@ -65,7 +81,7 @@ fields:
       kind: string
       default: ""
   - name: logs
-    type: '[]sqlqueryreceiver.LogsCfg'
+    type: '[]sqlquery.LogsCfg'
     kind: slice
     fields:
     - name: body_column
@@ -80,3 +96,19 @@ fields:
 - name: storage
   type: '*component.ID'
   kind: ptr
+  doc: |
+    ID represents the identity for a component. It combines two values:
+    * type - the Type of the component.
+    * name - the name of that component.
+    The component ID (combination type + name) is unique for a given component.Kind.
+- name: telemetry
+  type: sqlquery.TelemetryConfig
+  kind: struct
+  fields:
+  - name: logs
+    type: sqlquery.TelemetryLogsConfig
+    kind: struct
+    fields:
+    - name: query
+      kind: bool
+      default: false

@@ -1,0 +1,109 @@
+type: '*ecsobserver.Config'
+fields:
+- name: cluster_name
+  kind: string
+  default: default
+  doc: |
+    ClusterName is the target ECS cluster name for service discovery.
+- name: cluster_region
+  kind: string
+  default: ""
+  doc: |
+    ClusterRegion is the target ECS cluster's AWS region.
+- name: refresh_interval
+  type: time.Duration
+  kind: int64
+  default: 30s
+  doc: |
+    RefreshInterval determines how frequency at which the observer
+    needs to poll for collecting information about new processes.
+- name: result_file
+  kind: string
+  default: /etc/ecs_sd_targets.yaml
+  doc: |
+    ResultFile is the output path of the discovered targets YAML file (optional).
+    This is mainly used in conjunction with the Prometheus receiver.
+- name: job_label_name
+  kind: string
+  default: prometheus_job
+  doc: |
+    JobLabelName is the override for prometheus job label, using `job` literal will cause error
+    in otel prometheus receiver. See https://github.com/open-telemetry/opentelemetry-collector/issues/575
+- name: services
+  type: '[]ecsobserver.ServiceConfig'
+  kind: slice
+  doc: |
+    Services is a list of service name patterns for filtering tasks.
+  fields:
+  - name: job_name
+    kind: string
+    default: ""
+  - name: metrics_path
+    kind: string
+    default: ""
+  - name: metrics_ports
+    type: '[]int'
+    kind: slice
+  - name: name_pattern
+    kind: string
+    default: ""
+    doc: |
+      NamePattern is mandatory.
+  - name: container_name_pattern
+    kind: string
+    default: ""
+    doc: |
+      ContainerNamePattern is optional, empty string means all containers in that service would be exported.
+      Otherwise both service and container name petterns need to metch.
+- name: task_definitions
+  type: '[]ecsobserver.TaskDefinitionConfig'
+  kind: slice
+  doc: |
+    TaskDefinitions is a list of task definition arn patterns for filtering tasks.
+  fields:
+  - name: job_name
+    kind: string
+    default: ""
+  - name: metrics_path
+    kind: string
+    default: ""
+  - name: metrics_ports
+    type: '[]int'
+    kind: slice
+  - name: arn_pattern
+    kind: string
+    default: ""
+    doc: |
+      ArnPattern is mandetory, empty string means arn based match is skipped.
+  - name: container_name_pattern
+    kind: string
+    default: ""
+    doc: |
+      ContainerNamePattern is optional, empty string means all containers in that task definition would be exported.
+      Otherwise both service and container name petterns need to metch.
+- name: docker_labels
+  type: '[]ecsobserver.DockerLabelConfig'
+  kind: slice
+  doc: |
+    DockerLabels is a list of docker labels for filtering containers within tasks.
+  fields:
+  - name: job_name
+    kind: string
+    default: ""
+  - name: metrics_path
+    kind: string
+    default: ""
+  - name: metrics_ports
+    type: '[]int'
+    kind: slice
+  - name: port_label
+    kind: string
+    default: ""
+    doc: |
+      PortLabel is mandatory, empty string means docker label based match is skipped.
+  - name: job_name_label
+    kind: string
+    default: ""
+  - name: metrics_path_label
+    kind: string
+    default: ""

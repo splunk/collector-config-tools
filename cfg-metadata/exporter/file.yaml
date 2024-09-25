@@ -7,11 +7,20 @@ fields:
   default: ""
   doc: |
     Path of the file to write to. Path is relative to current directory.
+- name: append
+  kind: bool
+  default: false
+  doc: |
+    Mode defines whether the exporter should append to the file.
+    Options:
+    - false[default]:  truncates the file
+    - true:  appends to the file.
 - name: rotation
   type: '*fileexporter.Rotation'
   kind: ptr
   doc: |
-    Rotation defines an option about rotation of telemetry files
+    Rotation defines an option about rotation of telemetry files. Ignored
+    when GroupByAttribute is used.
   fields:
   - name: max_megabytes
     kind: int
@@ -47,6 +56,12 @@ fields:
     Options:
     - json[default]:  OTLP json bytes.
     - proto:  OTLP binary protobuf bytes.
+- name: encoding
+  type: '*component.ID'
+  kind: ptr
+  doc: |
+    Encoding defines the encoding of the telemetry data.
+    If specified, it overrides `FormatType` and applies an encoding extension.
 - name: compression
   kind: string
   default: ""
@@ -59,3 +74,28 @@ fields:
   doc: |
     FlushInterval is the duration between flushes.
     See time.ParseDuration for valid values.
+- name: group_by
+  type: '*fileexporter.GroupBy'
+  kind: ptr
+  doc: |
+    GroupBy enables writing to separate files based on a resource attribute.
+  fields:
+  - name: enabled
+    kind: bool
+    default: false
+    doc: |
+      Enables group_by. When group_by is enabled, rotation setting is ignored.  Default is false.
+  - name: resource_attribute
+    kind: string
+    default: fileexporter.path_segment
+    doc: |
+      ResourceAttribute specifies the name of the resource attribute that
+      contains the path segment of the file to write to. The final path will be
+      the Path config value, with the * replaced with the value of this resource
+      attribute. Default is "fileexporter.path_segment".
+  - name: max_open_files
+    kind: int
+    default: 100
+    doc: |
+      MaxOpenFiles specifies the maximum number of open file descriptors for the output files.
+      The default is 100.

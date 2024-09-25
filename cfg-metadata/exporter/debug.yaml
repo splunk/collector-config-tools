@@ -1,0 +1,14 @@
+type: '*debugexporter.Config'
+fields:
+- name: verbosity
+  type: configtelemetry.Level
+  kind: int32
+- name: sampling_initial
+  kind: int
+  default: 2
+- name: sampling_thereafter
+  kind: int
+  default: 1
+- name: use_internal_logger
+  kind: bool
+  default: true

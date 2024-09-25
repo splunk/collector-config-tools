@@ -3,10 +3,10 @@ doc: |
   Config defines configuration for Resource processor.
 fields:
 - name: transforms
-  type: '[]metricstransformprocessor.Transform'
+  type: '[]metricstransformprocessor.transform'
   kind: slice
   doc: |
-    Transform specifies a list of transforms on metrics with each transform focusing on one metric.
+    transform specifies a list of transforms on metrics with each transform focusing on one metric.
   fields:
   - name: include
     kind: string
@@ -14,7 +14,7 @@ fields:
     doc: |
       Include specifies the metric(s) to operate on.
   - name: match_type
-    type: metricstransformprocessor.MatchType
+    type: metricstransformprocessor.matchType
     kind: string
     default: ""
     doc: |
@@ -48,14 +48,14 @@ fields:
       GroupResourceLabels specifes resource labels that will be appended to this group's new ResourceMetrics message
       REQUIRED only if Action is GROUP
   - name: aggregation_type
-    type: metricstransformprocessor.AggregationType
+    type: aggregateutil.AggregationType
     kind: string
     default: ""
     doc: |
       AggregationType specifies how to aggregate.
       REQUIRED only if Action is COMBINE.
   - name: submatch_case
-    type: metricstransformprocessor.SubmatchCase
+    type: metricstransformprocessor.submatchCase
     kind: string
     default: ""
     doc: |
@@ -67,7 +67,7 @@ fields:
       Operations contains a list of operations that will be performed on the resulting metric(s).
     fields:
     - name: action
-      type: metricstransformprocessor.OperationAction
+      type: metricstransformprocessor.operationAction
       kind: string
       default: ""
       doc: |
@@ -89,7 +89,7 @@ fields:
       doc: |
         LabelSet is a list of labels to keep. All other labels are aggregated based on the AggregationType.
     - name: aggregation_type
-      type: metricstransformprocessor.AggregationType
+      type: aggregateutil.AggregationType
       kind: string
       default: ""
       doc: |
@@ -103,7 +103,7 @@ fields:
       kind: string
       default: ""
       doc: |
-        NewValue is used to set a new label value either when the operation is `AggregatedValues` or `AddLabel`.
+        NewValue is used to set a new label value either when the operation is `AggregatedValues` or `addLabel`.
     - name: value_actions
       type: '[]metricstransformprocessor.ValueAction'
       kind: slice

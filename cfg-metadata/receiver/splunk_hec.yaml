@@ -4,49 +4,96 @@ doc: |
 fields:
 - name: endpoint
   kind: string
-  default: :8088
+  default: localhost:8088
 - name: tls
-  type: '*configtls.TLSServerSetting'
+  type: '*configtls.ServerConfig'
   kind: ptr
+  doc: |
+    ServerConfig contains TLS configurations that are specific to server
+    connections in addition to the common configurations. This should be used by
+    components configuring TLS server connections.
   fields:
   - name: ca_file
     kind: string
     default: ""
+    doc: |
+      Path to the CA cert. For a client this verifies the server certificate.
+      For a server this verifies client certificates. If empty uses system root CA.
+      (optional)
   - name: ca_pem
     type: configopaque.String
     kind: string
     default: ""
+    doc: |
+      In memory PEM encoded cert. (optional)
+  - name: include_system_ca_certs_pool
+    kind: bool
+    default: false
+    doc: |
+      If true, load system CA certificates pool in addition to the certificates
+      configured in this struct.
   - name: cert_file
     kind: string
     default: ""
+    doc: |
+      Path to the TLS cert to use for TLS required connections. (optional)
   - name: cert_pem
     type: configopaque.String
     kind: string
     default: ""
+    doc: |
+      In memory PEM encoded TLS cert to use for TLS required connections. (optional)
   - name: key_file
     kind: string
     default: ""
+    doc: |
+      Path to the TLS key to use for TLS required connections. (optional)
   - name: key_pem
     type: configopaque.String
     kind: string
     default: ""
+    doc: |
+      In memory PEM encoded TLS key to use for TLS required connections. (optional)
   - name: min_version
     kind: string
     default: ""
+    doc: |
+      MinVersion sets the minimum TLS version that is acceptable.
+      If not set, TLS 1.2 will be used. (optional)
   - name: max_version
     kind: string
     default: ""
+    doc: |
+      MaxVersion sets the maximum TLS version that is acceptable.
+      If not set, refer to crypto/tls for defaults. (optional)
+  - name: cipher_suites
+    type: '[]string'
+    kind: slice
+    doc: |
+      CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+      If left blank, a safe default list is used.
+      See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
   - name: reload_interval
     type: time.Duration
     kind: int64
+    doc: |
+      ReloadInterval specifies the duration after which the certificate will be reloaded
+      If not set, it will never be reloaded (optional)
   - name: client_ca_file
     kind: string
     default: ""
+    doc: |
+      Path to the TLS cert to use by the server to verify a client certificate. (optional)
+      This sets the ClientCAs and ClientAuth to RequireAndVerifyClientCert in the TLSConfig. Please refer to
+      https://godoc.org/crypto/tls#Config for more information. (optional)
   - name: client_ca_file_reload
     kind: bool
     default: false
+    doc: |
+      Reload the ClientCAs file when it is modified
+      (optional, default false)
 - name: cors
-  type: '*confighttp.CORSSettings'
+  type: '*confighttp.CORSConfig'
   kind: ptr
   fields:
   - name: allowed_origins
@@ -58,12 +105,20 @@ fields:
   - name: max_age
     kind: int
 - name: auth
-  type: '*configauth.Authentication'
+  type: '*confighttp.AuthConfig'
   kind: ptr
   fields:
   - name: authenticator
     type: component.ID
     kind: struct
+    doc: |
+      ID represents the identity for a component. It combines two values:
+      * type - the Type of the component.
+      * name - the name of that component.
+      The component ID (combination type + name) is unique for a given component.Kind.
+  - name: request_params
+    type: '[]string'
+    kind: slice
 - name: max_request_body_size
   kind: int64
 - name: include_metadata
@@ -72,11 +127,42 @@ fields:
 - name: response_headers
   type: map[string]configopaque.String
   kind: map
+- name: compression_algorithms
+  type: '[]string'
+  kind: slice
+- name: read_timeout
+  type: time.Duration
+  kind: int64
+- name: read_header_timeout
+  type: time.Duration
+  kind: int64
+- name: write_timeout
+  type: time.Duration
+  kind: int64
+- name: idle_timeout
+  type: time.Duration
+  kind: int64
 - name: access_token_passthrough
   kind: bool
   default: false
   doc: |
     AccessTokenPassthrough indicates whether to associate datapoints with an organization access token received in request.
+- name: ack
+  type: splunkhecreceiver.Ack
+  kind: struct
+  doc: |
+    Ack defines configuration for the ACK functionality of the HEC receiver
+  fields:
+  - name: extension
+    type: '*component.ID'
+    kind: ptr
+    doc: |
+      Extension defines the extension to use for acking of events. Without specifying an extension, the ACK endpoint won't be exposed
+  - name: path
+    kind: string
+    default: /services/collector/ack
+    doc: |
+      Path for Ack API, default is '/services/collector/ack'. Ignored if Extension is not provided.
 - name: raw_path
   kind: string
   default: /services/collector/raw

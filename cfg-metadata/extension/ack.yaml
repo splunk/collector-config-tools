@@ -1,0 +1,20 @@
+type: '*ackextension.Config'
+doc: |
+  Config defines configuration for ack extension
+fields:
+- name: storage
+  type: '*component.ID'
+  kind: ptr
+  doc: |
+    StorageID defines the storage type of the extension. In-memory type is set by default (if not provided). Future consideration is disk type.
+- name: max_number_of_partition
+  kind: uint64
+  default: 1000000
+  doc: |
+    MaxNumPartition Specifies the maximum number of partitions that clients can acquire for this extension instance.
+    Implementation defines how limit exceeding should be handled.
+- name: max_number_of_pending_acks_per_partition
+  kind: uint64
+  default: 1000000
+  doc: |
+    MaxNumPendingAcksPerPartition Specifies the maximum number of ackIDs and their corresponding status information that are waiting to be queried in each partition.

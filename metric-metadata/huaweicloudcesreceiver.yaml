@@ -1,4 +1,4 @@
-type: awscloudwatchmetrics
+type: huaweicloudcesreceiver
 
 status:
   class: receiver
@@ -6,7 +6,4 @@ status:
     development: [metrics]
   distributions: []
   codeowners:
-    active: []
-
-tests:
-  config:
+    active: [heitorganzeli, narcis96, mwear]

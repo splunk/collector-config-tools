@@ -6,8 +6,4 @@ status:
     development: [metrics]
   distributions: []
   codeowners:
-    active: [heitorganzeli, narcis96, mwear
-
-tests:
-  skip_lifecycle: true
-  skip_shutdown: true
+    active: [heitorganzeli, narcis96, mwear]

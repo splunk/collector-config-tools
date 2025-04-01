@@ -11,7 +11,7 @@ status:
   distributions:
   - contrib
   codeowners:
-    active: [gramidt, mar4uk]
+    active: [gramidt, mar4uk, dehaansa, ArthurSens]
 
 tests:
   expect_consumer_error: true

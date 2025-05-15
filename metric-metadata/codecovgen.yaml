@@ -1,5 +1,7 @@
+type: codecovgen
+
 status:
   disable_codecov_badge: true
-  class: pkg
+  class: cmd
   codeowners:
-    active: [odubajDT]
+    active: [mx-psi]

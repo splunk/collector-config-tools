@@ -1,5 +1,13 @@
-status:
-  disable_codecov_badge: true
-  codeowners:
-    active: [jamesmoessis, MovieStoreGuy]
-    emeritus: [rmfitzpatrick]
+type: resourcedetectionprocessor/docker
+
+parent: resourcedetection
+
+resource_attributes:
+  host.name:
+    description: The host.name
+    type: string
+    enabled: true
+  os.type:
+    description: The os.type
+    type: string
+    enabled: true

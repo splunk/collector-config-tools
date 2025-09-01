@@ -1,12 +1,16 @@
 type: iis
 
+tests:
+  goleak:
+    setup: "setupTestMain(m)"
+
 status:
   class: receiver
   stability:
     beta: [metrics]
   distributions: [contrib]
   codeowners:
-    active: [Mrod1598, pjanotti]
+    active: [ishleenk17, Mrod1598, pjanotti]
     seeking_new: true
   unsupported_platforms: [linux, darwin]
 
@@ -140,10 +144,10 @@ metrics:
     unit: "{state}"
     gauge:
       value_type: int
-    enabled: false
+    enabled: true
   iis.application_pool.uptime:
     description: The application pools uptime period since the last restart.
     unit: "{ms}"
     gauge:
       value_type: int
-    enabled: false
+    enabled: true

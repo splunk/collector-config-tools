@@ -4,8 +4,8 @@ status:
   disable_codecov_badge: true
   class: extension
   stability:
-    alpha: [ extension ]
-  distributions: [ ]
+    beta: [ extension ]
+  distributions: [contrib]
   codeowners:
     active: [ dao-jun, VihasMakwana ]
 

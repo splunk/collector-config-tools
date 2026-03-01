@@ -3,10 +3,10 @@ type: gitlab
 status: 
   class: receiver
   stability: 
-    development: [traces]
-  distributions: []
+    alpha: [traces]
+  distributions: [contrib]
   codeowners:
-    active: [adrielp, atoulme]
+    active: [adrielp, atoulme, niwoerner]
 tests:
   config:
     webhook:

@@ -1,13 +1,12 @@
 type: opensearch
-display_name: OpenSearch Exporter
 
 status:
   class: exporter
   stability:
-    alpha: [traces, logs]
+    unmaintained: [traces, logs]
   distributions: [contrib]
   codeowners:
-    active: [ps48]
+    active: []
     emeritus: [Aneurysm9, MitchellGale, MaxKsyunz, YANG-DB]
     seeking_new: true
 

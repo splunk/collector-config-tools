@@ -1,13 +1,9 @@
-display_name: Pprof Receiver
 type: pprof
-
-description: |
-  The Pprof Receiver collects profiles from files specified with a glob pattern, from a remote endpoint or the running collector.
 
 status:
   class: receiver
   stability:
-    alpha: [profiles]
-  distributions: [contrib]
+    development: [profiles]
+  distributions: []
   codeowners:
     active: [MovieStoreGuy, atoulme]

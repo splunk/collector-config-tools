@@ -1,8 +1,4 @@
-display_name: UDP Log Receiver
-type: udp_log
-deprecated_type: udplog
-
-description: The UDP Log Receiver receives logs over UDP.
+type: udplog
 
 status:
   class: receiver

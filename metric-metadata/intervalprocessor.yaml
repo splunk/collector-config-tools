@@ -1,4 +1,3 @@
-display_name: Interval Processor
 type: interval
 
 status:
@@ -8,7 +7,6 @@ status:
   distributions: [contrib, k8s]
   warnings: [Statefulness]
   codeowners:
-    active: [RichieSams]
-    emeritus: [tombrk]
+    active: [RichieSams, sh0rez]
 tests:
   config:

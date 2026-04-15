@@ -1,12 +1,9 @@
-display_name: Syslog Receiver
 type: syslog
-
-description: Parses Syslogs received over TCP or UDP.
 
 status:
   class: receiver
   stability:
-    beta: [logs]
+    alpha: [logs]
   distributions: [contrib]
   codeowners:
     active: [andrzej-stencel]

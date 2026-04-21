@@ -258,6 +258,45 @@ events:
       - postgresql.total_plan_time
       - postgresql.query_plan
 
+events:
+  db.server.top_query:
+    enabled: true
+    description: top query
+    attributes:
+      - db.system.name
+      - db.namespace
+      - db.query.text
+      - postgresql.calls
+      - postgresql.rows
+      - postgresql.shared_blks_dirtied
+      - postgresql.shared_blks_hit
+      - postgresql.shared_blks_read
+      - postgresql.shared_blks_written
+      - postgresql.temp_blks_read
+      - postgresql.temp_blks_written
+      - postgresql.queryid
+      - postgresql.rolname
+      - postgresql.total_exec_time
+      - postgresql.total_plan_time
+      - postgresql.query_plan
+  db.server.query_sample:
+    enabled: true
+    description: query sample
+    attributes:
+      - db.system.name
+      - db.namespace
+      - db.query.text
+      - user.name
+      - postgresql.state
+      - postgresql.pid
+      - postgresql.application_name
+      - network.peer.address
+      - network.peer.port
+      - postgresql.client_hostname
+      - postgresql.query_start
+      - postgresql.wait_event
+      - postgresql.wait_event_type
+      - postgresql.query_id
 metrics:
   postgresql.backends:
     enabled: true

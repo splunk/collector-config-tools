@@ -3,20 +3,50 @@ type: system
 status:
   class: scraper
   stability:
-    beta: [metrics]
-  distributions: [core, contrib, k8s]
+    development: [metrics]
+  distributions: []
   codeowners:
-    active: [dmitryax, braydonk]
+    active: []
 
-sem_conv_version: 1.9.0
+resource_attributes:
+  host.ip:
+    description: The IP address of the Cisco network device
+    type: string
+    enabled: true
+  hw.type:
+    description: Type of the physical hardware component
+    type: string
+    enabled: true
+  os.name:
+    description: The operating system type of the Cisco device
+    type: string
+    enabled: true
 
 metrics:
-  system.uptime:
+  cisco.device.up:
     enabled: true
-    stability:
-      level: development
-    description: The time the system has been running
-    unit: s
+    description: Device availability (1 = up, 0 = down)
+    stability: development
+    unit: "1"
+    gauge:
+      value_type: int
+
+  system.cpu.utilization:
+    enabled: true
+    description: Percentage of CPU time in use.
+    stability: development
+    unit: "1"
     gauge:
       value_type: double
-    attributes: []
+
+  system.memory.utilization:
+    enabled: true
+    description: Percentage of memory bytes in use.
+    stability: development
+    unit: "1"
+    gauge:
+      value_type: double
+
+# TODO: Update the scraper to support test mode or mock SSH connections
+tests:
+  skip_lifecycle: true

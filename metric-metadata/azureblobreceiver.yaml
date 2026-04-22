@@ -1,6 +1,5 @@
 display_name: Azure Blob Receiver
-type: azure_blob
-deprecated_type: azureblob
+type: azureblob
 
 status:
   class: receiver
@@ -8,7 +7,7 @@ status:
     alpha: [logs, traces]
   distributions: [contrib]
   codeowners:
-    active: [eedorenko, mx-psi, dyl10s]
+    active: [eedorenko, mx-psi]
 
 # TODO: Update the exporter to pass the tests
 tests:

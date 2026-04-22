@@ -1,12 +1,13 @@
-display_name: Text Encoding Extension
 type: text_encoding
 
-description: The `text_encoding` extension is an encoding extension that can unmarshal and marshal logs.
-
 status:
+  disable_codecov_badge: true
   class: extension
   stability:
-    beta: [extension]
+    alpha: [extension]
   distributions: [contrib]
   codeowners:
     active: [MovieStoreGuy, atoulme]
+
+tests:
+  config:

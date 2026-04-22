@@ -4,6 +4,8 @@ reaggregation_enabled: true
 
 description: The File Stats receiver collects metrics from files specified with a glob pattern.
 
+description: The File Stats receiver collects metrics from files specified with a glob pattern.
+
 status:
   class: receiver
   stability:

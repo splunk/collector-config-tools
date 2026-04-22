@@ -1,8 +1,7 @@
-display_name: TCP Log Receiver
-type: tcp_log
-deprecated_type: tcplog
+display_name: TCP Receiver
+type: tcplog
 
-description: The TCP Log Receiver receives logs over TCP.
+description: The TCP Receiver receives logs over TCP.
 
 status:
   class: receiver

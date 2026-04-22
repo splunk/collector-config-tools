@@ -1,6 +1,5 @@
 display_name: File Log Receiver
-type: file_log
-deprecated_type: filelog
+type: filelog
 
 description: |
   This receiver tails and parses logs from files.
@@ -11,7 +10,7 @@ status:
     beta: [logs]
   distributions: [contrib, k8s]
   codeowners:
-    active: [andrzej-stencel, paulojmdias, VihasMakwana, braydonk]
+    active: [andrzej-stencel]
     emeritus: [djaglowski]
     seeking_new: true
 

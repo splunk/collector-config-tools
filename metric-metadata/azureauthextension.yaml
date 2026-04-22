@@ -1,6 +1,5 @@
 display_name: Azure Authenticator Extension
-type: azure_auth
-deprecated_type: azureauth
+type: azureauth
 
 status:
   class: extension

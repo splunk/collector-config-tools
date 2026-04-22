@@ -15,17 +15,24 @@ status:
     seeking_new: true
   unsupported_platforms: [darwin, linux]
 
+reaggregation_enabled: true
+
 attributes:
   bind_type:
     name_override: type
     description: The type of bind to the domain server.
     type: string
+<<<<<<<
+=======
+    requirement_level: recommended
+>>>>>>>
     enum:
       - server
       - client
   direction:
     description: The direction of data flow.
     type: string
+    requirement_level: recommended
     enum:
       - sent
       - received
@@ -33,6 +40,7 @@ attributes:
     name_override: type
     description: The type of network data sent.
     type: string
+    requirement_level: recommended
     enum:
       - compressed
       - uncompressed
@@ -40,6 +48,7 @@ attributes:
     name_override: type
     description: The type of operation.
     type: string
+    requirement_level: recommended
     enum:
       - read
       - write
@@ -48,6 +57,7 @@ attributes:
     name_override: type
     description: The type of suboperation.
     type: string
+    requirement_level: recommended
     enum:
       - security_descriptor_propagations_event
       - search
@@ -55,6 +65,7 @@ attributes:
     name_override: result
     description: The result status of the sync request.
     type: string
+    requirement_level: recommended
     enum:
       - success
       - schema_mismatch
@@ -63,6 +74,7 @@ attributes:
     name_override: type
     description: The type of value sent.
     type: string
+    requirement_level: recommended
     enum:
       - distinguished_names
       - other

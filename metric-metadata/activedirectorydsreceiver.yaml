@@ -22,10 +22,7 @@ attributes:
     name_override: type
     description: The type of bind to the domain server.
     type: string
-<<<<<<<
-=======
     requirement_level: recommended
->>>>>>>
     enum:
       - server
       - client

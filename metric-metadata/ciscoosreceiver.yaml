@@ -1,16 +1,26 @@
-display_name: Cisco OS Receiver
-type: cisco_os
-deprecated_type: ciscoos
-
-description: |
-  The Cisco OS Receiver is a modular receiver that collects metrics from Cisco network devices via SSH connections. It
-  supports multiple scrapers for comprehensive network monitoring and provides native OpenTelemetry OTLP metrics
-  generation.
+type: ciscoosreceiver
 
 status:
   class: receiver
   stability:
-    alpha: [metrics]
-  distributions: [contrib]
+    development: [metrics]
+  distributions: []
   codeowners:
     active: [dmitryax]
+
+resource_attributes:
+
+tests:
+  config:
+    collection_interval: 60s
+    timeout: 30s
+    scrapers:
+      bgp: true
+      environment: true
+      facts: true
+      interfaces: true
+      optics: true
+    devices:
+      - host: "localhost:2222"
+        username: "admin"
+        password: "admin"

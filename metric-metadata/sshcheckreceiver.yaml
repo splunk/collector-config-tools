@@ -1,16 +1,12 @@
-display_name: SSH Check Receiver
 type: sshcheck
-
-description: This receiver creates stats by connecting to an SSH server which may be an SFTP server.
 
 status:
   class: receiver
   stability:
-    beta: [metrics]
+    alpha: [metrics]
   distributions: [contrib]
   codeowners:
-    active: [ishaish103]
-    emeritus: [nslaughter]
+    active: [nslaughter]
 
 resource_attributes:
   ssh.endpoint:
@@ -24,34 +20,29 @@ attributes:
     type: string
 
 metrics:
+  sshcheck.status:
+    description: 1 if the SSH client successfully connected, otherwise 0.
+    enabled: true
+    stability:
+      level: development
+    sum:
+      value_type: int
+      aggregation_temporality: cumulative
+      monotonic: false
+    unit: "1"
   sshcheck.duration:
     description: Measures the duration of SSH connection.
     enabled: true
-    stability: development
+    stability:
+      level: development
     gauge:
       value_type: int
     unit: ms
   sshcheck.error:
     description: Records errors occurring during SSH check.
     enabled: true
-    stability: development
-    sum:
-      value_type: int
-      aggregation_temporality: cumulative
-      monotonic: false
-    unit: "{error}"
-    attributes: [error.message]
-  sshcheck.sftp_duration:
-    description: Measures SFTP request duration.
-    enabled: false
-    stability: development
-    gauge:
-      value_type: int
-    unit: ms
-  sshcheck.sftp_error:
-    description: Records errors occurring during SFTP check.
-    enabled: false
-    stability: development
+    stability:
+      level: development
     sum:
       value_type: int
       aggregation_temporality: cumulative
@@ -61,18 +52,29 @@ metrics:
   sshcheck.sftp_status:
     description: 1 if the SFTP server replied to request, otherwise 0.
     enabled: false
-    stability: development
+    stability:
+      level: development
     sum:
       value_type: int
       aggregation_temporality: cumulative
       monotonic: false
     unit: "1"
-  sshcheck.status:
-    description: 1 if the SSH client successfully connected, otherwise 0.
-    enabled: true
-    stability: development
+  sshcheck.sftp_duration:
+    description: Measures SFTP request duration.
+    enabled: false
+    stability:
+      level: development
+    gauge:
+      value_type: int
+    unit: ms
+  sshcheck.sftp_error:
+    description: Records errors occurring during SFTP check.
+    enabled: false
+    stability:
+      level: development
     sum:
       value_type: int
       aggregation_temporality: cumulative
       monotonic: false
-    unit: "1"
+    unit: "{error}"
+    attributes: [error.message]

@@ -42,6 +42,13 @@ telemetry:
       sum:
         value_type: int
         monotonic:
+    fluent_opened_connections:
+      enabled: true
+      description: Number of connections opened to the fluentforward receiver
+      unit: "1"
+      sum:
+        value_type: int
+        monotonic:
     fluent_parse_failures:
       enabled: true
       description: Number of times Fluent messages failed to be decoded

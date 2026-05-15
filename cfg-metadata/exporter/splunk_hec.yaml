@@ -313,7 +313,7 @@ fields:
   default: ""
   doc: |
     App version is used to track telemetry information for Splunk App's using HEC by App version. Defaults to the current OpenTelemetry Collector Contrib build version.
-- name: otel_attrs_to_hec_metadata
+- name: hec_metadata_to_otel_attrs
   type: splunk.HecToOtelAttrs
   kind: struct
   doc: |

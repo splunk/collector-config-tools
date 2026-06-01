@@ -2,8 +2,9 @@ type: golden
 
 status:
   disable_codecov_badge: true
-  class: cmd
+  class: pkg
   stability:
-    alpha: [metrics]
+    alpha: [ traces, metrics, logs, profiles ]
   codeowners:
     active: [atoulme]
+    emeritus: [djaglowski]

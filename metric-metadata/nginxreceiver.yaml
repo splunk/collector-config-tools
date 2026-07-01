@@ -18,6 +18,7 @@ attributes:
   state:
     description: The state of a connection
     type: string
+    requirement_level: recommended
     enum:
       - active
       - reading

@@ -1,9 +1,13 @@
-type: resourcedetectionprocessor/openshift
+type: resourcedetectionprocessor/azurecontainerapps
 sem_conv_version: 1.40.0
 
 parent: resourcedetection
 
 resource_attributes:
+  azure.container_app.instance.id:
+    description: The name of the Azure Container App replica
+    type: string
+    enabled: true
   cloud.platform:
     semantic_convention:
       ref: cloud.md#cloud-platform
@@ -16,15 +20,9 @@ resource_attributes:
     description: The cloud.provider
     type: string
     enabled: true
-  cloud.region:
+  service.name:
     semantic_convention:
-      ref: cloud.md#cloud-region
-    description: The cloud.region
-    type: string
-    enabled: true
-  k8s.cluster.name:
-    semantic_convention:
-      ref: k8s.md#k8s-cluster-name
-    description: The k8s.cluster.name
+      ref: service.md#service-name
+    description: The name of the Azure Container App
     type: string
     enabled: true
